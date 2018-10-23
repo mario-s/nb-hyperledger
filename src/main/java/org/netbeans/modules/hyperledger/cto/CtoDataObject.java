@@ -22,7 +22,8 @@ import org.openide.windows.TopComponent;
 @MIMEResolver.ExtensionRegistration(
         displayName = "#LBL_Cto_LOADER",
         mimeType = FileType.MIME,
-        extension = {".cto", ".CTO"}
+        extension = {"cto", "CTO"},
+        position=120
 )
 @DataObject.Registration(
         mimeType = FileType.MIME,
@@ -86,7 +87,7 @@ public class CtoDataObject extends MultiDataObject {
 
     public CtoDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
-        registerEditor("text/cto", true);
+        registerEditor(FileType.MIME, true);
     }
 
     @Override
