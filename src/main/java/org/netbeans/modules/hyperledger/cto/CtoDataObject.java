@@ -101,7 +101,7 @@ public class CtoDataObject extends MultiDataObject {
             mimeType = FileType.MIME,
             persistenceType = TopComponent.PERSISTENCE_ONLY_OPENED,
             preferredID = "Cto",
-            position = 1000
+            position = 10
     )
     @Messages("LBL_Cto_EDITOR=Source")
     public static MultiViewEditorElement createEditor(Lookup lkp) {
