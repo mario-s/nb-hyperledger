@@ -13,6 +13,39 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
+    <profiles>
+        <profile>
+            <id>javacc</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.helger.maven</groupId>
+                        <artifactId>ph-javacc-maven-plugin</artifactId>
+                        <version>4.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>javacc</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>javacc</goal>
+                                </goals>
+                                <configuration>
+                                    <jdkVersion>${maven.compiler.source}</jdkVersion>
+                                    <javadocFriendlyComments>true</javadocFriendlyComments>
+                                    <packageName>org.javacc.parser</packageName>
+                                    <sourceDirectory>src/main/javacc</sourceDirectory>
+                                    <outputDirectory>${project.build.directory}/generated-sources/javacc</outputDirectory>
+                                    <!--outputDirectory>src/main/java</outputDirectory-->
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            
+            </build>
+        </profile>
+    </profiles>
+    
     <build>
         <plugins>
             <plugin>

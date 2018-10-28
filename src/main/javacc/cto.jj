@@ -1,0 +1,50 @@
+options {
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = true;
+  DEBUG_PARSER = true;
+  DEBUG_LOOKAHEAD = true;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(CtoLang)
+
+package org.netbeans.modules.hyperledger.cto.lexer;
+
+/** Simple brace matcher. */
+public class CtoLang {
+
+  /** Main entry point. */
+  public static void main(String args[]) throws ParseException {
+    CtoLang parser = new CtoLang(System.in);
+    parser.Input();
+  }
+
+}
+
+PARSER_END(CtoLang)
+
+/** Root production. */
+void Input() :
+{}
+{
+  MatchedBraces() ("\n"|"\r")* <EOF>
+}
+
+/** Brace matching production. */
+void MatchedBraces() :
+{}
+{
+  "{" [ MatchedBraces() ] "}"
+}
