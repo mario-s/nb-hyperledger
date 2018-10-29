@@ -1,45 +1,48 @@
 options {
-  LOOKAHEAD = 1;
-  CHOICE_AMBIGUITY_CHECK = 2;
-  OTHER_AMBIGUITY_CHECK = 1;
-  STATIC = true;
-  DEBUG_PARSER = true;
-  DEBUG_LOOKAHEAD = true;
-  DEBUG_TOKEN_MANAGER = false;
-  ERROR_REPORTING = true;
-  JAVA_UNICODE_ESCAPE = false;
-  UNICODE_INPUT = false;
-  IGNORE_CASE = false;
-  USER_TOKEN_MANAGER = false;
-  USER_CHAR_STREAM = false;
-  BUILD_PARSER = true;
-  BUILD_TOKEN_MANAGER = true;
-  SANITY_CHECK = true;
-  FORCE_LA_CHECK = false;
+  JAVA_UNICODE_ESCAPE = true;
+  BUILD_PARSER = false;
 }
 
-PARSER_BEGIN(CtoLang)
+PARSER_BEGIN(Cto)
 
 package org.netbeans.modules.hyperledger.cto.lexer;
 
 /** Simple brace matcher. */
-public class CtoLang {
+public class Cto {
 
   /** Main entry point. */
   public static void main(String args[]) throws ParseException {
-    CtoLang parser = new CtoLang(System.in);
+    Cto parser = new Cto(System.in);
     parser.Input();
   }
 
 }
 
-PARSER_END(CtoLang)
+PARSER_END(Cto)
+
+
+SKIP : { " " }
+TOKEN: { <EOL : "\n" | "\r" | "\r\n"> }
+TOKEN: { <NAMESPACE : "namespace"> }
+TOKEN: { <ASSET : "asset"> }
+TOKEN: { <PARTICIPANT : "participant"> }
+TOKEN: { <TRANSACTION : "transaction"> }
+TOKEN: { <EVENT : "event"> }
+TOKEN: { <FIELD : "o "> }
+TOKEN: { <REF: "-->"> } 
+TOKEN: { <IDENTIFIED: "identified by"> }
+TOKEN: { <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?> }
+
+
+/***********
+ * Grammar *
+/***********
 
 /** Root production. */
 void Input() :
 {}
 {
-  MatchedBraces() ("\n"|"\r")* <EOF>
+  MatchedBraces() (<EOL>)* <EOF>
 }
 
 /** Brace matching production. */
@@ -47,4 +50,17 @@ void MatchedBraces() :
 {}
 {
   "{" [ MatchedBraces() ] "}"
+}
+
+
+void NamespaceDeclaration() :
+{}
+{
+  <NAMESPACE> Name() ";"
+}
+
+void Name() :
+{}
+{
+    "TODO"
 }
