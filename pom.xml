@@ -44,7 +44,36 @@
             
             </build>
         </profile>
+        <profile>
+            <id>jflex</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>de.jflex</groupId>
+                        <artifactId>jflex-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>jflex</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <lexDefinitions>
+                                        <lexDefinition>src/main/jflex</lexDefinition>
+                                    </lexDefinitions>
+                                    <verbose>true</verbose>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            
+            </build>
+        </profile>
     </profiles>
+    
     
     <build>
         <plugins>
