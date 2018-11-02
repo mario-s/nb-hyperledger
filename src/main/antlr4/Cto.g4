@@ -8,7 +8,7 @@ package org.netbeans.modules.hyperledger.cto.lexer;
 WSPC
     : ~[\s];
 NONE_WSPC
-    : [\S+];
+    : ~[\S];
 NAMESPACE
     : 'namespace';
 CLASS_ASSET
@@ -26,7 +26,7 @@ REF
 
 
 namespace
-    : NAMESPACE WSPC 'org.example.basic' 
+    : NAMESPACE (WSPC)+ (NONE_WSPC)+ 
     | EOF;
 
 
