@@ -36,8 +36,8 @@
                         <version>1.10</version>
                         <configuration>
                             <verbose>false</verbose>
-                            <showTree>false</showTree>
-                            <entryPoint>namespace</entryPoint>
+                            <showTree>true</showTree>
+                            <entryPoint>sourceUnit</entryPoint>
                             <grammarName>Cto</grammarName>
                             <packageName>org.netbeans.modules.hyperledger.cto.lexer</packageName>
                             <testFileExtension>.cto</testFileExtension>
