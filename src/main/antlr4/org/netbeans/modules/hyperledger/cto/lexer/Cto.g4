@@ -5,18 +5,19 @@ sourceUnit
     | EOF;
 
 namespaceDeclaration
-    : NAMESPACE WSPC+ NONE_WSPC+;
-    
+    : NAMESPACE WSPC+ IDENTIFIER;
 
 assetDeclaration
-    : CLASS_ASSET WORD+ IDENTIFIED WORD+;
+    : CLASS_ASSET IDENTIFIER IDENTIFIED IDENTIFIER;
+
+IDENTIFIER
+    :   [A-Za-z0-9]+;
 
 WSPC
-    : ~[\s];
-NONE_WSPC
-    : ~[\w.+];
+    : ~[\\s];
+
 WORD
-    : ~[\w];
+    : ~[\\w];
 NAMESPACE
     : 'namespace';
 CLASS_ASSET
@@ -33,11 +34,12 @@ VAR
     : 'o ';
 REF
     : '-->';
-
 COMMENT
-  : '/*' .*? '*/' -> channel(HIDDEN) ;
+    : '/*' .*? '*/' -> channel(HIDDEN) ;
 LINE_COMMENT
-  : '//' ~[\r\n]* -> channel(HIDDEN) ;
+    : '//' ~[\r\n]* -> channel(HIDDEN) ;
+WS 
+    : [ \t\n\r]+ -> skip ;
 
 
 
