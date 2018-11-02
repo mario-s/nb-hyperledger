@@ -9,11 +9,11 @@ import org.netbeans.spi.lexer.TokenFactory;
 /**
  *
  */
-public final class CtoLexer implements Lexer<CtoTokenId>{
+public final class MyCtoLexer implements Lexer<CtoTokenId>{
     
     private final LexerRestartInfo<CtoTokenId> info;
 
-    public CtoLexer(LexerRestartInfo<CtoTokenId> info) {
+    public MyCtoLexer(LexerRestartInfo<CtoTokenId> info) {
         this.info = info;
     }
     

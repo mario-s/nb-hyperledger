@@ -15,56 +15,39 @@
     
     <profiles>
         <profile>
-            <id>javacc</id>
+            <id>antlr</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.helger.maven</groupId>
-                        <artifactId>ph-javacc-maven-plugin</artifactId>
-                        <version>4.1.0</version>
+                        <groupId>org.antlr</groupId>
+                        <artifactId>antlr4-maven-plugin</artifactId>
+                        <version>4.3</version>
                         <executions>
                             <execution>
-                                <id>javacc</id>
-                                <phase>generate-sources</phase>
                                 <goals>
-                                    <goal>javacc</goal>
+                                    <goal>antlr4</goal>
                                 </goals>
-                                <configuration>
-                                    <jdkVersion>${maven.compiler.source}</jdkVersion>
-                                    <javadocFriendlyComments>true</javadocFriendlyComments>
-                                    <packageName>org.javacc.parser</packageName>
-                                    <sourceDirectory>src/main/javacc</sourceDirectory>
-                                    <outputDirectory>${project.build.directory}/generated-sources/javacc</outputDirectory>
-                                    <!--outputDirectory>src/main/java</outputDirectory-->
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
-            
-            </build>
-        </profile>
-        <profile>
-            <id>jflex</id>
-            <build>
-                <plugins>
                     <plugin>
-                        <groupId>de.jflex</groupId>
-                        <artifactId>jflex-maven-plugin</artifactId>
-                        <version>1.6.0</version>
+                        <groupId>com.khubla.antlr</groupId>
+                        <artifactId>antlr4test-maven-plugin</artifactId>
+                        <version>1.10</version>
+                        <configuration>
+                            <verbose>false</verbose>
+                            <showTree>false</showTree>
+                            <entryPoint>namespace</entryPoint>
+                            <grammarName>Cto</grammarName>
+                            <packageName>org.netbeans.modules.hyperledger.cto.lexer</packageName>
+                            <testFileExtension>.cto</testFileExtension>
+                            <exampleFiles>src/test/resources/examples</exampleFiles>
+                        </configuration>
                         <executions>
                             <execution>
-                                <id>jflex</id>
-                                <phase>generate-sources</phase>
                                 <goals>
-                                    <goal>generate</goal>
+                                    <goal>test</goal>
                                 </goals>
-                                <configuration>
-                                    <lexDefinitions>
-                                        <lexDefinition>src/main/jflex</lexDefinition>
-                                    </lexDefinitions>
-                                    <verbose>true</verbose>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -83,7 +66,7 @@
                 <version>3.13</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>true</useOSGiDependencies>
+                    <useOSGiDependencies>false</useOSGiDependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -177,8 +160,12 @@
             <artifactId>org-netbeans-modules-lexer</artifactId>
             <version>${netbeans.version}</version>
         </dependency>
-        
-        
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
+            <version>4.3</version>
+        </dependency>
         
         
         <!-- test dependencies -->
