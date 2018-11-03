@@ -1,17 +1,28 @@
 grammar Cto;
 
 sourceUnit
-    : namespaceDeclaration? importDeclaration* 
-    | EOF;
+    : namespaceDeclaration? importDeclaration* typeDeclaration*;
 
 namespaceDeclaration
-    : NAMESPACE WSPC+ qualifiedName;
+    : NAMESPACE qualifiedName;
 
 importDeclaration
     : IMPORT qualifiedName ('.' '*')? ;
 
+typeDeclaration
+    : (assetDeclaration | participantDeclaration | transactionDeclaration | eventDeclaration);
+
 assetDeclaration
     : CLASS_ASSET qualifiedName IDENTIFIED qualifiedName classBody;
+
+participantDeclaration
+    : CLASS_PARTICIPANT qualifiedName IDENTIFIED qualifiedName classBody;
+
+transactionDeclaration
+    : CLASS_TRANSACTION qualifiedName classBody;
+
+eventDeclaration
+    : CLASS_EVENT qualifiedName classBody;
 
 qualifiedName
     : IDENTIFIER ('.' IDENTIFIER)* ;
@@ -28,7 +39,7 @@ fieldDeclaration
     | refType IDENTIFIER;
 
 fieldType
-    :  VAR primitiveType ('[' ']')*;
+    : VAR primitiveType ('[' ']')*;
 
 refType
     : REF IDENTIFIER ('[' ']')*;

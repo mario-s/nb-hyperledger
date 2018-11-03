@@ -1,5 +1,25 @@
-namespace org.example.basic
+namespace org.sample.basic
+
+import org.sample.another
 
 asset SampleAsset identified by assetId {
    o String assetId
+   --> SampleParticipant owner
+}
+
+participant SampleParticipant identified by participantId {
+  o String participantId
+  o String firstName
+  o String lastName
+}
+
+transaction SampleTransaction {
+  --> SampleAsset asset
+  o String newValue
+}
+
+event SampleEvent {
+  --> SampleAsset asset
+  o String oldValue
+  o String newValue
 }
