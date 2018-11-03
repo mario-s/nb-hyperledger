@@ -1,1 +1,5 @@
 namespace org.example.basic
+
+asset SampleAsset identified by assetId {
+   o String assetId
+}
