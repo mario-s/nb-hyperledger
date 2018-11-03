@@ -1,7 +1,8 @@
 grammar Cto;
 
 sourceUnit
-    : namespaceDeclaration? importDeclaration* typeDeclaration*;
+    : namespaceDeclaration? importDeclaration* typeDeclaration*
+    | EOF;
 
 namespaceDeclaration
     : NAMESPACE qualifiedName;
