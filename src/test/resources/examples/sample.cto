@@ -1,3 +1,6 @@
+/**
+ * Sample business network definition.
+ */
 namespace org.sample.basic
 
 import org.sample.another

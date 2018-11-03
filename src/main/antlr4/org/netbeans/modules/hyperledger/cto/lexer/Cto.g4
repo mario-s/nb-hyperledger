@@ -1,49 +1,37 @@
 grammar Cto;
 
-sourceUnit
-    : namespaceDeclaration? importDeclaration* typeDeclaration*
+sourceUnit: namespaceDeclaration? importDeclaration* typeDeclaration*
     | EOF;
 
-namespaceDeclaration
-    : NAMESPACE qualifiedName;
+namespaceDeclaration: NAMESPACE qualifiedName;
 
-importDeclaration
-    : IMPORT qualifiedName ('.' '*')? ;
+importDeclaration: IMPORT qualifiedName ('.' '*')? ;
 
-typeDeclaration
-    : (assetDeclaration | participantDeclaration | transactionDeclaration | eventDeclaration);
+typeDeclaration: (assetDeclaration | participantDeclaration | transactionDeclaration | eventDeclaration);
 
-assetDeclaration
-    : CLASS_ASSET qualifiedName IDENTIFIED qualifiedName classBody;
+assetDeclaration: CLASS_ASSET qualifiedName IDENTIFIED qualifiedName classBody;
 
-participantDeclaration
-    : CLASS_PARTICIPANT qualifiedName IDENTIFIED qualifiedName classBody;
+participantDeclaration: CLASS_PARTICIPANT qualifiedName IDENTIFIED qualifiedName classBody;
 
-transactionDeclaration
-    : CLASS_TRANSACTION qualifiedName classBody;
+transactionDeclaration: CLASS_TRANSACTION qualifiedName classBody;
 
-eventDeclaration
-    : CLASS_EVENT qualifiedName classBody;
+eventDeclaration: CLASS_EVENT qualifiedName classBody;
 
-qualifiedName
-    : IDENTIFIER ('.' IDENTIFIER)* ;
+qualifiedName: IDENTIFIER ('.' IDENTIFIER)* ;
 
-classBody
-    : '{' classBodyDeclaration* '}';
+classBody: '{' classBodyDeclaration* '}';
 
 classBodyDeclaration
     : ' '
     | fieldDeclaration;
 
 fieldDeclaration
-    : fieldType IDENTIFIER 
+    : fieldType IDENTIFIER
     | refType IDENTIFIER;
 
-fieldType
-    : VAR primitiveType ('[' ']')*;
+fieldType: VAR primitiveType ('[' ']')*;
 
-refType
-    : REF IDENTIFIER ('[' ']')*;
+refType: REF IDENTIFIER ('[' ']')*;
 
 primitiveType
     : BOOLEAN
@@ -90,16 +78,12 @@ STRING
 REF
     : '-->';
 VAR
-    : 'o' WSPC;
-WSPC
-    : ~[\\s];
-WORD
-    : ~[\\w];
+    : 'o';
 COMMENT
     : '/*' .*? '*/' -> channel(HIDDEN) ;
 LINE_COMMENT
     : '//' ~[\r\n]* -> channel(HIDDEN) ;
-WS 
+WS
     : [ \t\n\r]+ -> skip ;
 
 fragment LetterOrDigit

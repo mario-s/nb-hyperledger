@@ -11,6 +11,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <antlr.version>4.7.1</antlr.version>
+        <antlr4test-maven-plugin.version>1.10</antlr4test-maven-plugin.version>
     </properties>
     
     <profiles>
@@ -21,7 +23,7 @@
                     <plugin>
                         <groupId>org.antlr</groupId>
                         <artifactId>antlr4-maven-plugin</artifactId>
-                        <version>4.3</version>
+                        <version>${antlr.version}</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -33,7 +35,7 @@
                     <plugin>
                         <groupId>com.khubla.antlr</groupId>
                         <artifactId>antlr4test-maven-plugin</artifactId>
-                        <version>1.10</version>
+                        <version>${antlr4test-maven-plugin.version}</version>
                         <configuration>
                             <verbose>false</verbose>
                             <showTree>true</showTree>
@@ -163,8 +165,8 @@
 
         <dependency>
             <groupId>org.antlr</groupId>
-            <artifactId>antlr4</artifactId>
-            <version>4.3</version>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${antlr.version}</version>
         </dependency>
         
         

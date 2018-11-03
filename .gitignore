@@ -5,3 +5,10 @@ nbactions.xml
 
 .DS_Store
 Thumbs.db
+.idea/
+*.iml
+.classpath
+.factorypath
+.project
+.settings/
+.vscode/
