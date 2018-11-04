@@ -38,10 +38,10 @@
                         <artifactId>antlr4test-maven-plugin</artifactId>
                         <version>${antlr4test-maven-plugin.version}</version>
                         <configuration>
-                            <verbose>true</verbose>
+                            <verbose>false</verbose>
                             <showTree>true</showTree>
                             <grammarName>Cto</grammarName>
-                            <entryPoint>sourceUnit</entryPoint>
+                            <entryPoint>modelUnit</entryPoint>
                             <packageName>org.netbeans.modules.hyperledger.cto.grammar</packageName>
                             <testFileExtension>.cto</testFileExtension>
                             <exampleFiles>src/test/resources/examples</exampleFiles>

@@ -2,42 +2,293 @@ parser grammar CtoParser;
 
 options { tokenVocab=CtoLexer; }
 
-sourceUnit: namespaceDeclaration importDeclaration* typeDeclaration* 
+modelUnit
+    : namespaceDeclaration? importDeclaration* typeDeclaration* EOF
     ;
 
-namespaceDeclaration: (PACKAGE)? qualifiedName;
+namespaceDeclaration
+    : NAMESPACE qualifiedName
+    ;
 
-importDeclaration: IMPORT qualifiedName (DOT MUL)? ;
+importDeclaration
+    : IMPORT qualifiedName (DOT '*')?
+    ;
 
-typeDeclaration: (assetDeclaration | participantDeclaration | transactionDeclaration | eventDeclaration);
+typeDeclaration
+    : classOrInterfaceModifier*
+      (assetDeclaration 
+      | enumDeclaration 
+      | participantDeclaration
+      | transactionDeclaration
+      | eventDeclaration
+      | annotationTypeDeclaration)
+    ;
 
-assetDeclaration: CLASS_ASSET qualifiedName IDENTIFIED qualifiedName classBody;
+modifier
+    : classOrInterfaceModifier;
 
-participantDeclaration: CLASS_PARTICIPANT qualifiedName IDENTIFIED qualifiedName classBody;
+classOrInterfaceModifier
+    : annotation
+    | ABSTRACT
+    ;
 
-transactionDeclaration: CLASS_TRANSACTION qualifiedName classBody;
+variableModifier
+    : annotation
+    ;
 
-eventDeclaration: CLASS_EVENT qualifiedName classBody;
+assetDeclaration
+    : ASSET IDENTIFIER
+      (EXTENDS typeType)?
+      IDENTIFIED
+      IDENTIFIER
+      classBody
+    ;
 
-qualifiedName: IDENTIFIER (DOT IDENTIFIER)* ;
+enumDeclaration
+    : ENUM IDENTIFIER LBRACE enumConstant* RBRACE
+    ;
 
-classBody: LBRACE classBodyDeclaration* RBRACE;
+enumConstant
+    : VAR IDENTIFIER
+    ;
+
+eventDeclaration
+    : EVENT IDENTIFIER
+      classBody
+    ;
+
+participantDeclaration
+    : PARTICIPANT IDENTIFIER
+      (EXTENDS typeType)?
+      IDENTIFIED
+      IDENTIFIER
+      classBody
+    ;
+
+transactionDeclaration
+    : TRANSACTION IDENTIFIER
+      classBody
+    ;
+
+classBody
+    : LBRACE classBodyDeclaration* RBRACE
+    ;
 
 classBodyDeclaration
-    : WS
-    | fieldDeclaration;
+    : ';'
+    | fieldDeclaration
+    ;
 
 fieldDeclaration
     : fieldType IDENTIFIER
     | refType IDENTIFIER;
 
-fieldType: VAR primitiveType (LBRACK RBRACK)*;
+fieldType
+    : VAR primitiveType (LBRACK RBRACK)* 
+    | VAR IDENTIFIER;
 
-refType: REF IDENTIFIER (LBRACK RBRACK)*;
+refType
+    : REF IDENTIFIER (LBRACK RBRACK)*;
+
+variableDeclarators
+    : variableDeclarator (',' variableDeclarator)*
+    ;
+
+variableDeclarator
+    : variableDeclaratorId ('=' variableInitializer)?
+    ;
+
+variableDeclaratorId
+    : IDENTIFIER ('[' ']')*
+    ;
+
+variableInitializer
+    : arrayInitializer
+    | expression
+    ;
+
+arrayInitializer
+    : '{' (variableInitializer (',' variableInitializer)* (',')? )? '}'
+    ;
+
+classOrInterfaceType
+    : IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments?)*
+    ;
+
+typeArgument
+    : typeType
+    | '?' (EXTENDS typeType)?
+    ;
+
+qualifiedNameList
+    : qualifiedName (',' qualifiedName)*
+    ;
+
+formalParameters
+    : '(' formalParameterList? ')'
+    ;
+
+formalParameterList
+    : formalParameter (',' formalParameter)* (',' lastFormalParameter)?
+    | lastFormalParameter
+    ;
+
+formalParameter
+    : variableModifier* typeType variableDeclaratorId
+    ;
+
+lastFormalParameter
+    : variableModifier* typeType ELLIPSIS variableDeclaratorId
+    ;
+
+qualifiedName
+    : IDENTIFIER ('.' IDENTIFIER)*
+    ;
+
+literal
+    : integerLiteral
+    | floatLiteral
+    | CHAR_LITERAL
+    | STRING_LITERAL
+    | BOOL_LITERAL
+    | NULL_LITERAL
+    ;
+
+integerLiteral
+    : DECIMAL_LITERAL
+    | HEX_LITERAL
+    | OCT_LITERAL
+    | BINARY_LITERAL
+    ;
+
+floatLiteral
+    : FLOAT_LITERAL
+    | HEX_FLOAT_LITERAL
+    ;
+
+// ANNOTATIONS
+
+annotation
+    : '@' qualifiedName ('(' ( elementValuePairs | elementValue )? ')')?
+    ;
+
+elementValuePairs
+    : elementValuePair (',' elementValuePair)*
+    ;
+
+elementValuePair
+    : IDENTIFIER '=' elementValue
+    ;
+
+elementValue
+    : expression
+    | annotation
+    | elementValueArrayInitializer
+    ;
+
+elementValueArrayInitializer
+    : '{' (elementValue (',' elementValue)*)? (',')? '}'
+    ;
+
+annotationTypeDeclaration
+    : '@' IDENTIFIER annotationTypeBody
+    ;
+
+annotationTypeBody
+    : '{' (annotationTypeElementDeclaration)* '}'
+    ;
+
+annotationTypeElementDeclaration
+    : modifier* annotationTypeElementRest
+    | ';' // this is not allowed by the grammar, but apparently allowed by the actual compiler
+    ;
+
+annotationTypeElementRest
+    : typeType annotationMethodOrConstantRest ';'
+    | enumDeclaration ';'?
+    | annotationTypeDeclaration ';'?
+    ;
+
+annotationMethodOrConstantRest
+    : annotationMethodRest
+    | annotationConstantRest
+    ;
+
+annotationMethodRest
+    : IDENTIFIER '(' ')' defaultValue?
+    ;
+
+annotationConstantRest
+    : variableDeclarators
+    ;
+
+defaultValue
+    : DEFAULT elementValue
+    ;
+
+// EXPRESSIONS
+
+parExpression
+    : '(' expression ')'
+    ;
+
+expression
+    : primary
+    | expression '[' expression ']'
+    | '(' typeType ')' expression
+    | expression postfix=('++' | '--')
+    | prefix=('+'|'-'|'++'|'--') expression
+    | prefix=('~'|'!') expression
+    | expression bop=('*'|'/'|'%') expression
+    | expression bop=('+'|'-') expression
+    | expression ('<' '<' | '>' '>' '>' | '>' '>') expression
+    | expression bop=('<=' | '>=' | '>' | '<') expression
+    | expression bop=('==' | '!=') expression
+    | expression bop='&' expression
+    | expression bop='^' expression
+    | expression bop='|' expression
+    | expression bop='&&' expression
+    | expression bop='||' expression
+    | expression bop='?' expression ':' expression
+    | <assoc=right> expression
+      bop=('=' | '+=' | '-=' | '*=' | '/=' | '&=' | '|=' | '^=' | '>>=' | '>>>=' | '<<=' | '%=')
+      expression
+    ;
+
+
+primary
+    : '(' expression ')'
+    | literal
+    | IDENTIFIER
+    ;
+
+classType
+    : (classOrInterfaceType '.')? annotation* IDENTIFIER typeArguments?
+    ;
+
+createdName
+    : IDENTIFIER typeArgumentsOrDiamond? ('.' IDENTIFIER typeArgumentsOrDiamond?)*
+    | primitiveType
+    ;
+
+typeArgumentsOrDiamond
+    : '<' '>'
+    | typeArguments
+    ;
+
+typeType
+    : annotation? (classOrInterfaceType | primitiveType) ('[' ']')*
+    ;
 
 primitiveType
     : BOOLEAN
     | DATE_TIME
     | DOUBLE
     | INTEGER
-    | STRING;
+    | LONG
+    | STRING
+    ;
+
+typeArguments
+    : '<' typeArgument (',' typeArgument)* '>'
+    ;
