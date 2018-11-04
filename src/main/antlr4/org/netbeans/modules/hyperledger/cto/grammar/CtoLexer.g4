@@ -1,29 +1,29 @@
 lexer grammar CtoLexer;
 
 // Keywords
-
 ABSTRACT:           'abstract';
 ASSET:              'asset';
-BOOLEAN:            'Boolean';
 CLASS:              'class';
-CONST:              'const';
-DATE_TIME:          'DateTime';
+CONCEPT:            'concept';
 DEFAULT:            'default';
-DOUBLE:             'Double';
 ENUM:               'enum';
 EVENT:              'event';
 EXTENDS:            'extends';
 IDENTIFIED:         'identified by';
 IMPORT:             'import';
-INTEGER:            'Integer';
-LONG:               'Long';
 NAMESPACE:          'namespace';
 PARTICIPANT:        'participant';
-STRING:             'String';
 TRANSACTION:        'transaction';
 
-// Literals
+//primitive types
+BOOLEAN:            'Boolean';
+DATE_TIME:          'DateTime';
+DOUBLE:             'Double';
+INTEGER:            'Integer';
+LONG:               'Long';
+STRING:             'String';
 
+// Literals
 DECIMAL_LITERAL:    ('0' | [1-9] (Digits? | '_'+ Digits)) [lL]?;
 HEX_LITERAL:        '0' [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?;
 OCT_LITERAL:        '0' '_'* [0-7] ([0-7_]* [0-7])? [lL]?;
@@ -41,7 +41,6 @@ NULL_LITERAL:       'null';
 
 
 // Separators
-
 LPAREN:             '(';
 RPAREN:             ')';
 LBRACE:             '{';
@@ -53,7 +52,6 @@ COMMA:              ',';
 DOT:                '.';
 
 // Operators
-
 ASSIGN:             '=';
 GT:                 '>';
 LT:                 '<';
@@ -77,15 +75,13 @@ BITOR:              '|';
 CARET:              '^';
 MOD:                '%';
 
-// Additional symbols not defined in the lexical specification
-
+// Additional symbols
 AT:                 '@';
 ELLIPSIS:           '...';
 REF:                '-->';
 VAR:                'o';
 
 // Whitespace and comments
-
 WS:                 [ \t\r\n\u000C]+ -> channel(HIDDEN);
 COMMENT:            '/*' .*? '*/'    -> channel(HIDDEN);
 LINE_COMMENT:       '//' ~[\r\n]*    -> channel(HIDDEN);
@@ -96,7 +92,6 @@ SPC: ' ';
 IDENTIFIER:         Letter LetterOrDigit*;
 
 // Fragment rules
-
 fragment ExponentPart
     : [eE] [+-]? Digits
     ;
@@ -125,7 +120,7 @@ fragment LetterOrDigit
     ;
 
 fragment Letter
-    : [a-zA-Z$_] // these are the "java letters" below 0x7F
+    : [a-zA-Z$_] // these are below 0x7F
     | ~[\u0000-\u007F\uD800-\uDBFF] // covers all characters above 0x7F which are not a surrogate
     | [\uD800-\uDBFF] [\uDC00-\uDFFF] // covers UTF-16 surrogate pairs encodings for U+10000 to U+10FFFF
     ;
