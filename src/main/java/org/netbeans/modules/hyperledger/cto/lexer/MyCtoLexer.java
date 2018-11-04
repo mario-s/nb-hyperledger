@@ -2,10 +2,7 @@ package org.netbeans.modules.hyperledger.cto.lexer;
 
 import org.netbeans.api.lexer.Token;
 import org.netbeans.spi.lexer.Lexer;
-import org.netbeans.spi.lexer.LexerInput;
 import org.netbeans.spi.lexer.LexerRestartInfo;
-import org.netbeans.spi.lexer.TokenFactory;
-
 /**
  *
  */
