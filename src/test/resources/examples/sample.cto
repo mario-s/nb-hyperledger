@@ -21,12 +21,12 @@ participant SampleParticipant identified by id{
 }
 
 transaction SampleTransaction {
-  --> SampleAsset _asset
+  --> SampleAsset asset
   o String newValue
 }
 
 event SampleEvent {
-  --> SampleAsset _asset
+  --> SampleAsset asset
   o String oldValue
   o String newValue
 }

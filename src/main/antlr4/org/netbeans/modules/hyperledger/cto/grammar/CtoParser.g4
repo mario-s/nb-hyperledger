@@ -80,39 +80,19 @@ classBodyDeclaration
     ;
 
 fieldDeclaration
-    : fieldType IDENTIFIER
-    | refType IDENTIFIER;
+    : fieldType IDENTIFIER 
+    | refType identifier;
 
 fieldType
-    : VAR primitiveType (LBRACK RBRACK)* 
-    | VAR IDENTIFIER;
+    : VAR (primitiveType | IDENTIFIER) (LBRACK RBRACK)*;
 
 refType
     : REF IDENTIFIER (LBRACK RBRACK)*;
 
-variableDeclarators
-    : variableDeclarator (',' variableDeclarator)*
-    ;
-
-variableDeclarator
-    : variableDeclaratorId ('=' variableInitializer)?
-    ;
+identifier: IDENTIFIER | ASSET;
 
 variableDeclaratorId
     : IDENTIFIER ('[' ']')*
-    ;
-
-variableInitializer
-    : arrayInitializer
-    | expression
-    ;
-
-arrayInitializer
-    : '{' (variableInitializer (',' variableInitializer)* (',')? )? '}'
-    ;
-
-classOrInterfaceType
-    : IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments?)*
     ;
 
 typeArgument
@@ -211,15 +191,10 @@ annotationTypeElementRest
 
 annotationMethodOrConstantRest
     : annotationMethodRest
-    | annotationConstantRest
     ;
 
 annotationMethodRest
     : IDENTIFIER '(' ')' defaultValue?
-    ;
-
-annotationConstantRest
-    : variableDeclarators
     ;
 
 defaultValue
@@ -236,23 +211,7 @@ expression
     : primary
     | expression '[' expression ']'
     | '(' typeType ')' expression
-    | expression postfix=('++' | '--')
-    | prefix=('+'|'-'|'++'|'--') expression
-    | prefix=('~'|'!') expression
-    | expression bop=('*'|'/'|'%') expression
-    | expression bop=('+'|'-') expression
-    | expression ('<' '<' | '>' '>' '>' | '>' '>') expression
-    | expression bop=('<=' | '>=' | '>' | '<') expression
     | expression bop=('==' | '!=') expression
-    | expression bop='&' expression
-    | expression bop='^' expression
-    | expression bop='|' expression
-    | expression bop='&&' expression
-    | expression bop='||' expression
-    | expression bop='?' expression ':' expression
-    | <assoc=right> expression
-      bop=('=' | '+=' | '-=' | '*=' | '/=' | '&=' | '|=' | '^=' | '>>=' | '>>>=' | '<<=' | '%=')
-      expression
     ;
 
 
@@ -262,22 +221,9 @@ primary
     | IDENTIFIER
     ;
 
-classType
-    : (classOrInterfaceType '.')? annotation* IDENTIFIER typeArguments?
-    ;
-
-createdName
-    : IDENTIFIER typeArgumentsOrDiamond? ('.' IDENTIFIER typeArgumentsOrDiamond?)*
-    | primitiveType
-    ;
-
-typeArgumentsOrDiamond
-    : '<' '>'
-    | typeArguments
-    ;
 
 typeType
-    : annotation? (classOrInterfaceType | primitiveType) ('[' ']')*
+    : annotation? (primitiveType) ('[' ']')*
     ;
 
 primitiveType
@@ -289,6 +235,3 @@ primitiveType
     | STRING
     ;
 
-typeArguments
-    : '<' typeArgument (',' typeArgument)* '>'
-    ;
