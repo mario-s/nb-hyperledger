@@ -35,7 +35,7 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId>{
 
     @Override
     protected Lexer<CtoTokenId> createLexer(LexerRestartInfo<CtoTokenId> info) {
-        return new MyCtoLexer(info);
+        return new CtoEditorLexer(info, this);
     }
 
     @Override
@@ -43,4 +43,7 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId>{
         return FileType.MIME;
     }
     
+    CtoTokenId getToken(int id) {
+        return idToToken.get(id);
+    }
 }
