@@ -95,11 +95,6 @@ variableDeclaratorId
     : IDENTIFIER ('[' ']')*
     ;
 
-typeArgument
-    : typeType
-    | '?' (EXTENDS typeType)?
-    ;
-
 qualifiedNameList
     : qualifiedName (',' qualifiedName)*
     ;
@@ -211,7 +206,6 @@ expression
     : primary
     | expression '[' expression ']'
     | '(' typeType ')' expression
-    | expression bop=('==' | '!=') expression
     ;
 
 

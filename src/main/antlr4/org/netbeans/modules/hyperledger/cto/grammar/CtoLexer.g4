@@ -55,25 +55,7 @@ DOT:                '.';
 ASSIGN:             '=';
 GT:                 '>';
 LT:                 '<';
-BANG:               '!';
-QUESTION:           '?';
-COLON:              ':';
-EQUAL:              '==';
-LE:                 '<=';
-GE:                 '>=';
-NOTEQUAL:           '!=';
-AND:                '&&';
-OR:                 '||';
-INC:                '++';
-DEC:                '--';
-ADD:                '+';
-SUB:                '-';
 MUL:                '*';
-DIV:                '/';
-BITAND:             '&';
-BITOR:              '|';
-CARET:              '^';
-MOD:                '%';
 
 // Additional symbols
 AT:                 '@';

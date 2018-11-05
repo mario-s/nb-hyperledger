@@ -11,7 +11,7 @@ enum ProductType {
 }
 
 // asset
-asset SampleAsset identified by assetId{
+abstract asset SampleAsset identified by assetId{
   o String assetId
   o Boolean enabled
   o Integer [] cols
