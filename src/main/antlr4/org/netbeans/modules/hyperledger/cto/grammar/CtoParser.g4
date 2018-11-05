@@ -15,8 +15,7 @@ importDeclaration
     ;
 
 typeDeclaration
-    : classOrInterfaceModifier*
-      (assetDeclaration 
+    : (assetDeclaration 
       | enumDeclaration 
       | participantDeclaration
       | transactionDeclaration
@@ -37,7 +36,8 @@ variableModifier
     ;
 
 assetDeclaration
-    : ASSET IDENTIFIER
+    : classOrInterfaceModifier*
+      ASSET IDENTIFIER
       (EXTENDS typeType)?
       IDENTIFIED
       IDENTIFIER
@@ -58,7 +58,8 @@ eventDeclaration
     ;
 
 participantDeclaration
-    : PARTICIPANT IDENTIFIER
+    : classOrInterfaceModifier*
+      PARTICIPANT IDENTIFIER
       (EXTENDS typeType)?
       IDENTIFIED
       IDENTIFIER
@@ -66,7 +67,8 @@ participantDeclaration
     ;
 
 transactionDeclaration
-    : TRANSACTION IDENTIFIER
+    : classOrInterfaceModifier*
+      TRANSACTION IDENTIFIER
       classBody
     ;
 
