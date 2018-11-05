@@ -19,6 +19,7 @@ abstract asset SampleAsset identified by assetId{
   --> SampleParticipant owner
 }
 
+@foo("arg", 2)
 participant SampleParticipant identified by id{
   o String id
   o String name

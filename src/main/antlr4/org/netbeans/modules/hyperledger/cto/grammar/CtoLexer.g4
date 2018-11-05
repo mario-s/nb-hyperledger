@@ -13,6 +13,7 @@ IDENTIFIED:         'identified by';
 IMPORT:             'import';
 NAMESPACE:          'namespace';
 PARTICIPANT:        'participant';
+REGEX:              'regex';
 TRANSACTION:        'transaction';
 
 //primitive types
@@ -50,6 +51,7 @@ RBRACK:             ']';
 SEMI:               ';';
 COMMA:              ',';
 DOT:                '.';
+APPO:               '"';
 
 // Operators
 ASSIGN:             '=';

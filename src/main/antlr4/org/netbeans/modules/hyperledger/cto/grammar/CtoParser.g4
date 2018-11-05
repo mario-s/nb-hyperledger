@@ -15,25 +15,22 @@ importDeclaration
     ;
 
 typeDeclaration
-    : (assetDeclaration 
-      | enumDeclaration 
-      | participantDeclaration
-      | transactionDeclaration
-      | eventDeclaration
-      | annotationTypeDeclaration)
+    : (assetDeclaration
+    | conceptDeclaration  
+    | enumDeclaration
+    | participantDeclaration
+    | transactionDeclaration
+    | eventDeclaration)
     ;
 
 modifier
     : classOrInterfaceModifier;
 
 classOrInterfaceModifier
-    : annotation
+    : decorator
     | ABSTRACT
     ;
 
-variableModifier
-    : annotation
-    ;
 
 assetDeclaration
     : classOrInterfaceModifier*
@@ -44,13 +41,15 @@ assetDeclaration
       classBody
     ;
 
-enumDeclaration
-    : ENUM IDENTIFIER LBRACE enumConstant* RBRACE
+conceptDeclaration
+    : CONCEPT
     ;
 
+enumDeclaration
+    : ENUM IDENTIFIER LBRACE enumConstant* RBRACE;
+
 enumConstant
-    : VAR IDENTIFIER
-    ;
+    : VAR IDENTIFIER;
 
 eventDeclaration
     : EVENT IDENTIFIER
@@ -73,8 +72,7 @@ transactionDeclaration
     ;
 
 classBody
-    : LBRACE classBodyDeclaration* RBRACE
-    ;
+    : LBRACE classBodyDeclaration* RBRACE;
 
 classBodyDeclaration
     : ';'
@@ -94,33 +92,13 @@ refType
 identifier: IDENTIFIER | ASSET;
 
 variableDeclaratorId
-    : IDENTIFIER ('[' ']')*
-    ;
+    : IDENTIFIER ('[' ']')*;
 
 qualifiedNameList
-    : qualifiedName (',' qualifiedName)*
-    ;
-
-formalParameters
-    : '(' formalParameterList? ')'
-    ;
-
-formalParameterList
-    : formalParameter (',' formalParameter)* (',' lastFormalParameter)?
-    | lastFormalParameter
-    ;
-
-formalParameter
-    : variableModifier* typeType variableDeclaratorId
-    ;
-
-lastFormalParameter
-    : variableModifier* typeType ELLIPSIS variableDeclaratorId
-    ;
+    : qualifiedName (',' qualifiedName)*;
 
 qualifiedName
-    : IDENTIFIER ('.' IDENTIFIER)*
-    ;
+    : IDENTIFIER ('.' IDENTIFIER)*;
 
 literal
     : integerLiteral
@@ -145,82 +123,14 @@ floatLiteral
 
 // ANNOTATIONS
 
-annotation
-    : '@' qualifiedName ('(' ( elementValuePairs | elementValue )? ')')?
-    ;
-
-elementValuePairs
-    : elementValuePair (',' elementValuePair)*
-    ;
+decorator
+    : '@' qualifiedName ('(' elementValuePair ')')?;
 
 elementValuePair
-    : IDENTIFIER '=' elementValue
-    ;
-
-elementValue
-    : expression
-    | annotation
-    | elementValueArrayInitializer
-    ;
-
-elementValueArrayInitializer
-    : '{' (elementValue (',' elementValue)*)? (',')? '}'
-    ;
-
-annotationTypeDeclaration
-    : '@' IDENTIFIER annotationTypeBody
-    ;
-
-annotationTypeBody
-    : '{' (annotationTypeElementDeclaration)* '}'
-    ;
-
-annotationTypeElementDeclaration
-    : modifier* annotationTypeElementRest
-    | ';' // this is not allowed by the grammar, but apparently allowed by the actual compiler
-    ;
-
-annotationTypeElementRest
-    : typeType annotationMethodOrConstantRest ';'
-    | enumDeclaration ';'?
-    | annotationTypeDeclaration ';'?
-    ;
-
-annotationMethodOrConstantRest
-    : annotationMethodRest
-    ;
-
-annotationMethodRest
-    : IDENTIFIER '(' ')' defaultValue?
-    ;
-
-defaultValue
-    : DEFAULT elementValue
-    ;
-
-// EXPRESSIONS
-
-parExpression
-    : '(' expression ')'
-    ;
-
-expression
-    : primary
-    | expression '[' expression ']'
-    | '(' typeType ')' expression
-    ;
-
-
-primary
-    : '(' expression ')'
-    | literal
-    | IDENTIFIER
-    ;
-
+    : literal ',' (literal | IDENTIFIER);
 
 typeType
-    : annotation? (primitiveType) ('[' ']')*
-    ;
+    : decorator? (primitiveType) ('[' ']')*;
 
 primitiveType
     : BOOLEAN
