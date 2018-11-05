@@ -23,26 +23,25 @@ typeDeclaration
     | eventDeclaration)
     ;
 
-modifier
-    : classOrInterfaceModifier;
-
-classOrInterfaceModifier
+classModifier
     : decorator
     | ABSTRACT
     ;
 
-
 assetDeclaration
-    : classOrInterfaceModifier*
+    : classModifier*
       ASSET IDENTIFIER
-      (EXTENDS typeType)?
+      (EXTENDS IDENTIFIER)?
       IDENTIFIED
       IDENTIFIER
       classBody
     ;
 
 conceptDeclaration
-    : CONCEPT
+    : classModifier*
+      CONCEPT IDENTIFIER
+      (EXTENDS IDENTIFIER)?
+      classBody
     ;
 
 enumDeclaration
@@ -57,16 +56,16 @@ eventDeclaration
     ;
 
 participantDeclaration
-    : classOrInterfaceModifier*
+    : classModifier*
       PARTICIPANT IDENTIFIER
-      (EXTENDS typeType)?
+      (EXTENDS IDENTIFIER)?
       IDENTIFIED
       IDENTIFIER
       classBody
     ;
 
 transactionDeclaration
-    : classOrInterfaceModifier*
+    : classModifier*
       TRANSACTION IDENTIFIER
       classBody
     ;
@@ -128,9 +127,6 @@ decorator
 
 elementValuePair
     : literal ',' (literal | IDENTIFIER);
-
-typeType
-    : decorator? (primitiveType) ('[' ']')*;
 
 primitiveType
     : BOOLEAN

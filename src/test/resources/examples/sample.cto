@@ -19,6 +19,14 @@ abstract asset SampleAsset identified by assetId{
   --> SampleParticipant owner
 }
 
+abstract concept Address {
+  o String street
+}
+
+concept UnitedStatesAddress extends Address {
+  o String zipcode
+}
+
 @foo("arg", 2)
 participant SampleParticipant identified by id{
   o String id
