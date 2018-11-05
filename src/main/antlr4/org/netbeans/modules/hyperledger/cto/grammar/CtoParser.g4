@@ -11,7 +11,7 @@ namespaceDeclaration
     ;
 
 importDeclaration
-    : IMPORT qualifiedName (DOT '*')?
+    : IMPORT qualifiedName (DOT MUL)?
     ;
 
 typeDeclaration
@@ -123,7 +123,7 @@ floatLiteral
 // ANNOTATIONS
 
 decorator
-    : '@' qualifiedName ('(' elementValuePair ')')?;
+    : AT qualifiedName ('(' elementValuePair ')')?;
 
 elementValuePair
     : literal ',' (literal | IDENTIFIER);
