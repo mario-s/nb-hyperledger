@@ -1,3 +1,36 @@
+/*
+ [The "BSD licence"]
+ Copyright (c) 2018 Mario Schroeder
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. The name of the author may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/*
+ A grammar for Hyperledger Composer Modeling Language
+ https://hyperledger.github.io/composer/latest/reference/cto_language.html
+ */
+
 parser grammar CtoParser;
 
 options { tokenVocab=CtoLexer; }
@@ -11,7 +44,7 @@ namespaceDeclaration
     ;
 
 importDeclaration
-    : IMPORT qualifiedName (DOT MUL)?
+    : IMPORT qualifiedName ('.' '*')?
     ;
 
 typeDeclaration
@@ -31,9 +64,7 @@ classModifier
 assetDeclaration
     : classModifier*
       ASSET IDENTIFIER
-      (EXTENDS IDENTIFIER)?
-      IDENTIFIED
-      IDENTIFIER
+      extendsOrIdentified
       classBody
     ;
 
@@ -45,7 +76,7 @@ conceptDeclaration
     ;
 
 enumDeclaration
-    : ENUM IDENTIFIER LBRACE enumConstant* RBRACE;
+    : ENUM IDENTIFIER '{' enumConstant* '}';
 
 enumConstant
     : VAR IDENTIFIER;
@@ -58,9 +89,7 @@ eventDeclaration
 participantDeclaration
     : classModifier*
       PARTICIPANT IDENTIFIER
-      (EXTENDS IDENTIFIER)?
-      IDENTIFIED
-      IDENTIFIER
+      extendsOrIdentified
       classBody
     ;
 
@@ -70,8 +99,12 @@ transactionDeclaration
       classBody
     ;
 
+extendsOrIdentified: ((EXTENDS IDENTIFIER) | identified);
+
+identified: (IDENTIFIED IDENTIFIER);
+
 classBody
-    : LBRACE classBodyDeclaration* RBRACE;
+    : '{' classBodyDeclaration* '}';
 
 classBodyDeclaration
     : ';'
@@ -79,61 +112,92 @@ classBodyDeclaration
     ;
 
 fieldDeclaration
-    : fieldType IDENTIFIER 
-    | refType identifier;
+    : stringField identifier defaultString? regexDeclaration? OPTIONAL?
+    | booleanField identifier defaultBoolean? OPTIONAL?
+    | numericField identifier defaultNumber? rangeValidation? OPTIONAL?
+    | dateField identifier defaultDate? OPTIONAL?
+    | identifierField identifier
+    | reference identifier;
 
-fieldType
-    : VAR (primitiveType | IDENTIFIER) (LBRACK RBRACK)*;
+identifierField
+    : VAR IDENTIFIER (square)*;
 
-refType
-    : REF IDENTIFIER (LBRACK RBRACK)*;
+numericField
+    : VAR numericPrimitive (square)*;
 
-identifier: IDENTIFIER | ASSET;
+numericPrimitive
+    : DOUBLE
+    | INTEGER
+    | LONG
+    ;
 
-variableDeclaratorId
-    : IDENTIFIER ('[' ']')*;
+booleanField
+    : VAR BOOLEAN (square)*;
 
-qualifiedNameList
-    : qualifiedName (',' qualifiedName)*;
+dateField
+    : VAR DATE_TIME (square)*;
+
+defaultDate
+    : DEFAULT ASSIGN DATE_TIME_LITERAL;
+
+regexDeclaration
+    : REGEX ASSIGN REGEX_EXPR;
+
+stringField
+    : VAR STRING (square)*;
+
+reference
+    : REF IDENTIFIER (square)*;
 
 qualifiedName
     : IDENTIFIER ('.' IDENTIFIER)*;
 
+rangeValidation
+    : RANGE ASSIGN rangeDeclaration;
+
+rangeDeclaration
+    : ('[' numberLiteral ',' ']')
+    | ('[' ',' numberLiteral ']')
+    | ('[' numberLiteral ',' numberLiteral ']');
+
+defaultBoolean
+    : (DEFAULT ASSIGN BOOL_LITERAL);
+
+defaultString
+    : (DEFAULT ASSIGN stringLiteral);
+
+defaultNumber
+    : (DEFAULT ASSIGN numberLiteral);
+
+identifier: IDENTIFIER | ASSET | PARTICIPANT;
+
 literal
-    : integerLiteral
-    | floatLiteral
-    | CHAR_LITERAL
-    | STRING_LITERAL
+    : numberLiteral
+    | stringLiteral
     | BOOL_LITERAL
-    | NULL_LITERAL
+    ;
+
+numberLiteral
+    : integerLiteral
+    | floatLiteral;
+
+stringLiteral
+    : CHAR_LITERAL
+    | STRING_LITERAL
     ;
 
 integerLiteral
     : DECIMAL_LITERAL
-    | HEX_LITERAL
     | OCT_LITERAL
-    | BINARY_LITERAL
     ;
 
 floatLiteral
-    : FLOAT_LITERAL
-    | HEX_FLOAT_LITERAL
-    ;
-
-// ANNOTATIONS
+    : FLOAT_LITERAL;
 
 decorator
     : AT qualifiedName ('(' elementValuePair ')')?;
 
 elementValuePair
-    : literal ',' (literal | IDENTIFIER);
+    : literal (',' literal)*;
 
-primitiveType
-    : BOOLEAN
-    | DATE_TIME
-    | DOUBLE
-    | INTEGER
-    | LONG
-    | STRING
-    ;
-
+square: '[' ']';

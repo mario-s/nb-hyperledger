@@ -1,3 +1,36 @@
+/*
+ [The "BSD licence"]
+ Copyright (c) 2018 Mario Schroeder
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. The name of the author may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/*
+ A grammar for Hyperledger Composer Modeling Language
+ https://hyperledger.github.io/composer/latest/reference/cto_language.html
+ */
+
 lexer grammar CtoLexer;
 
 // Keywords
@@ -12,7 +45,9 @@ EXTENDS:            'extends';
 IDENTIFIED:         'identified by';
 IMPORT:             'import';
 NAMESPACE:          'namespace';
+OPTIONAL:           'optional';
 PARTICIPANT:        'participant';
+RANGE:              'range';
 REGEX:              'regex';
 TRANSACTION:        'transaction';
 
@@ -26,20 +61,13 @@ STRING:             'String';
 
 // Literals
 DECIMAL_LITERAL:    ('0' | [1-9] (Digits? | '_'+ Digits)) [lL]?;
-HEX_LITERAL:        '0' [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?;
 OCT_LITERAL:        '0' '_'* [0-7] ([0-7_]* [0-7])? [lL]?;
-BINARY_LITERAL:     '0' [bB] [01] ([01_]* [01])? [lL]?;
 FLOAT_LITERAL:      (Digits '.' Digits? | '.' Digits) ExponentPart? [fFdD]?
              |       Digits (ExponentPart [fFdD]? | [fFdD])
              ;
-HEX_FLOAT_LITERAL:  '0' [xX] (HexDigits '.'? | HexDigits? '.' HexDigits) [pP] [+-]? Digits [fFdD]?;
 BOOL_LITERAL:       'true'
             |       'false'
             ;
-CHAR_LITERAL:       '\'' (~['\\\r\n] | EscapeSequence) '\'';
-STRING_LITERAL:     '"' (~["\\\r\n] | EscapeSequence)* '"';
-NULL_LITERAL:       'null';
-
 
 // Separators
 LPAREN:             '(';
@@ -51,12 +79,10 @@ RBRACK:             ']';
 SEMI:               ';';
 COMMA:              ',';
 DOT:                '.';
-APPO:               '"';
+COLON:              ':';
 
 // Operators
 ASSIGN:             '=';
-GT:                 '>';
-LT:                 '<';
 MUL:                '*';
 
 // Additional symbols
@@ -71,9 +97,35 @@ COMMENT:            '/*' .*? '*/'    -> channel(HIDDEN);
 LINE_COMMENT:       '//' ~[\r\n]*    -> channel(HIDDEN);
 SPC: ' ';
 
-// Identifiers
+//REGEX Expr
+REGEX_EXPR:         '/'.*?'/';
+
+DATE_TIME_LITERAL: Bound FullDate 'T' FullTime Bound;
+fragment Bound: '"' | '\'';
+fragment FullDate: Year '-' Month '-' Day;
+fragment Year: Digit Digit Digit Digit;
+fragment Month: [0][0-9]|[1][0-2];
+fragment Day: [0-2][0-9]|[0-3][01];
+
+fragment FullTime 
+    : PartialTime TimeOffset;
+fragment TimeOffset
+    : 'Z' | TimeNumOffset;
+fragment TimeNumOffset 
+    : '-' [01][0-2] (':' (HalfHour))?
+    | '+' [01][0-5] (':' (HalfHour | [4][5]))?
+    ;
+fragment HalfHour: [0][0] | [3][0];
+fragment PartialTime 
+    : [0-2][0-3] ':' Sixty ':' Sixty ('.' [0-9]*)?;
+fragment Sixty: [0-5] Digit;
+fragment Digit: [0-9];
+
 
 IDENTIFIER:         Letter LetterOrDigit*;
+
+CHAR_LITERAL:       '\'' (~["\\\r\n] | EscapeSequence)* '\'';
+STRING_LITERAL:     '"' (~["\\\r\n] | EscapeSequence)* '"';
 
 // Fragment rules
 fragment ExponentPart
