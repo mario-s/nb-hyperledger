@@ -16,10 +16,7 @@ public class CtoLanguageProvider extends LanguageProvider{
 
     @Override
     public Language<?> findLanguage(String mime) {
-        if(FileType.MIME.equals(mime)) {
-            return new CtoLanguageHierarchy().language();
-        }
-        return null;
+        return (FileType.MIME.equals(mime)) ? new CtoLanguageHierarchy().language() : null;
     }
 
     @Override
