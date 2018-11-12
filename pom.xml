@@ -1,51 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.netbeans.modules.hyperledger</groupId>
     <artifactId>hyperledger</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
-    
+
     <properties>
         <netbeans.version>RELEASE82</netbeans.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <antlr.version>4.7.1</antlr.version>
+        <antlr4test-maven-plugin.version>1.10</antlr4test-maven-plugin.version>
     </properties>
-    
-    <profiles>
-        <profile>
-            <id>javacc</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.helger.maven</groupId>
-                        <artifactId>ph-javacc-maven-plugin</artifactId>
-                        <version>4.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>javacc</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>javacc</goal>
-                                </goals>
-                                <configuration>
-                                    <jdkVersion>${maven.compiler.source}</jdkVersion>
-                                    <javadocFriendlyComments>true</javadocFriendlyComments>
-                                    <packageName>org.javacc.parser</packageName>
-                                    <sourceDirectory>src/main/javacc</sourceDirectory>
-                                    <outputDirectory>${project.build.directory}/generated-sources/javacc</outputDirectory>
-                                    <!--outputDirectory>src/main/java</outputDirectory-->
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            
-            </build>
-        </profile>
-    </profiles>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -54,7 +24,7 @@
                 <version>3.13</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>true</useOSGiDependencies>
+                    <useOSGiDependencies>false</useOSGiDependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -64,6 +34,18 @@
                 <configuration>
                     <useDefaultManifestFile>true</useDefaultManifestFile>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>${antlr.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -148,10 +130,14 @@
             <artifactId>org-netbeans-modules-lexer</artifactId>
             <version>${netbeans.version}</version>
         </dependency>
-        
-        
-        
-        
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${antlr.version}</version>
+        </dependency>
+
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -166,5 +152,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
 </project>

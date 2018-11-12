@@ -2,7 +2,7 @@ language: java
 cache: 
     directories:
     - $HOME/.m2
-script: mvn clean verify -Pjavacc
+script: mvn clean verify
 after_failure:
   - "cat ./target/surefire-reports/*.xml"
 jdk:
