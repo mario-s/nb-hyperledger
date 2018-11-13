@@ -2,6 +2,7 @@ package org.netbeans.modules.hyperledger.cto.lexer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.misc.Interval;
 import org.netbeans.spi.lexer.LexerInput;
@@ -36,6 +37,7 @@ public class AntlrCharStream implements CharStream {
 
     @Override
     public String getText(Interval interval) {
+        Objects.requireNonNull(interval, "Interval may not be null");
         return input.readText(interval.a, interval.b).toString();
     }
 
