@@ -38,6 +38,9 @@ public class AntlrCharStream implements CharStream {
     @Override
     public String getText(Interval interval) {
         Objects.requireNonNull(interval, "Interval may not be null");
+        if(interval.a < 0 || interval.b < interval.a - 1) {
+            throw new IllegalArgumentException("Invalid interval!");
+        }
         return input.readText(interval.a, interval.b).toString();
     }
 
