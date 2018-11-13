@@ -9,6 +9,7 @@ import org.netbeans.spi.lexer.LexerRestartInfo;
  *
  */
 public final class CtoEditorLexer implements Lexer<CtoTokenId>{
+    private final static String NAME = "CtoEditor";
     
     private final LexerRestartInfo<CtoTokenId> info;
     private final CtoLexer ctoLexer;
@@ -16,7 +17,7 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId>{
 
     public CtoEditorLexer(LexerRestartInfo<CtoTokenId> info, CtoLanguageHierarchy hierachy) {
         this.info = info;
-        CharStream stream = null; //TODO
+        CharStream stream = new AntlrCharStream(info.input(), NAME);
         ctoLexer = new CtoLexer(stream);
         this.hierachy = hierachy;
     }

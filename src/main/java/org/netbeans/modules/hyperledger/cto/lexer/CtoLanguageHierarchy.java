@@ -19,6 +19,7 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId>{
     private final Map<Integer, CtoTokenId> idToToken;
     
     public CtoLanguageHierarchy() {
+        
         idToToken = new HashMap<>();
         
         tokens = Arrays.<CtoTokenId>asList(new CtoTokenId[]{
