@@ -1,5 +1,6 @@
 package org.netbeans.modules.hyperledger.cto.lexer;
 
+import java.util.function.Function;
 import org.antlr.v4.runtime.CharStream;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
@@ -14,12 +15,18 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId>{
     private final LexerRestartInfo<CtoTokenId> info;
     private final CtoLexer ctoLexer;
     private final CtoLanguageHierarchy hierachy;
+    
+    private final Function<Integer, CtoTokenId> ctoTokenFactory;
+    private final Function<CtoTokenId, Token<CtoTokenId>> tokenFactory;
 
     public CtoEditorLexer(LexerRestartInfo<CtoTokenId> info, CtoLanguageHierarchy hierachy) {
         this.info = info;
         CharStream stream = new AntlrCharStream(info.input(), NAME);
         ctoLexer = new CtoLexer(stream);
         this.hierachy = hierachy;
+        
+        this.ctoTokenFactory = type -> hierachy.getToken(type);
+        this.tokenFactory = tokenId -> info.tokenFactory().createToken(tokenId);
     }
     
     @Override
@@ -30,27 +37,27 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId>{
 
         if (token.getType() != -1){
             int type = token.getType();
-            createdToken = createToken(type);
+            CtoTokenId tokenId = ctoTokenFactory.apply(type);
+            if(tokenId != null) {
+                createdToken = tokenFactory.apply(tokenId);
+            } else {
+                createdToken = ctoTokenFactory.andThen(tokenFactory).apply(CtoLexer.COLON);
+            }
         }  else if(info.input().readLength() > 0){
-            createdToken = createToken(CtoLexer.WS);
+            createdToken = ctoTokenFactory.andThen(tokenFactory).apply(CtoLexer.WS);
         }
 
         return createdToken;
     }
-    
-    private Token<CtoTokenId> createToken(int type) {
-        CtoTokenId tokenId  = hierachy.getToken(type);
-        return info.tokenFactory().createToken(tokenId);
-    }
 
     @Override
     public Object state() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return null;
     }
 
     @Override
     public void release() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        //nothing todo
     }
     
 }

@@ -31,5 +31,11 @@ public class CtoTokenId implements TokenId{
     public String primaryCategory() {
         return primaryCategory;
     }
+
+    @Override
+    public String toString() {
+        return "CtoTokenId{" + "name=" + name + ", primaryCategory=" + primaryCategory + ", id=" + id + '}';
+    }
+    
     
 }

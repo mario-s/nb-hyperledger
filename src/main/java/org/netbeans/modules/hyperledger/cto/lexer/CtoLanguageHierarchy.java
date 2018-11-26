@@ -22,9 +22,8 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId>{
         
         idToToken = new HashMap<>();
         
-        tokens = Arrays.<CtoTokenId>asList(new CtoTokenId[]{
-            //[PENDING]
-        });
+        AntlrTokenReader reader = new AntlrTokenReader();
+        tokens = reader.readTokenFile();
         tokens.forEach(token -> idToToken.put(token.ordinal(), token));
     } 
 
