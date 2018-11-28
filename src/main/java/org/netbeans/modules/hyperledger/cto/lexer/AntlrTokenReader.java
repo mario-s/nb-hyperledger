@@ -22,6 +22,8 @@ public class AntlrTokenReader {
         tokenTypes = new HashMap<>();
         tokens = new ArrayList<>();
         
+        tokenTypes.put("\'abstract\'", "keyword");
+        
         tokenTypes.put("\'asset\'", "type");
         tokenTypes.put("\'participant\'", "type");
         
