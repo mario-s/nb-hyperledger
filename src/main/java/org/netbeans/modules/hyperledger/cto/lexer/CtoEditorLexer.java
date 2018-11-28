@@ -14,7 +14,6 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId>{
     
     private final LexerRestartInfo<CtoTokenId> info;
     private final CtoLexer ctoLexer;
-    private final CtoLanguageHierarchy hierachy;
     
     private final Function<Integer, CtoTokenId> ctoTokenFactory;
     private final Function<CtoTokenId, Token<CtoTokenId>> tokenFactory;
@@ -23,7 +22,6 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId>{
         this.info = info;
         CharStream stream = new AntlrCharStream(info.input(), NAME);
         ctoLexer = new CtoLexer(stream);
-        this.hierachy = hierachy;
         
         this.ctoTokenFactory = type -> hierachy.getToken(type);
         this.tokenFactory = tokenId -> info.tokenFactory().createToken(tokenId);
@@ -41,7 +39,7 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId>{
             if(tokenId != null) {
                 createdToken = tokenFactory.apply(tokenId);
             } else {
-                createdToken = ctoTokenFactory.andThen(tokenFactory).apply(CtoLexer.COLON);
+                createdToken = ctoTokenFactory.andThen(tokenFactory).apply(CtoLexer.SEMI);
             }
         }  else if(info.input().readLength() > 0){
             createdToken = ctoTokenFactory.andThen(tokenFactory).apply(CtoLexer.WS);
