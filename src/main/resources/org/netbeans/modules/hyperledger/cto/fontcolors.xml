@@ -2,8 +2,10 @@
 <!DOCTYPE fontscolors PUBLIC "-//NetBeans//DTD Editor Fonts and Colors settings 1.1//EN" "http://www.netbeans.org/dtds/EditorFontsColors-1_1.dtd">
 <fontscolors>
     
-    <fontcolor name="keyword"           foreColor="blue" default="default"/>
-    <fontcolor name="type"              foreColor="green" default="default"/>    
-    <fontcolor name="number"            foreColor="red" default="default"/>    
+    <fontcolor name="keyword"       foreColor="blue" default="default"/>
+    <fontcolor name="primitive"     foreColor="green" default="default"/>    
+    <fontcolor name="field"         foreColor="orange" default="default"/> 
+    <fontcolor name="operator"      foreColor="black" default="default"/> 
+    <fontcolor name="separator"     foreColor="black" default="default"/>   
 
 </fontscolors>

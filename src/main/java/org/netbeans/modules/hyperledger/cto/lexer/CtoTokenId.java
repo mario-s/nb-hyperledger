@@ -37,6 +37,7 @@ public enum CtoTokenId implements TokenId {
     RBRACE("}", "separator"),
     LBRACKET("[", "separator"),
     RBRACKET("]", "separator"),
+    
     SEMI(";", "operator"),
     COMMA(",", "operator"),
     DOT(".", "operator"),
@@ -45,6 +46,7 @@ public enum CtoTokenId implements TokenId {
     STAR("*", "operator"),
     AT("@", "operator"),
     TRIPLE_DOT("...", "operator"),
+    
     REF("-->", "field"),
     FIELD("o", "field");
 
