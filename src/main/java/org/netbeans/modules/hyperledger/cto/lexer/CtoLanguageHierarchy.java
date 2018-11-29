@@ -31,7 +31,7 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
 
         idToToken = new HashMap<>();
         tokens = new ArrayList<>();
-        int max = vocabulary.getMaxTokenType();
+        int max = vocabulary.getMaxTokenType()+1;
         for (int i = 1; i < max; i++) {
             CtoTokenId token = new CtoTokenId(vocabulary.getDisplayName(i), getCategory(i), i);
             tokens.add(token);
@@ -49,7 +49,7 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
                 return Category.separator;
             } else if (t < CtoLexer.DECIMAL_LITERAL) {
                 return Category.field;
-            } else if (t < CtoLexer.WS || t >= CtoLexer.CHAR_LITERAL) {
+            } else if (t < CtoLexer.WS || t == CtoLexer.CHAR_LITERAL || t == CtoLexer.STRING_LITERAL) {
                 return Category.value;
             } else if (t == CtoLexer.COMMENT || t == CtoLexer.LINE_COMMENT) {
                 return Category.comment;

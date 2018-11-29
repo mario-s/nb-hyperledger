@@ -38,8 +38,6 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId>{
             CtoTokenId tokenId = ctoTokenFactory.apply(type);
             if(tokenId != null) {
                 createdToken = tokenFactory.apply(tokenId);
-            } else {
-                createdToken = ctoTokenFactory.andThen(tokenFactory).apply(CtoLexer.SEMI);
             }
         }  else if(info.input().readLength() > 0){
             createdToken = ctoTokenFactory.andThen(tokenFactory).apply(CtoLexer.WS);
