@@ -1,11 +1,11 @@
 package org.netbeans.modules.hyperledger.cto.lexer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
@@ -19,7 +19,7 @@ import org.netbeans.spi.lexer.LexerRestartInfo;
 public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
 
     enum Category {
-        keyword, primitive, field, operator, separator, value, comment
+        keyword, type, field, separator, value, comment, unknow
     }
 
     private final List<CtoTokenId> tokens;
@@ -40,20 +40,24 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
     }
 
     private String getCategory(int token) {
-        if (token < CtoLexer.BOOLEAN) {
-            return Category.keyword.name();
-        } else if (token < CtoLexer.DECIMAL_LITERAL) {
-            return Category.primitive.name();
-        } else if (token < CtoLexer.LPAREN) {
-            return Category.value.name();
-        } else if (token < CtoLexer.ASSIGN) {
-            return Category.separator.name();
-        } else if (token < CtoLexer.ELLIPSIS) {
-            return Category.operator.name();
-        } else if (token < CtoLexer.WS) {
-            return Category.field.name();
-        }
-        return Category.comment.name();
+        Function<Integer, Category> mapping = t -> {
+            if (t < CtoLexer.BOOLEAN) {
+                return Category.keyword;
+            } else if (t < CtoLexer.LPAREN) {
+                return Category.type;
+            } else if (t < CtoLexer.REF) {
+                return Category.separator;
+            } else if (t < CtoLexer.DECIMAL_LITERAL) {
+                return Category.field;
+            } else if (t < CtoLexer.WS || t >= CtoLexer.CHAR_LITERAL) {
+                return Category.value;
+            } else if (t == CtoLexer.COMMENT || t == CtoLexer.LINE_COMMENT) {
+                return Category.comment;
+            }
+            return Category.unknow;
+        };
+
+        return mapping.apply(token).name();
     }
 
     @Override

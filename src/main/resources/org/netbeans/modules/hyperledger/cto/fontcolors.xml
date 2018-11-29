@@ -3,9 +3,10 @@
 <fontscolors>
     
     <fontcolor name="keyword"       foreColor="blue" default="default"/>
-    <fontcolor name="primitive"     foreColor="green" default="default"/>    
+    <fontcolor name="type"          foreColor="green" default="default"/>    
     <fontcolor name="field"         foreColor="orange" default="default"/> 
-    <fontcolor name="operator"      foreColor="black" default="default"/> 
-    <fontcolor name="separator"     foreColor="black" default="default"/>   
+    <fontcolor name="value"         foreColor="black" default="default"/> 
+    <fontcolor name="separator"     foreColor="magenta" default="default"/>
+    <fontcolor name="comment"       foreColor="gray" default="default"/>   
 
 </fontscolors>
