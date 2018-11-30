@@ -1,5 +1,6 @@
 package org.netbeans.modules.hyperledger.cto.lexer;
 
+import java.util.Map;
 import java.util.function.Function;
 import org.antlr.v4.runtime.CharStream;
 import org.netbeans.api.lexer.Token;
@@ -15,18 +16,18 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId> {
     private final static String NAME = "CtoEditor";
 
     private final LexerRestartInfo<CtoTokenId> info;
+    private final Map<Integer, CtoTokenId> idToToken;
+    
+    private final Function<CtoTokenId, Token<CtoTokenId>> tokenFactory;
     private final CtoLexer ctoLexer;
 
-    private final Function<Integer, CtoTokenId> ctoTokenFactory;
-    private final Function<CtoTokenId, Token<CtoTokenId>> tokenFactory;
-
-    public CtoEditorLexer(LexerRestartInfo<CtoTokenId> info, CtoLanguageHierarchy hierachy) {
+    public CtoEditorLexer(LexerRestartInfo<CtoTokenId> info, Map<Integer, CtoTokenId> idToToken) {
         this.info = info;
+        this.idToToken = idToToken;
+        this.tokenFactory = id -> info.tokenFactory().createToken(id);
+        
         CharStream stream = new AntlrCharStream(info.input(), NAME);
         ctoLexer = new CtoLexer(stream);
-
-        this.ctoTokenFactory = type -> hierachy.getToken(type);
-        this.tokenFactory = tokenId -> info.tokenFactory().createToken(tokenId);
     }
 
     @Override
@@ -46,7 +47,8 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId> {
     }
 
     private Token<CtoTokenId> createToken(int type) {
-        return ctoTokenFactory.andThen(tokenFactory).apply(type);
+        Function<Integer, CtoTokenId> mapping = idToToken::get;
+        return mapping.andThen(tokenFactory).apply(type);
     }
 
     @Override

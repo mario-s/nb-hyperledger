@@ -70,15 +70,11 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
 
     @Override
     protected Lexer<CtoTokenId> createLexer(LexerRestartInfo<CtoTokenId> info) {
-        return new CtoEditorLexer(info, this);
+        return new CtoEditorLexer(info, idToToken);
     }
 
     @Override
     protected String mimeType() {
         return FileType.MIME;
-    }
-
-    CtoTokenId getToken(int id) {
-        return idToToken.get(id);
     }
 }
