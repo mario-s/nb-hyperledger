@@ -41,9 +41,7 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
 
     private String getCategory(int token) {
         Function<Integer, Category> mapping = t -> {
-            if(t == CtoLexer.IDENTIFIER) {
-                return Category.text;
-            } else if (t < CtoLexer.BOOLEAN) {
+            if (t < CtoLexer.BOOLEAN) {
                 return Category.keyword;
             } else if (t < CtoLexer.LPAREN) {
                 return Category.type;
