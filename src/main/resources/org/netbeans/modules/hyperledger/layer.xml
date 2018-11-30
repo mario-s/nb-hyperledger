@@ -28,12 +28,20 @@
                 <folder name="FontsColors">
                     <folder name="NetBeans">
                         <folder name="Defaults">
-                            <file name="fontcolors.xml" url="cto/fontcolors.xml">
+                            <file name="coloring.xml" url="cto/fontColors.xml">
                                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.modules.hyperledger.Bundle"/>
                             </file>
                         </folder>
                     </folder>
                 </folder>                
+            </folder>
+        </folder>
+    </folder>
+    
+    <folder name="OptionsDialog">
+        <folder name="PreviewExamples">
+            <folder name="text">
+                <file name="cto" url="cto/ColorPreview.cto"/>
             </folder>
         </folder>
     </folder>
