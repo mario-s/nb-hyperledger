@@ -1,5 +1,6 @@
 package org.netbeans.modules.hyperledger.cto.lexer;
 
+import java.util.function.Supplier;
 import org.netbeans.api.lexer.InputAttributes;
 import org.netbeans.api.lexer.Language;
 import org.netbeans.api.lexer.LanguagePath;
@@ -13,10 +14,16 @@ import org.netbeans.spi.lexer.LanguageProvider;
  */
 @org.openide.util.lookup.ServiceProvider(service=org.netbeans.spi.lexer.LanguageProvider.class)
 public class CtoLanguageProvider extends LanguageProvider{
+    
+    private final Supplier<Language<?>> supplier;
+
+    public CtoLanguageProvider() {
+        this.supplier = () -> new CtoLanguageHierarchy().language();
+    }
 
     @Override
     public Language<?> findLanguage(String mime) {
-        return (FileType.MIME.equals(mime)) ? new CtoLanguageHierarchy().language() : null;
+        return (FileType.MIME.equals(mime)) ? supplier.get() : null;
     }
 
     @Override
