@@ -26,11 +26,14 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
     private final Map<Integer, CtoTokenId> idToToken;
 
     public CtoLanguageHierarchy() {
-
-        Vocabulary vocabulary = CtoLexer.VOCABULARY;
-
         idToToken = new HashMap<>();
         tokens = new ArrayList<>();
+        
+        createTokenMapping();
+    }
+
+    private void createTokenMapping() {
+        Vocabulary vocabulary = CtoLexer.VOCABULARY;
         int max = vocabulary.getMaxTokenType()+1;
         for (int i = 1; i < max; i++) {
             CtoTokenId token = new CtoTokenId(vocabulary.getDisplayName(i), getCategory(i), i);
