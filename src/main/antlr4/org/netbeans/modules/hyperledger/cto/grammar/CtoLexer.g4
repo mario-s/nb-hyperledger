@@ -51,12 +51,12 @@ REGEX:              'regex';
 TRANSACTION:        'transaction';
 
 //primitive types
-BOOLEAN:            'Boolean';
-DATE_TIME:          'DateTime';
-DOUBLE:             'Double';
-INTEGER:            'Integer';
-LONG:               'Long';
-STRING:             'String';
+BOOLEAN:            'boolean';
+DATE_TIME:          'datetime';
+DOUBLE:             'double';
+INTEGER:            'integer';
+LONG:               'long';
+STRING:             'string';
 
 // Separators
 LPAREN:             '(';
@@ -119,11 +119,10 @@ fragment PartialTime
 fragment Sixty: [0-5] Digit;
 fragment Digit: [0-9];
 
-
-IDENTIFIER:         Letter LetterOrDigit*;
-
 CHAR_LITERAL:       '\'' (~["\\\r\n] | EscapeSequence)* '\'';
 STRING_LITERAL:     '"' (~["\\\r\n] | EscapeSequence)* '"';
+
+IDENTIFIER:         Letter LetterOrDigit*;
 
 // Fragment rules
 fragment ExponentPart

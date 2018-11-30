@@ -19,7 +19,7 @@ import org.netbeans.spi.lexer.LexerRestartInfo;
 public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
 
     enum Category {
-        keyword, type, field, separator, value, comment, unknow
+        keyword, type, field, separator, value, comment, text
     }
 
     private final List<CtoTokenId> tokens;
@@ -41,7 +41,9 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
 
     private String getCategory(int token) {
         Function<Integer, Category> mapping = t -> {
-            if (t < CtoLexer.BOOLEAN) {
+            if(t == CtoLexer.IDENTIFIER) {
+                return Category.text;
+            } else if (t < CtoLexer.BOOLEAN) {
                 return Category.keyword;
             } else if (t < CtoLexer.LPAREN) {
                 return Category.type;
@@ -54,7 +56,7 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
             } else if (t == CtoLexer.COMMENT || t == CtoLexer.LINE_COMMENT) {
                 return Category.comment;
             }
-            return Category.unknow;
+            return Category.text;
         };
 
         return mapping.apply(token).name();
