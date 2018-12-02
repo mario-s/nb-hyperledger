@@ -11,9 +11,10 @@ import org.netbeans.spi.lexer.LexerInput;
  *
  */
 final class CtoCharStream implements CharStream {
+    
+    private final static String NAME = "CtoChar";
 
     private final LexerInput input;
-    private final String name;
 
     private int line = 1;
     private int markDepth = 0;
@@ -21,12 +22,11 @@ final class CtoCharStream implements CharStream {
     private int charPositionInLine = 0;
     private final List<CharStreamState> markers;
 
-    public CtoCharStream(LexerInput input, String name) {
+    public CtoCharStream(LexerInput input) {
         this.input = input;
-        this.name = name;
 
         markers = new ArrayList<>();
-        markers.add(null); // depth 0 means no backtracking, leave blank
+        markers.add(null);
     }
 
     @Override
@@ -109,7 +109,7 @@ final class CtoCharStream implements CharStream {
 
     @Override
     public String getSourceName() {
-        return name;
+        return NAME;
     }
 
     private int read() {

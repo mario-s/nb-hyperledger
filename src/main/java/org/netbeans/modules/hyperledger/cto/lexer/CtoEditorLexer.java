@@ -2,7 +2,6 @@ package org.netbeans.modules.hyperledger.cto.lexer;
 
 import java.util.Map;
 import java.util.function.Function;
-import org.antlr.v4.runtime.CharStream;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.spi.lexer.Lexer;
@@ -13,8 +12,7 @@ import org.netbeans.spi.lexer.LexerRestartInfo;
  */
 public final class CtoEditorLexer implements Lexer<CtoTokenId> {
 
-    private final static String NAME = "CtoEditor";
-
+   
     private final LexerRestartInfo<CtoTokenId> info;
     private final Map<Integer, CtoTokenId> idToToken;
     
@@ -26,8 +24,7 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId> {
         this.idToToken = idToToken;
         this.tokenFactory = id -> info.tokenFactory().createToken(id);
         
-        CharStream stream = new CtoCharStream(info.input(), NAME);
-        ctoLexer = new CtoLexer(stream);
+        ctoLexer = new CtoLexer(new CtoCharStream(info.input()));
     }
 
     @Override
