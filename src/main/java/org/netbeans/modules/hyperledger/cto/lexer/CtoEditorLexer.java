@@ -26,7 +26,7 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId> {
         this.idToToken = idToToken;
         this.tokenFactory = id -> info.tokenFactory().createToken(id);
         
-        CharStream stream = new AntlrCharStream(info.input(), NAME);
+        CharStream stream = new CtoCharStream(info.input(), NAME);
         ctoLexer = new CtoLexer(stream);
     }
 

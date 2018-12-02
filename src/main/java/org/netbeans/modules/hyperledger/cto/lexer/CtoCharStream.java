@@ -10,26 +10,22 @@ import org.netbeans.spi.lexer.LexerInput;
 /**
  *
  */
-public class AntlrCharStream implements CharStream {
+final class CtoCharStream implements CharStream {
 
     private final LexerInput input;
     private final String name;
-    private final boolean ignoreCase;
+    private final boolean ignoreCase = true;
 
     private int line = 1;
     private int markDepth = 0;
     private int index = 0;
     private int charPositionInLine = 0;
-    private List<CharStreamState> markers;
+    private final List<CharStreamState> markers;
 
-    public AntlrCharStream(LexerInput input, String name) {
-        this(input, name, true);
-    }
     
-    public AntlrCharStream(LexerInput input, String name, boolean ignoreCase) {
+    public CtoCharStream(LexerInput input, String name) {
         this.input = input;
         this.name = name;
-        this.ignoreCase = ignoreCase;
 
         markers = new ArrayList<>();
         markers.add(null); // depth 0 means no backtracking, leave blank
