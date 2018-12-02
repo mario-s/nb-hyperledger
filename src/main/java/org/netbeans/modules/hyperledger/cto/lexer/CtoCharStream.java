@@ -14,7 +14,6 @@ final class CtoCharStream implements CharStream {
 
     private final LexerInput input;
     private final String name;
-    private final boolean ignoreCase = true;
 
     private int line = 1;
     private int markDepth = 0;
@@ -22,7 +21,6 @@ final class CtoCharStream implements CharStream {
     private int charPositionInLine = 0;
     private final List<CharStreamState> markers;
 
-    
     public CtoCharStream(LexerInput input, String name) {
         this.input = input;
         this.name = name;
@@ -34,7 +32,7 @@ final class CtoCharStream implements CharStream {
     @Override
     public String getText(Interval interval) {
         Objects.requireNonNull(interval, "Interval may not be null");
-        if(interval.a < 0 || interval.b < interval.a - 1) {
+        if (interval.a < 0 || interval.b < interval.a - 1) {
             throw new IllegalArgumentException("Invalid interval!");
         }
         return input.readText(interval.a, interval.b).toString();
@@ -64,11 +62,7 @@ final class CtoCharStream implements CharStream {
         }
         backup(i);
 
-        if (ignoreCase && (c != -1)){
-            return Character.toLowerCase((char)c);
-        } else {
-            return c;
-        }
+        return c;
     }
 
     @Override
@@ -80,7 +74,7 @@ final class CtoCharStream implements CharStream {
 
         return markDepth;
     }
-    
+
     @Override
     public void release(int marker) {
         // unwind any other markers made after m and release m
@@ -98,7 +92,7 @@ final class CtoCharStream implements CharStream {
     public void seek(int index) {
         if (index < this.index) {
             backup(this.index - index);
-            this.index = index; 
+            this.index = index;
             return;
         }
 
@@ -117,7 +111,7 @@ final class CtoCharStream implements CharStream {
     public String getSourceName() {
         return name;
     }
-    
+
     private int read() {
         int result = input.read();
         if (result == LexerInput.EOF) {
@@ -126,7 +120,7 @@ final class CtoCharStream implements CharStream {
 
         return result;
     }
-    
+
     private void backup(int count) {
         input.backup(count);
     }
