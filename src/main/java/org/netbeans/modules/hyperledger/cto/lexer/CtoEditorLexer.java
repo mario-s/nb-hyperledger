@@ -3,7 +3,6 @@ package org.netbeans.modules.hyperledger.cto.lexer;
 import java.util.Map;
 import java.util.function.Function;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.UnbufferedCharStream;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.spi.lexer.Lexer;
