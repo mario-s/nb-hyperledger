@@ -2,6 +2,8 @@ package org.netbeans.modules.hyperledger.cto.lexer;
 
 import java.util.Map;
 import java.util.function.Function;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.UnbufferedCharStream;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.spi.lexer.Lexer;
@@ -24,7 +26,8 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId> {
         this.idToToken = idToToken;
         this.tokenFactory = id -> info.tokenFactory().createToken(id);
         
-        ctoLexer = new CtoLexer(new CtoCharStream(info.input()));
+        CharStream stream = new CtoCharStream(info.input());
+        ctoLexer = new CtoLexer(stream);
     }
 
     @Override

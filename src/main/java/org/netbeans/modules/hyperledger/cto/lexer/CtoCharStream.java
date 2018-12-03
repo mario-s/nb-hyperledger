@@ -1,5 +1,7 @@
 package org.netbeans.modules.hyperledger.cto.lexer;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Objects;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.misc.Interval;
@@ -9,13 +11,11 @@ import org.netbeans.spi.lexer.LexerInput;
  *
  */
 final class CtoCharStream implements CharStream {
-    
+
     private final static String NAME = "CtoChar";
 
     private final LexerInput input;
-
-    private int markDepth = 0;
-    private int index = 0;
+    private final Deque<Integer> markers = new ArrayDeque<>();
 
     public CtoCharStream(LexerInput input) {
         this.input = input;
@@ -32,61 +32,64 @@ final class CtoCharStream implements CharStream {
 
     @Override
     public void consume() {
-        input.read();
-        index++;
+        read();
     }
 
     @Override
-    public int LA(int i) {
-        if (i == 0) {
-            return 0; 
+    public int LA(int ahead) {
+        if (ahead == 0) {
+            return 0;
         }
 
         int c = 0;
-        for (int j = 0; j < i; j++) {
+        for (int j = 0; j < ahead; j++) {
             c = read();
         }
-        backup(i);
+        backup(ahead);
 
         return c;
     }
 
     @Override
     public int mark() {
-        markDepth++;
-        return markDepth;
+        markers.push(index());
+        return markers.size() - 1;
     }
 
     @Override
     public void release(int marker) {
-        // unwind any other markers made after m and release m
-        markDepth = marker;
-        // release this marker
-        markDepth--;
+        if(markers.size() < marker) {
+            return;
+        }
+        
+        //remove all markers from the given one
+        for(int i = marker; i < markers.size(); i++) {
+            markers.remove(i);
+        }
     }
 
     @Override
     public int index() {
-        return index;
+        return input.readLengthEOF();
     }
 
     @Override
     public void seek(int index) {
-        if (index < this.index) {
-            backup(this.index - index);
-            this.index = index;
-            return;
-        }
-
-        // seek forward
-        while (this.index < index) {
-            consume();
+        int len = index();
+        if (index < len) {
+            //seek backward
+            backup(len - index);
+        } else {
+            // seek forward
+            while (len < index) {
+                consume();
+            }
         }
     }
 
     @Override
     public int size() {
-        return -1; //?
+        return -1; //unknown
     }
 
     @Override
