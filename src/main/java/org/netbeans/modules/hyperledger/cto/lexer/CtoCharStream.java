@@ -1,7 +1,5 @@
 package org.netbeans.modules.hyperledger.cto.lexer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.misc.Interval;
@@ -16,17 +14,11 @@ final class CtoCharStream implements CharStream {
 
     private final LexerInput input;
 
-    private int line = 1;
     private int markDepth = 0;
     private int index = 0;
-    private int charPositionInLine = 0;
-    private final List<CharStreamState> markers;
 
     public CtoCharStream(LexerInput input) {
         this.input = input;
-
-        markers = new ArrayList<>();
-        markers.add(null);
     }
 
     @Override
@@ -40,20 +32,14 @@ final class CtoCharStream implements CharStream {
 
     @Override
     public void consume() {
-        int c = input.read();
+        input.read();
         index++;
-        charPositionInLine++;
-
-        if (c == '\n') {
-            line++;
-            charPositionInLine = 0;
-        }
     }
 
     @Override
     public int LA(int i) {
         if (i == 0) {
-            return 0; // undefined
+            return 0; 
         }
 
         int c = 0;
@@ -67,11 +53,7 @@ final class CtoCharStream implements CharStream {
 
     @Override
     public int mark() {
-        CharStreamState state = nextState();
-        state.index = index;
-        state.line = line;
-        state.charPositionInLine = charPositionInLine;
-
+        markDepth++;
         return markDepth;
     }
 
@@ -124,24 +106,4 @@ final class CtoCharStream implements CharStream {
     private void backup(int count) {
         input.backup(count);
     }
-
-    private CharStreamState nextState() {
-        markDepth++;
-        CharStreamState state;
-        if (markDepth >= markers.size()) {
-            state = new CharStreamState();
-            markers.add(state);
-        } else {
-            state = markers.get(markDepth);
-        }
-        return state;
-    }
-
-    private class CharStreamState {
-
-        private int index;
-        private int line;
-        private int charPositionInLine;
-    }
-
 }
