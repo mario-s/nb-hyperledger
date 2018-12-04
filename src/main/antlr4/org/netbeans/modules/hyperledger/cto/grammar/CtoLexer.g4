@@ -36,7 +36,6 @@ lexer grammar CtoLexer;
 // Keywords
 ABSTRACT:           'abstract';
 ASSET:              'asset';
-CLASS:              'class';
 CONCEPT:            'concept';
 DEFAULT:            'default';
 ENUM:               'enum';
@@ -52,22 +51,12 @@ REGEX:              'regex';
 TRANSACTION:        'transaction';
 
 //primitive types
-BOOLEAN:            'Boolean';
-DATE_TIME:          'DateTime';
-DOUBLE:             'Double';
-INTEGER:            'Integer';
-LONG:               'Long';
-STRING:             'String';
-
-// Literals
-DECIMAL_LITERAL:    ('0' | [1-9] (Digits? | '_'+ Digits)) [lL]?;
-OCT_LITERAL:        '0' '_'* [0-7] ([0-7_]* [0-7])? [lL]?;
-FLOAT_LITERAL:      (Digits '.' Digits? | '.' Digits) ExponentPart? [fFdD]?
-             |       Digits (ExponentPart [fFdD]? | [fFdD])
-             ;
-BOOL_LITERAL:       'true'
-            |       'false'
-            ;
+BOOLEAN:            'boolean';
+DATE_TIME:          'datetime';
+DOUBLE:             'double';
+INTEGER:            'integer';
+LONG:               'long';
+STRING:             'string';
 
 // Separators
 LPAREN:             '(';
@@ -91,16 +80,25 @@ ELLIPSIS:           '...';
 REF:                '-->';
 VAR:                'o';
 
+// Literals
+DECIMAL_LITERAL:    ('0' | [1-9] (Digits? | '_'+ Digits)) [lL]?;
+OCT_LITERAL:        '0' '_'* [0-7] ([0-7_]* [0-7])? [lL]?;
+FLOAT_LITERAL:      (Digits '.' Digits? | '.' Digits) ExponentPart? [fFdD]?
+             |       Digits (ExponentPart [fFdD]? | [fFdD])
+             ;
+BOOL_LITERAL:       'true'
+            |       'false'
+            ;
+DATE_TIME_LITERAL: Bound FullDate 'T' FullTime Bound;
+
 // Whitespace and comments
 WS:                 [ \t\r\n\u000C]+ -> channel(HIDDEN);
-COMMENT:            '/*' .*? '*/'    -> channel(HIDDEN);
 LINE_COMMENT:       '//' ~[\r\n]*    -> channel(HIDDEN);
-SPC: ' ';
+COMMENT:            '/*' .*? '*/'    -> channel(HIDDEN);
 
 //REGEX Expr
 REGEX_EXPR:         '/'.*?'/';
 
-DATE_TIME_LITERAL: Bound FullDate 'T' FullTime Bound;
 fragment Bound: '"' | '\'';
 fragment FullDate: Year '-' Month '-' Day;
 fragment Year: Digit Digit Digit Digit;
@@ -121,11 +119,10 @@ fragment PartialTime
 fragment Sixty: [0-5] Digit;
 fragment Digit: [0-9];
 
-
-IDENTIFIER:         Letter LetterOrDigit*;
-
 CHAR_LITERAL:       '\'' (~["\\\r\n] | EscapeSequence)* '\'';
 STRING_LITERAL:     '"' (~["\\\r\n] | EscapeSequence)* '"';
+
+IDENTIFIER:         Letter LetterOrDigit*;
 
 // Fragment rules
 fragment ExponentPart

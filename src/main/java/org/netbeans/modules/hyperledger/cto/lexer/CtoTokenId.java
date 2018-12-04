@@ -10,7 +10,7 @@ public class CtoTokenId implements TokenId{
     private final String name;
     private final String primaryCategory;
     private final int id;
-
+    
     public CtoTokenId(String name, String primaryCategory, int id) {
         this.name = name;
         this.primaryCategory = primaryCategory;
@@ -31,5 +31,10 @@ public class CtoTokenId implements TokenId{
     public String primaryCategory() {
         return primaryCategory;
     }
-    
+
+    @Override
+    public String toString() {
+        return "CtoTokenId{" + "name=" + name + ", primaryCategory=" + primaryCategory + ", id=" + id + '}';
+    }
+
 }
