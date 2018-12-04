@@ -51,12 +51,12 @@ REGEX:              'regex';
 TRANSACTION:        'transaction';
 
 //primitive types
-BOOLEAN:            'boolean';
-DATE_TIME:          'datetime';
-DOUBLE:             'double';
-INTEGER:            'integer';
-LONG:               'long';
-STRING:             'string';
+BOOLEAN:            'Boolean';
+DATE_TIME:          'DateTime';
+DOUBLE:             'Double';
+INTEGER:            'Integer';
+LONG:               'Long';
+STRING:             'String';
 
 // Separators
 LPAREN:             '(';
