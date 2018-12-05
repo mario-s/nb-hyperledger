@@ -18,30 +18,38 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
-import javax.swing.text.JTextComponent;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.hyperledger.cto.FileType;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionTask;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 
 /**
  *
  */
-@MimeRegistration(mimeType = FileType.MIME, service = CompletionProvider.class)
-public class CtoCompletionProvider implements CompletionProvider{
-
-    @Override
-    public CompletionTask createTask(int type, JTextComponent jtc) {
-        if(type == CompletionProvider.COMPLETION_QUERY_TYPE) {
-            return new AsyncCompletionTask(new CtoCompletionQuery(), jtc);
-        }
-        return null;
+public class CtoCompletionProviderTest {
+    
+    private CtoCompletionProvider classUnderTest;
+    
+    @BeforeEach
+    public void setUp() {
+        classUnderTest = new CtoCompletionProvider();
     }
-
-    @Override
-    public int getAutoQueryTypes(JTextComponent jtc, String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    @Test
+    @DisplayName("It should return a task for completion query type.")
+    public void createTask_NotNull() {
+        CompletionTask result = classUnderTest.createTask(CompletionProvider.COMPLETION_QUERY_TYPE, null);
+        assertThat(result, notNullValue());
+    }
+    
+    @Test
+    @DisplayName("It should return null for tool tip query type.")
+    public void createTask_Null() {
+        CompletionTask result = classUnderTest.createTask(CompletionProvider.TOOLTIP_QUERY_TYPE, null);
+        assertThat(result, nullValue());
     }
     
 }
