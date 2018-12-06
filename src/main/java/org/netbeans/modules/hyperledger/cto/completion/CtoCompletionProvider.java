@@ -41,7 +41,7 @@ public class CtoCompletionProvider implements CompletionProvider{
 
     @Override
     public int getAutoQueryTypes(JTextComponent jtc, String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0; //only when the user asks for it
     }
     
 }

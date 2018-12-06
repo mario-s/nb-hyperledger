@@ -18,6 +18,8 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.text.Document;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
@@ -29,7 +31,12 @@ final class CtoCompletionQuery extends AsyncCompletionQuery{
 
     @Override
     protected void query(CompletionResultSet crs, Document dcmnt, int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        crs.addAllItems(getCompletionItems());
+        crs.finish();
     }
     
+    private List<CtoCompletionItem> getCompletionItems() {
+        List<CtoCompletionItem> items = new ArrayList<>();
+        return items;
+    }
 }
