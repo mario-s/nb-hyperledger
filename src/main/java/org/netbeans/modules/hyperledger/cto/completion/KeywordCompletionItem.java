@@ -19,19 +19,29 @@
 package org.netbeans.modules.hyperledger.cto.completion;
 
 import java.util.Optional;
+import javax.swing.ImageIcon;
+import org.openide.util.ImageUtilities;
 
 /**
  *
  * @author mario.schroeder
  */
 public class KeywordCompletionItem extends AbstractCompletionItem {
-
-    public KeywordCompletionItem(Optional<String> iconPath, String name, int offset) {
-        super(iconPath, name, offset);
+    
+    private final ImageIcon icon;
+    
+    public KeywordCompletionItem(Optional<String> iconPath, String name,  int offset) {
+        super(name, offset);
+        icon = iconPath.map(path -> new ImageIcon(ImageUtilities.loadImage(path))).orElse(null);
     }
     
     @Override
     public int getSortPriority() {
         return (icon != null) ? 50 : 100;
+    }
+
+    @Override
+    protected ImageIcon getIcon() {
+        return icon;
     }
 }

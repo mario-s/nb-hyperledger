@@ -18,6 +18,8 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  */
@@ -30,6 +32,11 @@ public class PrimitiveTypeCompletionItem extends AbstractCompletionItem{
     @Override
     public int getSortPriority() {
         return 200;
+    }
+
+    @Override
+    protected ImageIcon getIcon() {
+        return null;
     }
     
 }

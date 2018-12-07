@@ -22,7 +22,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.util.Optional;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -32,28 +31,16 @@ import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionTask;
 import org.netbeans.spi.editor.completion.support.CompletionUtilities;
 import org.openide.util.Exceptions;
-import org.openide.util.ImageUtilities;
-
-import static java.util.Optional.empty;
 /**
  *
  */
 public abstract class AbstractCompletionItem implements CompletionItem {
     
-    private static Color SELCTED_COLOR = Color.decode("0x0000B2");
+    private static final Color SELECTED_COLOR = Color.decode("0x0000B2");
     private final String name;
+    private final int caretOffset;
     
-    private int caretOffset;
-    
-    protected final ImageIcon icon;
-
-
     public AbstractCompletionItem(String name, int offset) {
-        this(empty(), name, offset);
-    }
-    
-    public AbstractCompletionItem(Optional<String> iconPath, String name,  int offset) {
-        icon = iconPath.map(path -> new ImageIcon(ImageUtilities.loadImage(path))).orElse(null);
         this.name = name;
         this.caretOffset = offset;
     }
@@ -81,8 +68,8 @@ public abstract class AbstractCompletionItem implements CompletionItem {
 
     @Override
     public void render(Graphics grphcs, Font font, Color frontCol, Color backCol, int width, int height, boolean selected) {
-        CompletionUtilities.renderHtml(icon, name, null, grphcs, font,
-            (selected ? Color.white : SELCTED_COLOR), width, height, selected);
+        CompletionUtilities.renderHtml(getIcon(), name, null, grphcs, font,
+            (selected ? Color.white : SELECTED_COLOR), width, height, selected);
     }
 
     @Override
@@ -110,5 +97,5 @@ public abstract class AbstractCompletionItem implements CompletionItem {
         return name;
     }
     
-
+    protected abstract ImageIcon getIcon();
 }
