@@ -18,12 +18,14 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.Document;
+import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
+import org.netbeans.modules.hyperledger.cto.lexer.TokenTaxonomy;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 
+import static java.util.stream.Collectors.toList;
 /**
  *
  */
@@ -31,12 +33,13 @@ final class CtoCompletionQuery extends AsyncCompletionQuery{
 
     @Override
     protected void query(CompletionResultSet crs, Document dcmnt, int i) {
-        crs.addAllItems(getCompletionItems());
+        crs.addAllItems(getKeywordItems());
         crs.finish();
     }
     
-    private List<CtoCompletionItem> getCompletionItems() {
-        List<CtoCompletionItem> items = new ArrayList<>();
-        return items;
+    private List<CtoCompletionItem> getKeywordItems() {
+        List<CtoTokenId> tokens = TokenTaxonomy.getDefault().tokens(TokenTaxonomy.Category.keyword);
+        return tokens.stream().map(t -> new CtoCompletionItem(t.name())).collect(toList());
     }
+
 }
