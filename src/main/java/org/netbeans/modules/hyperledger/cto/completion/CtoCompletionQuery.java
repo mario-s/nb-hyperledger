@@ -19,6 +19,8 @@
 package org.netbeans.modules.hyperledger.cto.completion;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 import javax.swing.text.Document;
 import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
 import org.netbeans.modules.hyperledger.cto.lexer.TokenTaxonomy;
@@ -26,10 +28,18 @@ import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.Optional.*;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 /**
  *
  */
 final class CtoCompletionQuery extends AsyncCompletionQuery{
+    
+    private final Function<TokenTaxonomy.Category, List<CtoTokenId>> tokenProvider;
+    
+    CtoCompletionQuery() {
+        tokenProvider = category -> TokenTaxonomy.getDefault().tokens(category);
+    }
 
     @Override
     protected void query(CompletionResultSet crs, Document dcmnt, int offset) {
@@ -38,8 +48,24 @@ final class CtoCompletionQuery extends AsyncCompletionQuery{
     }
     
     private List<CtoCompletionItem> getKeywordItems(int offset) {
-        List<CtoTokenId> tokens = TokenTaxonomy.getDefault().tokens(TokenTaxonomy.Category.keyword);
-        return tokens.stream().map(t -> new CtoCompletionItem(t.name(), offset)).collect(toList());
+        return map(tokenProvider.apply(TokenTaxonomy.Category.keyword), offset);
+    }
+    
+    private List<CtoCompletionItem> map(List<CtoTokenId> tokens, int offset) {
+        return tokens.stream().map(t -> map(t, offset)).collect(toList());
+    }
+    
+    private CtoCompletionItem map(CtoTokenId token, int offset) {
+        Optional<String> iconPath = iconPath(token.ordinal());
+        return new CtoCompletionItem(iconPath, token.name(), offset);
+    }
+    
+    private Optional<String> iconPath(int type) {
+        switch(type) {
+            case CtoLexer.ASSET:
+                return of("org/netbeans/modules/hyperledger/cto/value_16x16.png");
+            default: return empty();
+        }
     }
 
 }

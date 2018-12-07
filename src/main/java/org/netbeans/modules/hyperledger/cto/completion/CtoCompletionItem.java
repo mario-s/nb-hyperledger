@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.Optional;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -33,6 +34,7 @@ import org.netbeans.spi.editor.completion.support.CompletionUtilities;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 
+import static java.util.Optional.empty;
 /**
  *
  */
@@ -41,17 +43,15 @@ public class CtoCompletionItem implements CompletionItem {
     private static Color SELCTED_COLOR = Color.decode("0x0000B2");
     private final String name;
     
-    private ImageIcon icon;
+    private final ImageIcon icon;
     private int caretOffset;
 
     public CtoCompletionItem(String name, int offset) {
-        this("org/netbeans/modules/hyperledger/cto/value_16x16.png", name, offset);
+        this(empty(), name, offset);
     }
     
-    public CtoCompletionItem(String iconPath, String name,  int offset) {
-        if(iconPath != null) {
-            this.icon = new ImageIcon(ImageUtilities.loadImage(iconPath));
-        }
+    public CtoCompletionItem(Optional<String> iconPath, String name,  int offset) {
+        icon = iconPath.map(path -> new ImageIcon(ImageUtilities.loadImage(path))).orElse(null);
         this.name = name;
         this.caretOffset = offset;
     }
