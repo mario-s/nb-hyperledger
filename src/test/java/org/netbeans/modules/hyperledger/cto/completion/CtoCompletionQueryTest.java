@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.anyList;
 import org.mockito.Mock;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
@@ -47,7 +49,7 @@ public class CtoCompletionQueryTest {
     @DisplayName("The query should add items to the result set.")
     public void query_AddItems() {
         classUnderTest.query(resultSet, null, 0);
-        verify(resultSet).addAllItems(anyList());
+        verify(resultSet, times(2)).addAllItems(anyList());
     }
     
 

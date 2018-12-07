@@ -27,16 +27,20 @@ import org.netbeans.modules.hyperledger.cto.lexer.TokenTaxonomy;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.Optional.*;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+
 /**
  *
  */
-final class CtoCompletionQuery extends AsyncCompletionQuery{
-    
+final class CtoCompletionQuery extends AsyncCompletionQuery {
+
+    private static final String ICON_PATH = "org/netbeans/modules/hyperledger/cto/%s";
+
     private final Function<TokenTaxonomy.Category, List<CtoTokenId>> tokenProvider;
-    
+
     CtoCompletionQuery() {
         tokenProvider = category -> TokenTaxonomy.getDefault().tokens(category);
     }
@@ -44,27 +48,42 @@ final class CtoCompletionQuery extends AsyncCompletionQuery{
     @Override
     protected void query(CompletionResultSet crs, Document dcmnt, int offset) {
         crs.addAllItems(getKeywordItems(offset));
+        crs.addAllItems(getPrimitiveTypeItems(offset));
         crs.finish();
     }
-    
-    private List<CtoCompletionItem> getKeywordItems(int offset) {
-        return map(tokenProvider.apply(TokenTaxonomy.Category.keyword), offset);
+
+    private List<? extends AbstractCompletionItem> getKeywordItems(int offset) {
+        Function<CtoTokenId, KeywordCompletionItem> mapping = token -> {
+            Optional<String> iconPath = iconPath(token.ordinal());
+            return new KeywordCompletionItem(iconPath, token.name(), offset);
+        };
+        List<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.keyword);
+        return map(tokens, mapping);
     }
-    
-    private List<CtoCompletionItem> map(List<CtoTokenId> tokens, int offset) {
-        return tokens.stream().map(t -> map(t, offset)).collect(toList());
+
+    private List<? extends AbstractCompletionItem> getPrimitiveTypeItems(int offset) {
+        Function<CtoTokenId, PrimitiveTypeCompletionItem> mapping = token -> {
+            return new PrimitiveTypeCompletionItem(token.name(), offset);
+        };
+        List<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.type);
+        return map(tokens, mapping);
     }
-    
-    private CtoCompletionItem map(CtoTokenId token, int offset) {
-        Optional<String> iconPath = iconPath(token.ordinal());
-        return new CtoCompletionItem(iconPath, token.name(), offset);
+
+    private List<? extends AbstractCompletionItem> map(List<CtoTokenId> tokens, Function<CtoTokenId, ? extends AbstractCompletionItem> mapping) {
+        return tokens.stream().map(t -> mapping.apply(t)).collect(toList());
     }
-    
+
+
     private Optional<String> iconPath(int type) {
-        switch(type) {
+        switch (type) {
             case CtoLexer.ASSET:
-                return of("org/netbeans/modules/hyperledger/cto/value_16x16.png");
-            default: return empty();
+                return of(format(ICON_PATH, "asset.png"));
+            case CtoLexer.PARTICIPANT:
+                return of(format(ICON_PATH, "participant.png"));
+            case CtoLexer.TRANSACTION:
+                return of(format(ICON_PATH, "transaction.png"));
+            default:
+                return empty();
         }
     }
 

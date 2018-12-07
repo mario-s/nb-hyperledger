@@ -38,19 +38,21 @@ import static java.util.Optional.empty;
 /**
  *
  */
-public class CtoCompletionItem implements CompletionItem {
+public abstract class AbstractCompletionItem implements CompletionItem {
     
     private static Color SELCTED_COLOR = Color.decode("0x0000B2");
     private final String name;
     
-    private final ImageIcon icon;
     private int caretOffset;
+    
+    protected final ImageIcon icon;
 
-    public CtoCompletionItem(String name, int offset) {
+
+    public AbstractCompletionItem(String name, int offset) {
         this(empty(), name, offset);
     }
     
-    public CtoCompletionItem(Optional<String> iconPath, String name,  int offset) {
+    public AbstractCompletionItem(Optional<String> iconPath, String name,  int offset) {
         icon = iconPath.map(path -> new ImageIcon(ImageUtilities.loadImage(path))).orElse(null);
         this.name = name;
         this.caretOffset = offset;
@@ -99,11 +101,6 @@ public class CtoCompletionItem implements CompletionItem {
     }
 
     @Override
-    public int getSortPriority() {
-        return 100;
-    }
-
-    @Override
     public CharSequence getSortText() {
         return name;
     }
@@ -112,5 +109,6 @@ public class CtoCompletionItem implements CompletionItem {
     public CharSequence getInsertPrefix() {
         return name;
     }
+    
 
 }
