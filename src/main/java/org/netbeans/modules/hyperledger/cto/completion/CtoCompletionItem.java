@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
@@ -30,17 +31,28 @@ import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionTask;
 import org.netbeans.spi.editor.completion.support.CompletionUtilities;
 import org.openide.util.Exceptions;
+import org.openide.util.ImageUtilities;
 
 /**
  *
  */
 public class CtoCompletionItem implements CompletionItem {
-
-    private String name;
+    
+    private static Color SELCTED_COLOR = Color.decode("0x0000B2");
+    private final String name;
+    
+    private ImageIcon icon;
     private int caretOffset;
 
     public CtoCompletionItem(String name) {
+        this(name, "org/netbeans/modules/hyperledger/cto/value_16x16.png");
+    }
+    
+    public CtoCompletionItem(String name, String iconPath) {
         this.name = name;
+        if(iconPath != null) {
+            this.icon = new ImageIcon(ImageUtilities.loadImage(iconPath));
+        }
     }
 
     @Override
@@ -56,7 +68,7 @@ public class CtoCompletionItem implements CompletionItem {
 
     @Override
     public void processKeyEvent(KeyEvent ke) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //TODO
     }
 
     @Override
@@ -65,8 +77,9 @@ public class CtoCompletionItem implements CompletionItem {
     }
 
     @Override
-    public void render(Graphics grphcs, Font font, Color color, Color color1, int i, int i1, boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void render(Graphics grphcs, Font font, Color frontCol, Color backCol, int width, int height, boolean selected) {
+        CompletionUtilities.renderHtml(icon, name, null, grphcs, font,
+            (selected ? Color.white : SELCTED_COLOR), width, height, selected);
     }
 
     @Override
@@ -81,7 +94,7 @@ public class CtoCompletionItem implements CompletionItem {
 
     @Override
     public boolean instantSubstitution(JTextComponent jtc) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
