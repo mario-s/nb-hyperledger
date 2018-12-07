@@ -18,15 +18,10 @@
  */
 package org.netbeans.modules.hyperledger.cto.lexer;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.modules.hyperledger.cto.FileType;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.spi.lexer.LanguageHierarchy;
 import org.netbeans.spi.lexer.Lexer;
 import org.netbeans.spi.lexer.LexerRestartInfo;
