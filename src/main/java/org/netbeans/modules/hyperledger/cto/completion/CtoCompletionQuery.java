@@ -32,14 +32,14 @@ import static java.util.stream.Collectors.toList;
 final class CtoCompletionQuery extends AsyncCompletionQuery{
 
     @Override
-    protected void query(CompletionResultSet crs, Document dcmnt, int i) {
-        crs.addAllItems(getKeywordItems());
+    protected void query(CompletionResultSet crs, Document dcmnt, int offset) {
+        crs.addAllItems(getKeywordItems(offset));
         crs.finish();
     }
     
-    private List<CtoCompletionItem> getKeywordItems() {
+    private List<CtoCompletionItem> getKeywordItems(int offset) {
         List<CtoTokenId> tokens = TokenTaxonomy.getDefault().tokens(TokenTaxonomy.Category.keyword);
-        return tokens.stream().map(t -> new CtoCompletionItem(t.name())).collect(toList());
+        return tokens.stream().map(t -> new CtoCompletionItem(t.name(), offset)).collect(toList());
     }
 
 }

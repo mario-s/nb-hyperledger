@@ -44,15 +44,16 @@ public class CtoCompletionItem implements CompletionItem {
     private ImageIcon icon;
     private int caretOffset;
 
-    public CtoCompletionItem(String name) {
-        this(name, "org/netbeans/modules/hyperledger/cto/value_16x16.png");
+    public CtoCompletionItem(String name, int offset) {
+        this("org/netbeans/modules/hyperledger/cto/value_16x16.png", name, offset);
     }
     
-    public CtoCompletionItem(String name, String iconPath) {
-        this.name = name;
+    public CtoCompletionItem(String iconPath, String name,  int offset) {
         if(iconPath != null) {
             this.icon = new ImageIcon(ImageUtilities.loadImage(iconPath));
         }
+        this.name = name;
+        this.caretOffset = offset;
     }
 
     @Override
