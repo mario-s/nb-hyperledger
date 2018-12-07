@@ -18,6 +18,9 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
+
+import java.util.Optional;
+import static java.util.Optional.empty;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -33,8 +36,7 @@ interface CompletionFilter {
     char SPC = ' ';
 
     static class FilterResult {
-
-        String filter;
+        Optional<String> filter = empty();
         Pair<Integer, Integer> offset;
     }
 
@@ -64,7 +66,7 @@ interface CompletionFilter {
             }
 
             FilterResult result = new FilterResult();
-            result.filter = filter;
+            result.filter = Optional.of(filter);
             result.offset = Pair.of(startOffset, offset);
             return result;
         }
@@ -83,10 +85,9 @@ interface CompletionFilter {
         }
 
         private int indexOfWhite(char[] line) {
-            int i = line.length;
-            while (--i > -1) {
-                final char c = line[i];
-                if (Character.isWhitespace(c)) {
+            int m = line.length;
+            for(int i = m - 1; i > -1; i--) {
+                if (Character.isWhitespace(line[i])) {
                     return i;
                 }
             }
