@@ -19,14 +19,15 @@
 package org.netbeans.modules.hyperledger.cto.completion;
 
 import javax.swing.ImageIcon;
+import org.openide.util.Pair;
 
 /**
  *
  */
 public class PrimitiveTypeCompletionItem extends AbstractCompletionItem{
 
-    public PrimitiveTypeCompletionItem(String name, int offset) {
-        super(name, offset);
+    public PrimitiveTypeCompletionItem(String name, Pair<Integer, Integer> offsets) {
+        super(name, offsets);
     }
 
     @Override

@@ -18,17 +18,26 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.StyledDocument;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.mockito.ArgumentMatchers.anyList;
+import org.mockito.ArgumentMatchers;
+import static org.mockito.ArgumentMatchers.*;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
+import org.openide.util.Pair;
 
 /**
  *
@@ -38,20 +47,29 @@ public class CtoCompletionQueryTest {
     @Mock
     private CompletionResultSet resultSet;
     
+    @Mock
+    private CompletionFilter completionFilter;
+    
+    @Mock
+    private Document document;
+    
     private CtoCompletionQuery classUnderTest;
     
     @BeforeEach
-    public void setUp() {
-        classUnderTest = new CtoCompletionQuery();
+    public void setUp() throws BadLocationException {
+        reset(document, completionFilter);
+        classUnderTest = new CtoCompletionQuery(completionFilter);
+        
+        CompletionFilter.FilterResult result = new CompletionFilter.FilterResult();
+        result.offset = Pair.of(0, 0);
+        when(completionFilter.filter(document, 0)).thenReturn(result);
     }
     
     @Test
     @DisplayName("The query should add items to the result set.")
     public void query_AddItems() {
-        classUnderTest.query(resultSet, null, 0);
+        classUnderTest.query(resultSet, document, 0);
         verify(resultSet, times(2)).addAllItems(anyList());
     }
-    
-
     
 }

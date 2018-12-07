@@ -18,9 +18,11 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
+import java.util.Map.Entry;
 import java.util.Optional;
 import javax.swing.ImageIcon;
 import org.openide.util.ImageUtilities;
+import org.openide.util.Pair;
 
 /**
  *
@@ -30,8 +32,8 @@ public class KeywordCompletionItem extends AbstractCompletionItem {
     
     private final ImageIcon icon;
     
-    public KeywordCompletionItem(Optional<String> iconPath, String name,  int offset) {
-        super(name, offset);
+    public KeywordCompletionItem(Optional<String> iconPath, String name, Pair<Integer, Integer> offsets) {
+        super(name, offsets);
         icon = iconPath.map(path -> new ImageIcon(ImageUtilities.loadImage(path))).orElse(null);
     }
     

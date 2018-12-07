@@ -22,6 +22,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -31,6 +33,7 @@ import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionTask;
 import org.netbeans.spi.editor.completion.support.CompletionUtilities;
 import org.openide.util.Exceptions;
+import org.openide.util.Pair;
 /**
  *
  */
@@ -38,18 +41,21 @@ public abstract class AbstractCompletionItem implements CompletionItem {
     
     private static final Color SELECTED_COLOR = Color.decode("0x0000B2");
     private final String name;
-    private final int caretOffset;
+    private final int startOffset;
+    private final int endOffset;
     
-    public AbstractCompletionItem(String name, int offset) {
+    public AbstractCompletionItem(String name, Pair<Integer, Integer> offsets) {
         this.name = name;
-        this.caretOffset = offset;
+        this.startOffset = offsets.first();
+        this.endOffset = offsets.second();
     }
 
     @Override
     public void defaultAction(JTextComponent jtc) {
         try {
             StyledDocument doc = (StyledDocument) jtc.getDocument();
-            doc.insertString(caretOffset, name, null);
+            doc.remove(startOffset, endOffset-startOffset);
+            doc.insertString(startOffset, name, null);
             Completion.get().hideAll();
         } catch (BadLocationException ex) {
             Exceptions.printStackTrace(ex);
