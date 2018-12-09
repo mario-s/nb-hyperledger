@@ -30,6 +30,7 @@ import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.Optional.*;
+import java.util.stream.Stream;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.StyledDocument;
@@ -46,7 +47,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     
     private final CompletionFilter completionFilter;
 
-    private final Function<TokenTaxonomy.Category, List<CtoTokenId>> tokenProvider;
+    private final Function<TokenTaxonomy.Category, Stream<CtoTokenId>> tokenProvider;
     
 
     CtoCompletionQuery() {
@@ -55,7 +56,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     
     CtoCompletionQuery(CompletionFilter completionFilter) {
         this.completionFilter = completionFilter;
-        tokenProvider = category -> TokenTaxonomy.getDefault().tokens(category);
+        tokenProvider = category -> TokenTaxonomy.getDefault().tokens(category).stream();
     }
 
     @Override
@@ -63,34 +64,35 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
 
         CompletionFilter.FilterResult filterResult = completionFilter.filter(document, offset);
         
-        Pair<Integer, Integer> offsets = filterResult.offset;
-
-        crs.addAllItems(getKeywordItems(offsets));
-        crs.addAllItems(getPrimitiveTypeItems(offsets));
+        crs.addAllItems(getKeywordItems(filterResult));
+        crs.addAllItems(getPrimitiveTypeItems(filterResult));
         crs.finish();
     }
-
     
-
-    private List<? extends AbstractCompletionItem> getKeywordItems(Pair<Integer, Integer> offsets) {
+    private List<? extends AbstractCompletionItem> getKeywordItems(CompletionFilter.FilterResult filterResult) {
         Function<CtoTokenId, KeywordCompletionItem> mapping = token -> {
             Optional<String> iconPath = iconPath(token.ordinal());
-            return new KeywordCompletionItem(iconPath, token.name(), offsets);
+            return new KeywordCompletionItem(iconPath, token.name(), filterResult.offset);
         };
-        List<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.keyword);
-        return map(tokens, mapping);
+        Stream<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.keyword);
+        return map(filterResult.filter, tokens, mapping);
     }
 
-    private List<? extends AbstractCompletionItem> getPrimitiveTypeItems(Pair<Integer, Integer> offsets) {
+    private List<? extends AbstractCompletionItem> getPrimitiveTypeItems(CompletionFilter.FilterResult filterResult) {
         Function<CtoTokenId, PrimitiveTypeCompletionItem> mapping = token -> {
-            return new PrimitiveTypeCompletionItem(token.name(), offsets);
+            return new PrimitiveTypeCompletionItem(token.name(), filterResult.offset);
         };
-        List<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.type);
-        return map(tokens, mapping);
+        Stream<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.type);
+        return map(filterResult.filter, tokens, mapping);
     }
-
-    private List<? extends AbstractCompletionItem> map(List<CtoTokenId> tokens, Function<CtoTokenId, ? extends AbstractCompletionItem> mapping) {
-        return tokens.stream().map(t -> mapping.apply(t)).collect(toList());
+    
+    private List<? extends AbstractCompletionItem> map(Optional<String> filter, Stream<CtoTokenId> tokens, Function<CtoTokenId, ? extends AbstractCompletionItem> mapping) {
+        String name = filter.orElse("");
+        if(!name.isEmpty()){
+            tokens = tokens.filter(t -> t.name().startsWith(name));
+        }
+        Stream<? extends AbstractCompletionItem> itemStream = tokens.map(t -> mapping.apply(t));
+        return itemStream.collect(toList());
     }
 
     private Optional<String> iconPath(int type) {
