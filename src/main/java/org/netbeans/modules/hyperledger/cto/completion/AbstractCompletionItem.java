@@ -22,8 +22,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.util.Map;
-import java.util.Map.Entry;
+import static java.lang.String.format;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -39,6 +38,8 @@ import org.openide.util.Pair;
  */
 public abstract class AbstractCompletionItem implements CompletionItem {
     
+    private static final String TEMPLATE = "%s ";
+    
     private static final Color SELECTED_COLOR = Color.decode("0x0000B2");
     private final String name;
     private final int startOffset;
@@ -49,13 +50,14 @@ public abstract class AbstractCompletionItem implements CompletionItem {
         this.startOffset = offsets.first();
         this.endOffset = offsets.second();
     }
+    
 
     @Override
     public void defaultAction(JTextComponent jtc) {
         try {
             StyledDocument doc = (StyledDocument) jtc.getDocument();
             doc.remove(startOffset, endOffset-startOffset);
-            doc.insertString(startOffset, name, null);
+            doc.insertString(startOffset, format(TEMPLATE, name), null);
             Completion.get().hideAll();
         } catch (BadLocationException ex) {
             Exceptions.printStackTrace(ex);
