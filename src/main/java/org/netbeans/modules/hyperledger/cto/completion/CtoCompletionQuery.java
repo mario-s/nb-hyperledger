@@ -31,12 +31,7 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.Optional.*;
 import java.util.stream.Stream;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
-import javax.swing.text.StyledDocument;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
-import org.openide.util.Exceptions;
-import org.openide.util.Pair;
 
 /**
  *
