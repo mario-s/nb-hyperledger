@@ -44,6 +44,7 @@ interface CompletionFilter {
 
     static class FilterImpl implements CompletionFilter {
 
+        @Override
         public FilterResult filter(Document document, int offset) {
             String filter = null;
             int startOffset = offset - 1;
@@ -51,16 +52,11 @@ interface CompletionFilter {
             try {
                 StyledDocument styledDocument = (StyledDocument) document;
                 int lineStartOffset = getRowFirstNonWhite(styledDocument, offset);
-                char[] line = styledDocument.getText(lineStartOffset, offset - lineStartOffset).toCharArray();
+                char[] line = styledDocument.getText(lineStartOffset, offset - lineStartOffset).toCharArray();                
                 int whiteOffset = indexOfWhite(line);
 
                 filter = new String(line, whiteOffset + 1, line.length - whiteOffset - 1);
-
-                if (whiteOffset > 0) {
-                    startOffset = lineStartOffset + whiteOffset + 1;
-                } else {
-                    startOffset = lineStartOffset;
-                }
+                startOffset = (whiteOffset > 0 ) ? lineStartOffset + whiteOffset + 1 : lineStartOffset;
             } catch (BadLocationException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -85,8 +81,7 @@ interface CompletionFilter {
         }
 
         private int indexOfWhite(char[] line) {
-            int m = line.length;
-            for(int i = m - 1; i > -1; i--) {
+            for(int i = line.length - 1; i > -1; i--) {
                 if (Character.isWhitespace(line[i])) {
                     return i;
                 }
