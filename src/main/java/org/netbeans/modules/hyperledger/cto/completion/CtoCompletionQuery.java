@@ -46,7 +46,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     
 
     CtoCompletionQuery() {
-        this(new CompletionFilter.FilterResultImpl());
+        this(new CompletionFilter.FilterImpl());
     }
     
     CtoCompletionQuery(CompletionFilter completionFilter) {

@@ -42,7 +42,7 @@ interface CompletionFilter {
 
     FilterResult filter(Document document, int offset);
 
-    static class FilterResultImpl implements CompletionFilter {
+    static class FilterImpl implements CompletionFilter {
 
         public FilterResult filter(Document document, int offset) {
             String filter = null;
@@ -66,7 +66,7 @@ interface CompletionFilter {
             }
 
             FilterResult result = new FilterResult();
-            result.filter = Optional.of(filter);
+            result.filter = Optional.ofNullable(filter);
             result.offset = Pair.of(startOffset, offset);
             return result;
         }
