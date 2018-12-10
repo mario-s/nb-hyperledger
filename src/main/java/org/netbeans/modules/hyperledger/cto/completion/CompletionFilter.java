@@ -69,9 +69,10 @@ interface CompletionFilter {
 
         private int getRowFirstNonWhite(StyledDocument doc, int offset)
                 throws BadLocationException {
-            Element lineElement = doc.getParagraphElement(offset);
-            int start = lineElement.getStartOffset();
-            while (start + 1 < lineElement.getEndOffset()) {
+            Element paragraph = doc.getParagraphElement(offset);
+            int start = paragraph.getStartOffset();
+            int end = paragraph.getEndOffset();
+            while (start + 1 < end) {
                 if (doc.getText(start, 1).charAt(0) != SPC) {
                     break;
                 }
