@@ -44,7 +44,6 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
 
     private final Function<TokenTaxonomy.Category, Stream<CtoTokenId>> tokenProvider;
     
-
     CtoCompletionQuery() {
         this(new CompletionFilter.FilterImpl());
     }

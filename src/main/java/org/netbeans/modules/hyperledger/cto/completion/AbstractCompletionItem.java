@@ -23,40 +23,56 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import static java.lang.String.format;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.MissingResourceException;
+import java.util.Optional;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
 import org.netbeans.api.editor.completion.Completion;
+import org.netbeans.spi.editor.completion.CompletionDocumentation;
 import org.netbeans.spi.editor.completion.CompletionItem;
+import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.CompletionTask;
+import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
+import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 import org.netbeans.spi.editor.completion.support.CompletionUtilities;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 import org.openide.util.Pair;
+
 /**
  *
  */
+@NbBundle.Messages({
+    "docUrl=https://hyperledger.github.io/composer/v0.19/reference/cto_language.html"
+})
 public abstract class AbstractCompletionItem implements CompletionItem {
-    
+
     private static final String TEMPLATE = "%s ";
-    
+
     private static final Color SELECTED_COLOR = Color.decode("0x0000B2");
     private final String name;
     private final int startOffset;
     private final int endOffset;
-    
+
     public AbstractCompletionItem(String name, Pair<Integer, Integer> offsets) {
         this.name = name;
         this.startOffset = offsets.first();
         this.endOffset = offsets.second();
     }
-    
 
     @Override
     public void defaultAction(JTextComponent jtc) {
         try {
             StyledDocument doc = (StyledDocument) jtc.getDocument();
-            doc.remove(startOffset, endOffset-startOffset);
+            doc.remove(startOffset, endOffset - startOffset);
             doc.insertString(startOffset, format(TEMPLATE, name), null);
             Completion.get().hideAll();
         } catch (BadLocationException ex) {
@@ -77,12 +93,19 @@ public abstract class AbstractCompletionItem implements CompletionItem {
     @Override
     public void render(Graphics grphcs, Font font, Color frontCol, Color backCol, int width, int height, boolean selected) {
         CompletionUtilities.renderHtml(getIcon(), name, null, grphcs, font,
-            (selected ? Color.white : SELECTED_COLOR), width, height, selected);
+                (selected ? Color.white : SELECTED_COLOR), width, height, selected);
     }
 
     @Override
     public CompletionTask createDocumentationTask() {
-        return null;
+        Optional<String> opt = getMessage(name);
+        return opt.map(msg -> new AsyncCompletionTask(new AsyncCompletionQuery() {
+            @Override
+            protected void query(CompletionResultSet completionResultSet, Document document, int i) {
+                completionResultSet.setDocumentation(new Documentation(msg, getDocumentationURL()));
+                completionResultSet.finish();
+            }
+        })).orElse(null);
     }
 
     @Override
@@ -104,6 +127,56 @@ public abstract class AbstractCompletionItem implements CompletionItem {
     public CharSequence getInsertPrefix() {
         return name;
     }
-    
+
+    private URL getDocumentationURL() {
+        String docUrl = getMessage("docUrl").orElse("");
+        try {
+            return new URL(docUrl);
+        } catch (MalformedURLException ex) {
+            return null;
+        }
+    }
+
+    private Optional<String> getMessage(String key) {
+        try {
+            return of(NbBundle.getMessage(AbstractCompletionItem.class, key));
+        } catch (MissingResourceException e) {
+            return empty();
+        }
+    }
+
     protected abstract ImageIcon getIcon();
+
+    static class Documentation implements CompletionDocumentation {
+
+        private final String message;
+
+        private final URL docUrl;
+
+        public Documentation(String message, URL docUrl) {
+            this.message = message;
+            this.docUrl = docUrl;
+        }
+
+        @Override
+        public String getText() {
+            return message;
+        }
+
+        @Override
+        public URL getURL() {
+            return docUrl;
+        }
+
+        @Override
+        public CompletionDocumentation resolveLink(String string) {
+            return null;
+        }
+
+        @Override
+        public Action getGotoSourceAction() {
+            return null;
+        }
+
+    }
 }

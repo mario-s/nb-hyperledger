@@ -18,25 +18,30 @@
  */
 package org.netbeans.modules.hyperledger.cto.completion;
 
-import java.util.Map.Entry;
 import java.util.Optional;
 import javax.swing.ImageIcon;
 import org.openide.util.ImageUtilities;
+import org.openide.util.NbBundle;
 import org.openide.util.Pair;
 
 /**
  *
  * @author mario.schroeder
  */
+@NbBundle.Messages({
+    "asset=Asset is an class definition that represent something valuable which is exchanged within the network.",
+    "participant=Participant is a member of the network that may hold the asset.",
+    "transaction=Transaction is the process when an assets changes the owner, e.g. from one participant to another."
+})
 public class KeywordCompletionItem extends AbstractCompletionItem {
-    
+
     private final ImageIcon icon;
-    
+
     public KeywordCompletionItem(Optional<String> iconPath, String name, Pair<Integer, Integer> offsets) {
         super(name, offsets);
         icon = iconPath.map(path -> new ImageIcon(ImageUtilities.loadImage(path))).orElse(null);
     }
-    
+
     @Override
     public int getSortPriority() {
         return (icon != null) ? 50 : 100;
@@ -46,4 +51,5 @@ public class KeywordCompletionItem extends AbstractCompletionItem {
     protected ImageIcon getIcon() {
         return icon;
     }
+
 }
