@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.*;
 
 /**
  *
- * Class for organizing similar tokens into groups
+ * Class for organizing similar tokens into groups.
  */
 public final class TokenTaxonomy {
 

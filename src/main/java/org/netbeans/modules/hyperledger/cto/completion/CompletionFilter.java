@@ -29,7 +29,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.Pair;
 
 /**
- *
+ * Filter for the code completion items.
  */
 interface CompletionFilter {
 

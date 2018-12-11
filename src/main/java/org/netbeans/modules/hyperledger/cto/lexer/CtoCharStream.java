@@ -26,7 +26,7 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.netbeans.spi.lexer.LexerInput;
 
 /**
- *
+ * Specialized {@link CharStream} for the cto lexer.
  */
 final class CtoCharStream implements CharStream {
 

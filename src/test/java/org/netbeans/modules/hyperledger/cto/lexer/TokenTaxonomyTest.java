@@ -25,9 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.netbeans.api.lexer.Language;
-import org.netbeans.modules.hyperledger.cto.FileType;
-
 public class TokenTaxonomyTest {
 
     private TokenTaxonomy classUnderTest;

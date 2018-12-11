@@ -34,7 +34,8 @@ import java.util.stream.Stream;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
- *
+ * This query is been executed which the user requests for a suggestion and 
+ * narrows the possibilities.
  */
 final class CtoCompletionQuery extends AsyncCompletionQuery {
 
@@ -50,7 +51,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     
     CtoCompletionQuery(CompletionFilter completionFilter) {
         this.completionFilter = completionFilter;
-        tokenProvider = category -> TokenTaxonomy.getDefault().tokens(category).stream();
+        this.tokenProvider = category -> TokenTaxonomy.getDefault().tokens(category).stream();
     }
 
     @Override

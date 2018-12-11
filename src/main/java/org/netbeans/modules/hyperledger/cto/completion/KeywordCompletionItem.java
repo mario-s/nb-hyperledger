@@ -25,8 +25,7 @@ import org.openide.util.NbBundle;
 import org.openide.util.Pair;
 
 /**
- *
- * @author mario.schroeder
+ * Item for the keyword category.
  */
 @NbBundle.Messages({
     "asset=Asset is an class definition that represent something valuable which is exchanged within the network.",

@@ -25,6 +25,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.*;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -48,12 +49,12 @@ public class CtoCompletionQueryTest {
     @Mock
     private Document document;
     
+    @InjectMocks
     private CtoCompletionQuery classUnderTest;
     
     @BeforeEach
     public void setUp() throws BadLocationException {
         reset(document, completionFilter);
-        classUnderTest = new CtoCompletionQuery(completionFilter);
         
         CompletionFilter.FilterResult result = new CompletionFilter.FilterResult();
         result.offset = Pair.of(0, 0);

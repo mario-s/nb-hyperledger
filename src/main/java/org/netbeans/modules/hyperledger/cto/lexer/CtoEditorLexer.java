@@ -30,7 +30,6 @@ import org.netbeans.spi.lexer.LexerRestartInfo;
  *
  */
 public final class CtoEditorLexer implements Lexer<CtoTokenId> {
-
    
     private final LexerRestartInfo<CtoTokenId> info;
     private final Map<Integer, CtoTokenId> idToToken;
