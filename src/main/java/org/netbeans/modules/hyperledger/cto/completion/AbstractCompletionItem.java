@@ -34,7 +34,6 @@ import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.StyledDocument;
 import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.spi.editor.completion.CompletionDocumentation;
 import org.netbeans.spi.editor.completion.CompletionItem;
@@ -71,7 +70,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
     @Override
     public void defaultAction(JTextComponent jtc) {
         try {
-            StyledDocument doc = (StyledDocument) jtc.getDocument();
+            Document doc = jtc.getDocument();
             doc.remove(startOffset, endOffset - startOffset);
             doc.insertString(startOffset, format(TEMPLATE, name), null);
             Completion.get().hideAll();
