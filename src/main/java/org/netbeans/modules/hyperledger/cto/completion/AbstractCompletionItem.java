@@ -82,7 +82,6 @@ public abstract class AbstractCompletionItem implements CompletionItem {
 
     @Override
     public void processKeyEvent(KeyEvent ke) {
-        //TODO
     }
 
     @Override
