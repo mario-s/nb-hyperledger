@@ -23,6 +23,7 @@ import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
  *
+ * @author mario.schroeder
  */
 final class CtoVocabulary implements Vocabulary{
     

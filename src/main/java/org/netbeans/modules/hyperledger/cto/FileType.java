@@ -19,7 +19,9 @@
 package org.netbeans.modules.hyperledger.cto;
 
 /**
- * Constants for the cto file type
+ * Constants for the cto file type.
+ * 
+ * @author mario.schroeder
  */
 public interface FileType {
     String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";

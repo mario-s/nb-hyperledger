@@ -36,6 +36,8 @@ import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 /**
  * This query is been executed which the user requests for a suggestion and 
  * narrows the possibilities.
+ * 
+ * @author mario.schroeder
  */
 final class CtoCompletionQuery extends AsyncCompletionQuery {
 

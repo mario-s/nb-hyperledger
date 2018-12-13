@@ -28,6 +28,7 @@ import org.netbeans.spi.lexer.LexerRestartInfo;
 
 /**
  *
+ * @author mario.schroeder
  */
 public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
 

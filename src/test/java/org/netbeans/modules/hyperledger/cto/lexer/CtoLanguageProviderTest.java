@@ -27,6 +27,10 @@ import org.junit.jupiter.api.Test;
 import org.netbeans.api.lexer.Language;
 import org.netbeans.modules.hyperledger.cto.FileType;
 
+/**
+ * 
+ * @author mario.schroeder
+ */
 public class CtoLanguageProviderTest {
 
     private CtoLanguageProvider classUnderTest;

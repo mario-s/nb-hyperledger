@@ -27,6 +27,8 @@ import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 
 /**
  * The provide for the code completion of the cto language.
+ * 
+ * @author mario.schroeder
  */
 @MimeRegistration(mimeType = FileType.MIME, service = CompletionProvider.class)
 public class CtoCompletionProvider implements CompletionProvider{

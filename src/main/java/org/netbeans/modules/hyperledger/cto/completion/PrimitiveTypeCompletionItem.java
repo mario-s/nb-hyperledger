@@ -22,7 +22,9 @@ import javax.swing.ImageIcon;
 import org.openide.util.Pair;
 
 /**
- * Item for the primitive type category
+ * Item for the primitive type category.
+ * 
+ * @author mario.schroeder
  */
 public class PrimitiveTypeCompletionItem extends AbstractCompletionItem{
 

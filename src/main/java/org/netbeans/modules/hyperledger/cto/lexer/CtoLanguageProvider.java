@@ -29,6 +29,8 @@ import org.netbeans.spi.lexer.LanguageProvider;
 
 /**
  * Service to deliver the language.
+ * 
+ * @author mario.schroeder
  */
 @org.openide.util.lookup.ServiceProvider(service=org.netbeans.spi.lexer.LanguageProvider.class)
 public class CtoLanguageProvider extends LanguageProvider{

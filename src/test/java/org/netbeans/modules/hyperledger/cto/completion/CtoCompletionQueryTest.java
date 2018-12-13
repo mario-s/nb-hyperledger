@@ -36,7 +36,7 @@ import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.openide.util.Pair;
 
 /**
- *
+ * @author mario.schroeder
  */
 @ExtendWith(MockitoExtension.class)
 public class CtoCompletionQueryTest {

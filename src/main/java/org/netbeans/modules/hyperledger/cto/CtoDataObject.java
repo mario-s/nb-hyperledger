@@ -34,6 +34,11 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 
+/**
+ * Register the cto file type.
+ * 
+ * @author mario.schroeder
+ */
 @Messages({
     "LBL_Cto_LOADER=Files of Cto"
 })

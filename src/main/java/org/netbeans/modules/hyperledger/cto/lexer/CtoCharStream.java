@@ -27,6 +27,8 @@ import org.netbeans.spi.lexer.LexerInput;
 
 /**
  * Specialized {@link CharStream} for the cto lexer.
+ * 
+ * @author mario.schroeder
  */
 final class CtoCharStream implements CharStream {
 

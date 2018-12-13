@@ -48,6 +48,7 @@ import org.openide.util.Pair;
 
 /**
  *
+ * @author mario.schroeder
  */
 @NbBundle.Messages({
     "docUrl=https://hyperledger.github.io/composer/latest/reference/cto_language.html"

@@ -27,7 +27,7 @@ import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionTask;
 
 /**
- *
+ * @author mario.schroeder
  */
 public class CtoCompletionProviderTest {
     

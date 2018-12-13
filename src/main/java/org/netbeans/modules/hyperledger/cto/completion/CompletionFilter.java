@@ -30,6 +30,8 @@ import org.openide.util.Pair;
 
 /**
  * Filter for the code completion items.
+ * 
+ * @author mario.schroeder
  */
 interface CompletionFilter {
 

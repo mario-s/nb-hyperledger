@@ -35,7 +35,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.netbeans.modules.hyperledger.cto.completion.CompletionFilter.FilterResult;
 
 /**
- *
+ * @author mario.schroeder
  */
 @ExtendWith(MockitoExtension.class)
 public class CompletionFilterTest {
