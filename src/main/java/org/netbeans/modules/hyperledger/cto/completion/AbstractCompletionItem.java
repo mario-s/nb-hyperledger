@@ -50,7 +50,7 @@ import org.openide.util.Pair;
  *
  */
 @NbBundle.Messages({
-    "docUrl=https://hyperledger.github.io/composer/v0.19/reference/cto_language.html"
+    "docUrl=https://hyperledger.github.io/composer/latest/reference/cto_language.html"
 })
 public abstract class AbstractCompletionItem implements CompletionItem {
 
