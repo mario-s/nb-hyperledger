@@ -16,43 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.lexer;
+package org.netbeans.modules.hyperledger.cto.completion;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import javax.swing.text.JTextComponent;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.hyperledger.cto.FileType;
-import org.netbeans.spi.lexer.LanguageHierarchy;
-import org.netbeans.spi.lexer.Lexer;
-import org.netbeans.spi.lexer.LexerRestartInfo;
+import org.netbeans.spi.editor.completion.CompletionProvider;
+import org.netbeans.spi.editor.completion.CompletionTask;
+import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 
 /**
- *
+ * The provide for the code completion of the cto language.
+ * 
  * @author mario.schroeder
  */
-public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
+@MimeRegistration(mimeType = FileType.MIME, service = CompletionProvider.class)
+public class CtoCompletionProvider implements CompletionProvider{
 
-
-    private final List<CtoTokenId> tokens;
-    private final Map<Integer, CtoTokenId> idToToken;
-
-    public CtoLanguageHierarchy() {
-        tokens = TokenTaxonomy.getDefault().allTokens();
-        idToToken = TokenTaxonomy.getDefault().getIdTokenMap();
+    @Override
+    public CompletionTask createTask(int type, JTextComponent jtc) {
+        if(type == CompletionProvider.COMPLETION_QUERY_TYPE) {
+            return new AsyncCompletionTask(new CtoCompletionQuery(), jtc);
+        }
+        return null;
     }
 
     @Override
-    protected Collection<CtoTokenId> createTokenIds() {
-        return tokens;
+    public int getAutoQueryTypes(JTextComponent jtc, String string) {
+        return 0; //only when the user asks for it
     }
-
-    @Override
-    protected Lexer<CtoTokenId> createLexer(LexerRestartInfo<CtoTokenId> info) {
-        return new CtoEditorLexer(info, idToToken);
-    }
-
-    @Override
-    protected String mimeType() {
-        return FileType.MIME;
-    }
+    
 }

@@ -18,41 +18,36 @@
  */
 package org.netbeans.modules.hyperledger.cto.lexer;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import org.netbeans.modules.hyperledger.cto.FileType;
-import org.netbeans.spi.lexer.LanguageHierarchy;
-import org.netbeans.spi.lexer.Lexer;
-import org.netbeans.spi.lexer.LexerRestartInfo;
+import org.antlr.v4.runtime.Vocabulary;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
  *
  * @author mario.schroeder
  */
-public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
+final class CtoVocabulary implements Vocabulary{
+    
+    private static final Vocabulary VOCABULARY = CtoLexer.VOCABULARY;
 
-
-    private final List<CtoTokenId> tokens;
-    private final Map<Integer, CtoTokenId> idToToken;
-
-    public CtoLanguageHierarchy() {
-        tokens = TokenTaxonomy.getDefault().allTokens();
-        idToToken = TokenTaxonomy.getDefault().getIdTokenMap();
+    @Override
+    public int getMaxTokenType() {
+        return VOCABULARY.getMaxTokenType();
     }
 
     @Override
-    protected Collection<CtoTokenId> createTokenIds() {
-        return tokens;
+    public String getLiteralName(int tokenType) {
+        return VOCABULARY.getLiteralName(tokenType);
     }
 
     @Override
-    protected Lexer<CtoTokenId> createLexer(LexerRestartInfo<CtoTokenId> info) {
-        return new CtoEditorLexer(info, idToToken);
+    public String getSymbolicName(int tokenType) {
+        return VOCABULARY.getSymbolicName(tokenType);
     }
 
     @Override
-    protected String mimeType() {
-        return FileType.MIME;
+    public String getDisplayName(int tokenType) {
+        String name = VOCABULARY.getDisplayName(tokenType);
+        return name.replaceAll("^\\'|\\'$", "");
     }
+    
 }

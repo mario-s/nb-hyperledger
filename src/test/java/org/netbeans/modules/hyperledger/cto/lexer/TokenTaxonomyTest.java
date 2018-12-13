@@ -18,41 +18,32 @@
  */
 package org.netbeans.modules.hyperledger.cto.lexer;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import org.netbeans.modules.hyperledger.cto.FileType;
-import org.netbeans.spi.lexer.LanguageHierarchy;
-import org.netbeans.spi.lexer.Lexer;
-import org.netbeans.spi.lexer.LexerRestartInfo;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
- *
+ * 
  * @author mario.schroeder
  */
-public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
+public class TokenTaxonomyTest {
 
+    private TokenTaxonomy classUnderTest;
 
-    private final List<CtoTokenId> tokens;
-    private final Map<Integer, CtoTokenId> idToToken;
-
-    public CtoLanguageHierarchy() {
-        tokens = TokenTaxonomy.getDefault().allTokens();
-        idToToken = TokenTaxonomy.getDefault().getIdTokenMap();
+    @BeforeEach
+    public void setUp() {
+        classUnderTest = TokenTaxonomy.getDefault();
     }
 
-    @Override
-    protected Collection<CtoTokenId> createTokenIds() {
-        return tokens;
+    @Test
+    @DisplayName("It should return a list of keyword tokens.")
+    public void tokens_Keywords() {
+        List<CtoTokenId> result = classUnderTest.tokens(TokenTaxonomy.Category.keyword);
+        assertThat(result.isEmpty(), is(false));
     }
 
-    @Override
-    protected Lexer<CtoTokenId> createLexer(LexerRestartInfo<CtoTokenId> info) {
-        return new CtoEditorLexer(info, idToToken);
-    }
 
-    @Override
-    protected String mimeType() {
-        return FileType.MIME;
-    }
 }

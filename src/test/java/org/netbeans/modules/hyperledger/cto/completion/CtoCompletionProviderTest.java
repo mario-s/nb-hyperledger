@@ -16,33 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.lexer;
+package org.netbeans.modules.hyperledger.cto.completion;
 
-import java.util.Collection;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.netbeans.spi.editor.completion.CompletionProvider;
+import org.netbeans.spi.editor.completion.CompletionTask;
 
 /**
- * 
  * @author mario.schroeder
  */
-public class CtoLanguageHierarchyTest {
-
-    private CtoLanguageHierarchy classUnderTest;
-
+public class CtoCompletionProviderTest {
+    
+    private CtoCompletionProvider classUnderTest;
+    
     @BeforeEach
     public void setUp() {
-        classUnderTest = new CtoLanguageHierarchy();
+        classUnderTest = new CtoCompletionProvider();
     }
-
+    
     @Test
-    @DisplayName("It should return a non empty collection of tokens.")
-    public void createTokenIds_NotEmpty() {
-        Collection<CtoTokenId> result = classUnderTest.createTokenIds();
-        assertThat(result.isEmpty(), is(false));
+    @DisplayName("It should return a task for completion query type.")
+    public void createTask_NotNull() {
+        CompletionTask result = classUnderTest.createTask(CompletionProvider.COMPLETION_QUERY_TYPE, null);
+        assertThat(result, notNullValue());
     }
-
+    
+    @Test
+    @DisplayName("It should return null for tool tip query type.")
+    public void createTask_Null() {
+        CompletionTask result = classUnderTest.createTask(CompletionProvider.TOOLTIP_QUERY_TYPE, null);
+        assertThat(result, nullValue());
+    }
+    
 }

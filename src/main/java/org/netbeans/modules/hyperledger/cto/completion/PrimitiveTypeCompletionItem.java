@@ -16,33 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.lexer;
+package org.netbeans.modules.hyperledger.cto.completion;
 
-import java.util.Collection;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import javax.swing.ImageIcon;
+import org.openide.util.Pair;
 
 /**
+ * Item for the primitive type category.
  * 
  * @author mario.schroeder
  */
-public class CtoLanguageHierarchyTest {
+public class PrimitiveTypeCompletionItem extends AbstractCompletionItem{
 
-    private CtoLanguageHierarchy classUnderTest;
-
-    @BeforeEach
-    public void setUp() {
-        classUnderTest = new CtoLanguageHierarchy();
+    public PrimitiveTypeCompletionItem(String name, Pair<Integer, Integer> offsets) {
+        super(name, offsets);
     }
 
-    @Test
-    @DisplayName("It should return a non empty collection of tokens.")
-    public void createTokenIds_NotEmpty() {
-        Collection<CtoTokenId> result = classUnderTest.createTokenIds();
-        assertThat(result.isEmpty(), is(false));
+    @Override
+    public int getSortPriority() {
+        return 200;
     }
 
+    @Override
+    protected ImageIcon getIcon() {
+        return null;
+    }
+    
 }
