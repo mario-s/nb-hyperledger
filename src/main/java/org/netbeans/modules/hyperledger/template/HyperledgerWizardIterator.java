@@ -51,7 +51,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 // TODO define position attribute
-@TemplateRegistration(folder = "Project/APISupport", displayName = "#Hyperledger_displayName", description = "HyperledgerDescription.html", iconBase = "org/netbeans/modules/hyperledger/template/Hyperledger.png", content = "HyperledgerProject.zip")
+@TemplateRegistration(folder = "Project/ClientSide", 
+        displayName = "#Hyperledger_displayName", 
+        description = "HyperledgerDescription.html", 
+        iconBase = "org/netbeans/modules/hyperledger/template/blockchain.png", 
+        content = "HyperledgerProject.zip")
 @Messages("Hyperledger_displayName=Hyperledger")
 public class HyperledgerWizardIterator implements WizardDescriptor./*Progress*/InstantiatingIterator {
 
