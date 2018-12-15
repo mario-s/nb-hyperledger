@@ -167,6 +167,16 @@
             <artifactId>org-netbeans-modules-editor-completion</artifactId>
             <version>RELEASE82</version>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-projectuiapi</artifactId>
+            <version>RELEASE82</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-projectapi</artifactId>
+            <version>RELEASE82</version>
+        </dependency>
     </dependencies>
 
 </project>
