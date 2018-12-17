@@ -18,13 +18,22 @@
  */
 package org.netbeans.modules.hyperledger.cto;
 
+import javax.swing.Icon;
+import org.netbeans.api.annotations.common.StaticResource;
+import org.openide.util.ImageUtilities;
+
 /**
  * Constants for the cto file type.
  * 
  * @author mario.schroeder
  */
 public interface FileType {
+    @StaticResource
     String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
     
     String MIME = "text/cto";
+    
+    static Icon icon() {
+        return ImageUtilities.loadImageIcon(ICON, false);
+    }
 }
