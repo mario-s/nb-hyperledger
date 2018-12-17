@@ -30,7 +30,7 @@ class HyperledgerProject implements Project {
     public Lookup getLookup() {
         if (lookup == null) {
             lookup = Lookups.fixed(new Object[]{
-                this
+                this,
             });
         }
         return lookup;
