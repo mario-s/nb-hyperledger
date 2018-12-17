@@ -22,7 +22,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Icon;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
-import org.netbeans.modules.hyperledger.cto.FileType;
+import org.netbeans.modules.hyperledger.ProjectIcon;
 
 /**
  *
@@ -48,7 +48,7 @@ public class HyperledgerProjectInformation implements ProjectInformation{
 
     @Override
     public Icon getIcon() {
-        return FileType.icon();
+        return ProjectIcon.icon();
     }
 
     @Override

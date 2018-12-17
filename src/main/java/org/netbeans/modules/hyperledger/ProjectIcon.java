@@ -16,20 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
+package org.netbeans.modules.hyperledger;
 
 import javax.swing.Icon;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.openide.util.ImageUtilities;
 
 /**
- * Constants for the cto file type.
- * 
+ *
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
+public final class ProjectIcon {
     
-    String MIME = "text/cto";
+    @StaticResource
+    public static final String ICON = "org/netbeans/modules/hyperledger/template/blockchain.png";
+    
+    private ProjectIcon() {
+        //nothing
+    }
+           
+    public static Icon icon() {
+        return ImageUtilities.loadImageIcon(ICON, false);
+    }
 }

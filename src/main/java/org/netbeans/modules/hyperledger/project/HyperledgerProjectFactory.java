@@ -21,6 +21,7 @@ package org.netbeans.modules.hyperledger.project;
 import java.io.IOException;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectManager;
+import org.netbeans.modules.hyperledger.ProjectIcon;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.project.ProjectFactory;
 import org.netbeans.spi.project.ProjectFactory2;
@@ -40,7 +41,7 @@ public class HyperledgerProjectFactory implements ProjectFactory2{
     public ProjectManager.Result isProject2(FileObject projectDirectory) {
         ProjectManager.Result result = null;
         if (isProject(projectDirectory)) {
-            result = new ProjectManager.Result(FileType.icon());
+            result = new ProjectManager.Result(ProjectIcon.icon());
         }
         return result;
     }
