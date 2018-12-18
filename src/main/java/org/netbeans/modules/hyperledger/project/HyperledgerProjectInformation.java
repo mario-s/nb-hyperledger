@@ -22,7 +22,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Icon;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
-import org.netbeans.modules.hyperledger.ProjectIcon;
 
 /**
  *

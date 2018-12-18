@@ -36,7 +36,7 @@ import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.api.project.ProjectManager;
 import org.netbeans.api.templates.TemplateRegistration;
-import org.netbeans.modules.hyperledger.ProjectIcon;
+import org.netbeans.modules.hyperledger.project.ProjectIcon;
 import org.netbeans.spi.project.ui.support.ProjectChooser;
 import org.netbeans.spi.project.ui.templates.support.Templates;
 import org.openide.WizardDescriptor;
@@ -55,7 +55,7 @@ import org.xml.sax.InputSource;
 @TemplateRegistration(folder = "Project/ClientSide", 
         displayName = "#Hyperledger_displayName", 
         description = "HyperledgerDescription.html", 
-        iconBase = ProjectIcon.ICON, 
+        iconBase = "org/netbeans/modules/hyperledger/template/blockchain.png", 
         content = "HyperledgerProject.zip")
 @Messages("Hyperledger_displayName=Hyperledger")
 public class HyperledgerWizardIterator implements WizardDescriptor./*Progress*/InstantiatingIterator {

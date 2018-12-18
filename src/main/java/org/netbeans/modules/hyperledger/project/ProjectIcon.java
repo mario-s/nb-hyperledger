@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger;
+package org.netbeans.modules.hyperledger.project;
 
 import javax.swing.Icon;
 import org.netbeans.api.annotations.common.StaticResource;

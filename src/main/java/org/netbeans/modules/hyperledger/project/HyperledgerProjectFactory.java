@@ -21,7 +21,6 @@ package org.netbeans.modules.hyperledger.project;
 import java.io.IOException;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectManager;
-import org.netbeans.modules.hyperledger.ProjectIcon;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.project.ProjectFactory;
 import org.netbeans.spi.project.ProjectFactory2;
