@@ -99,10 +99,10 @@ public class CtoNavigatorPanel implements NavigatorPanel {
 
     private void display(Collection<? extends DataObject> selectedFiles) {
         if (selectedFiles.size() == 1) {
-            DataObject d = selectedFiles.iterator().next();
-            if (d.isValid()) {
-                //Node delegate = d.getNodeDelegate();
-                Node delegate = new CtoDataNode(d, Children.LEAF);
+            DataObject dataObject = selectedFiles.iterator().next();
+            if (dataObject.isValid()) {
+                //Node delegate = dataObject.getNodeDelegate();
+                Node delegate = new CtoRootNode(dataObject, Children.LEAF);
                 manager.setRootContext(delegate);
             }
         } else {

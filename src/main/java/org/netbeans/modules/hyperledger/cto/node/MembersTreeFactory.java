@@ -18,20 +18,41 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import org.netbeans.modules.hyperledger.cto.FileType;
+import java.util.List;
+import org.netbeans.api.lexer.TokenId;
+import org.netbeans.modules.hyperledger.cto.lexer.Category;
+import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
+import org.openide.nodes.AbstractNode;
+import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
+import org.openide.nodes.Node;
 
 /**
  *
  * @author mario.schroeder
  */
-public class CtoDataNode extends DataNode {
+final class MembersTreeFactory extends ChildFactory<TokenId> {
     
-    public CtoDataNode(DataObject obj, Children ch) {
-        super(obj, ch);
-        setIconBaseWithExtension(FileType.ICON);
+    private final DataObject obj;
+
+    public MembersTreeFactory(DataObject obj) {
+        this.obj = obj;
+    }
+
+    @Override
+    protected Node createNodeForKey(TokenId key) {
+        AbstractNode node = new AbstractNode(Children.LEAF);
+        node.setDisplayName(key.name());
+        return node;
+    }
+    
+    @Override
+    protected boolean createKeys(List<TokenId> toPopulate) {
+        TokenId token = new CtoTokenId("Asset", Category.keyword.name(), 0);
+        toPopulate.add(token);
+        return true;
     }
     
 }

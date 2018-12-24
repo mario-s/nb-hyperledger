@@ -34,9 +34,6 @@ import static java.util.stream.Collectors.*;
  */
 public final class TokenTaxonomy {
 
-    public enum Category {
-        keyword, type, field, separator, value, comment, text
-    }
 
     private final List<CtoTokenId> tokens;
 

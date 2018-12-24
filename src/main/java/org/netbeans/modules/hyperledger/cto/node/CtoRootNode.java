@@ -16,34 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.lexer;
+package org.netbeans.modules.hyperledger.cto.node;
 
-import java.util.List;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.netbeans.modules.hyperledger.cto.FileType;
+import org.openide.loaders.DataNode;
+import org.openide.loaders.DataObject;
+import org.openide.nodes.Children;
 
 /**
- * 
+ *
  * @author mario.schroeder
  */
-public class TokenTaxonomyTest {
+public class CtoRootNode extends DataNode {
 
-    private TokenTaxonomy classUnderTest;
+    private final MembersTreeFactory treeFactory;
 
-    @BeforeEach
-    public void setUp() {
-        classUnderTest = TokenTaxonomy.getDefault();
+    public CtoRootNode(DataObject obj, Children ch) {
+        super(obj, ch);
+        setIconBaseWithExtension(FileType.ICON);
+
+        treeFactory = new MembersTreeFactory(obj);
+
+        init();
     }
 
-    @Test
-    @DisplayName("It should return a list of keyword tokens.")
-    public void tokens_Keywords() {
-        List<CtoTokenId> result = classUnderTest.tokens(Category.keyword);
-        assertThat(result.isEmpty(), is(false));
+    private void init() {
+        setChildren(Children.create(treeFactory, true));
     }
-
 
 }

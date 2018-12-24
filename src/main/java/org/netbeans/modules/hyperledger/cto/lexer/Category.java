@@ -18,32 +18,11 @@
  */
 package org.netbeans.modules.hyperledger.cto.lexer;
 
-import java.util.List;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 /**
+ * Categories for the tokens.
  * 
  * @author mario.schroeder
  */
-public class TokenTaxonomyTest {
-
-    private TokenTaxonomy classUnderTest;
-
-    @BeforeEach
-    public void setUp() {
-        classUnderTest = TokenTaxonomy.getDefault();
-    }
-
-    @Test
-    @DisplayName("It should return a list of keyword tokens.")
-    public void tokens_Keywords() {
-        List<CtoTokenId> result = classUnderTest.tokens(Category.keyword);
-        assertThat(result.isEmpty(), is(false));
-    }
-
-
+public enum Category {
+    keyword, type, field, separator, value, comment, text
 }

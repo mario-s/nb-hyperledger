@@ -32,6 +32,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.Optional.*;
 import java.util.stream.Stream;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+import org.netbeans.modules.hyperledger.cto.lexer.Category;
 
 /**
  * This query is been executed which the user requests for a suggestion and 
@@ -45,7 +46,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     
     private final CompletionFilter completionFilter;
 
-    private final Function<TokenTaxonomy.Category, Stream<CtoTokenId>> tokenProvider;
+    private final Function<Category, Stream<CtoTokenId>> tokenProvider;
     
     CtoCompletionQuery() {
         this(new CompletionFilter.FilterImpl());
@@ -71,7 +72,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
             Optional<String> iconPath = iconPath(token.ordinal());
             return new KeywordCompletionItem(iconPath, token.name(), filterResult.offset);
         };
-        Stream<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.keyword);
+        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.keyword);
         return map(filterResult.filter, tokens, mapping);
     }
 
@@ -79,7 +80,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
         Function<CtoTokenId, PrimitiveTypeCompletionItem> mapping = token -> {
             return new PrimitiveTypeCompletionItem(token.name(), filterResult.offset);
         };
-        Stream<CtoTokenId> tokens = tokenProvider.apply(TokenTaxonomy.Category.type);
+        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.type);
         return map(filterResult.filter, tokens, mapping);
     }
     
