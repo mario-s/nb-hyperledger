@@ -54,7 +54,7 @@ public class CtoNavigatorPanel implements NavigatorPanel {
 
     private final ExplorerManager manager = new ExplorerManager();
     private final Lookup lookup = ExplorerUtils.createLookup(manager, new ActionMap());
-    private final JComponent view = new MembersView(manager, lookup);
+    private final JComponent view = new MembersView(manager);
 
     private final LookupListener selectionListener = ev -> {
         RP.post(() -> {
