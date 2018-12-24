@@ -22,7 +22,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import org.openide.explorer.ExplorerManager;
-import org.openide.explorer.view.ListView;
+import org.openide.explorer.view.BeanTreeView;
 
 /**
  *
@@ -30,13 +30,13 @@ import org.openide.explorer.view.ListView;
  */
 final class MembersView extends JPanel implements ExplorerManager.Provider {
 
-    private final ListView view;
+    private final BeanTreeView view;
     private final ExplorerManager manager;
 
     public MembersView(ExplorerManager manager) {
         this.manager = manager;
         
-        view = new ListView();
+        view = new BeanTreeView();
         view.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setLayout(new BorderLayout());
         add(view, BorderLayout.CENTER);
