@@ -25,7 +25,7 @@ import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
  *
  * @author mario.schroeder
  */
-final class CtoVocabulary implements Vocabulary{
+public final class CtoVocabulary implements Vocabulary{
     
     private static final Vocabulary VOCABULARY = CtoLexer.VOCABULARY;
 
