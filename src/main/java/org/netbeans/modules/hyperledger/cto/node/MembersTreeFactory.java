@@ -21,7 +21,6 @@ package org.netbeans.modules.hyperledger.cto.node;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
-import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
@@ -70,7 +69,7 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
         ParserListener listener = new ParserListener();
         
         try {
-            CharStream input = new ANTLRFileStream(fileObject.getPath());
+            CharStream input = new FileCharStream(fileObject.getPath());
             Lexer lexer = new CtoLexer(input);
             TokenStream tokenStream = new CommonTokenStream(lexer);
             CtoParser parser = new CtoParser(tokenStream);

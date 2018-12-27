@@ -78,8 +78,4 @@ final class ParserListener extends CtoParserBaseListener{
         addNode(ctx.IDENTIFIER(0), CtoLexer.CONCEPT);
     }
     
-    
-    
-    
-    
 }
