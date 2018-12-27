@@ -28,8 +28,8 @@ import org.antlr.v4.runtime.misc.Utils;
  *
  * @author mario.schroeder
  */
-class FileCharStream implements CharStream {
-
+final class StringStream implements CharStream {
+    
     /**
      * The data being scanned
      */
@@ -45,18 +45,8 @@ class FileCharStream implements CharStream {
      */
     protected int current = 0;
 
-    /**
-     * What is name or source of this char stream?
-     */
-    private final String name;
-
-    public FileCharStream(String name) throws IOException {
-        this.name = name;
-        load();
-    }
-
-    private void load() throws IOException {
-        data = Utils.readFile(name, null);
+    StringStream(String content) {
+        this.data = content.toCharArray();
         this.countChars = data.length;
     }
 
@@ -76,7 +66,7 @@ class FileCharStream implements CharStream {
 
     @Override
     public String getSourceName() {
-        return name;
+        return String.class.getSimpleName();
     }
 
     @Override

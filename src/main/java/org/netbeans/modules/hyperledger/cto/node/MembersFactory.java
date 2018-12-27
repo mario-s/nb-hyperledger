@@ -52,7 +52,7 @@ final class MembersFactory extends ChildFactory<Pair<String,String>> implements 
     
     private final DataNode root;
     
-    public MembersFactory(DataNode root) {
+    MembersFactory(DataNode root) {
         this.root = root;
         root.getDataObject().addPropertyChangeListener(this);
     }
@@ -72,7 +72,7 @@ final class MembersFactory extends ChildFactory<Pair<String,String>> implements 
         FileObject fileObject = root.getDataObject().getPrimaryFile();
 
         try {
-            CharStream input = new FileCharStream(fileObject.getPath());
+            CharStream input = new StringStream(fileObject.asText());
             Lexer lexer = new CtoLexer(input);
             TokenStream tokenStream = new CommonTokenStream(lexer);
             CtoParser parser = new CtoParser(tokenStream);

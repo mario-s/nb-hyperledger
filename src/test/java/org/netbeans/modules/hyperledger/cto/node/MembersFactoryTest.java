@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
@@ -27,10 +28,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.BDDMockito.given;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
 import org.openide.util.Pair;
 
@@ -42,19 +44,22 @@ import org.openide.util.Pair;
 public class MembersFactoryTest {
     
     @Mock
-    private FileObject fileObject;
+    private DataNode node;
     
     @Mock
     private DataObject dataObject;
     
-    @InjectMocks
     private MembersFactory classUnderTest;
     
     @BeforeEach
     public void setup() {
-        String path = getClass().getResource("sample.cto").getPath();
-        given(fileObject.getPath()).willReturn(path);
+        String path = getClass().getResource("sample.cto").getFile();
+        FileObject fileObject = FileUtil.toFileObject(new File(path));
+        
+        given(node.getDataObject()).willReturn(dataObject);
         given(dataObject.getPrimaryFile()).willReturn(fileObject);
+        
+        classUnderTest = new MembersFactory(node);
     }
     
     @Test
