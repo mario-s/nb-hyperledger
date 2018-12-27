@@ -98,6 +98,6 @@ final class MembersFactory extends ChildFactory<Pair<String,String>> implements 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        refresh(true);
+        refresh(false);
     }
 }

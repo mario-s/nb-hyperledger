@@ -18,12 +18,12 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
@@ -47,7 +47,7 @@ final class ParserListener extends CtoParserBaseListener{
     
     ParserListener() {
         vocabulary = new CtoVocabulary();
-        members = new HashMap<>();
+        members = new TreeMap<>();
         namespace = empty();
     }
     
