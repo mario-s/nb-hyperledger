@@ -19,29 +19,150 @@
 package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.IOException;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.IntStream;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.Utils;
 
 /**
  *
  * @author mario.schroeder
  */
-class FileCharStream extends ANTLRInputStream {
+class FileCharStream implements CharStream {
 
-    private final String fileName;
+    /**
+     * The data being scanned
+     */
+    protected char[] data;
 
-    public FileCharStream(String fileName) throws IOException {
-        this.fileName = fileName;
+    /**
+     * How many characters are actually in the buffer
+     */
+    protected int countChars;
+
+    /**
+     * 0..countChars-1 index into string of next char
+     */
+    protected int current = 0;
+
+    /**
+     * What is name or source of this char stream?
+     */
+    private final String name;
+
+    public FileCharStream(String name) throws IOException {
+        this.name = name;
         load();
     }
-    
+
     private void load() throws IOException {
-        data = Utils.readFile(fileName, null);
-        this.n = data.length;
+        data = Utils.readFile(name, null);
+        this.countChars = data.length;
     }
 
     @Override
     public String getSourceName() {
-        return fileName;
+        return name;
+    }
+
+    public void reset() {
+        current = 0;
+    }
+
+    @Override
+    public void consume() {
+        if (current >= countChars) {
+            assert LA(1) == IntStream.EOF;
+            throw new IllegalStateException("cannot consume EOF");
+        }
+
+        if (current < countChars) {
+            current++;
+        }
+    }
+
+    @Override
+    public int LA(int i) {
+        if (i == 0) {
+            return 0; // undefined
+        }
+        if (i < 0) {
+            i++; // e.g., translate LA(-1) to use offset i=0; then data[current+0-1]
+            if ((current + i - 1) < 0) {
+                return IntStream.EOF; // invalid; no char before first char
+            }
+        }
+
+        if ((current + i - 1) >= countChars) {
+            return IntStream.EOF;
+        }
+        return data[current + i - 1];
+    }
+
+    public int LT(int i) {
+        return LA(i);
+    }
+
+    /**
+     * Return the current input symbol index 0..n where n indicates the last
+     * symbol has been read. The index is the index of char to be returned from
+     * LA(1).
+     */
+    @Override
+    public int index() {
+        return current;
+    }
+
+    @Override
+    public int size() {
+        return countChars;
+    }
+
+    /**
+     * mark/release do nothing; we have entire buffer
+     */
+    @Override
+    public int mark() {
+        return -1;
+    }
+
+    @Override
+    public void release(int marker) {
+    }
+
+    /**
+     * consume() ahead until p==index; can't just set p=index as we must update
+     * line and charPositionInLine. If we seek backwards, just set p
+     */
+    @Override
+    public void seek(int index) {
+        if (index <= current) {
+            current = index; // just jump; don't update stream state (line, ...)
+            return;
+        }
+        // seek forward, consume until current hits index or countChars (whichever comes first)
+        index = Math.min(index, countChars);
+        while (current < index) {
+            consume();
+        }
+    }
+
+    @Override
+    public String getText(Interval interval) {
+        int start = interval.a;
+        int stop = interval.b;
+        if (stop >= countChars) {
+            stop = countChars - 1;
+        }
+        int count = stop - start + 1;
+        if (start >= countChars) {
+            return "";
+        }
+        return new String(data, start, count);
+    }
+
+    @Override
+    public String toString() {
+        return new String(data);
     }
 }
