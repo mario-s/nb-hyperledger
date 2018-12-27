@@ -61,12 +61,22 @@ class FileCharStream implements CharStream {
     }
 
     @Override
-    public String getSourceName() {
-        return name;
+    public String getText(Interval interval) {
+        int start = interval.a;
+        int stop = interval.b;
+        if (stop >= countChars) {
+            stop = countChars - 1;
+        }
+        int count = stop - start + 1;
+        if (start >= countChars) {
+            return "";
+        }
+        return new String(data, start, count);
     }
 
-    public void reset() {
-        current = 0;
+    @Override
+    public String getSourceName() {
+        return name;
     }
 
     @Override
@@ -103,11 +113,6 @@ class FileCharStream implements CharStream {
         return LA(i);
     }
 
-    /**
-     * Return the current input symbol index 0..n where n indicates the last
-     * symbol has been read. The index is the index of char to be returned from
-     * LA(1).
-     */
     @Override
     public int index() {
         return current;
@@ -145,20 +150,6 @@ class FileCharStream implements CharStream {
         while (current < index) {
             consume();
         }
-    }
-
-    @Override
-    public String getText(Interval interval) {
-        int start = interval.a;
-        int stop = interval.b;
-        if (stop >= countChars) {
-            stop = countChars - 1;
-        }
-        int count = stop - start + 1;
-        if (start >= countChars) {
-            return "";
-        }
-        return new String(data, start, count);
     }
 
     @Override
