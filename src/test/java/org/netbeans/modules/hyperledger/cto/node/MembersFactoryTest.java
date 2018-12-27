@@ -39,7 +39,7 @@ import org.openide.util.Pair;
  * @author mario.schroeder
  */
 @ExtendWith(MockitoExtension.class)
-public class MembersTreeFactoryTest {
+public class MembersFactoryTest {
     
     @Mock
     private FileObject fileObject;
@@ -48,7 +48,7 @@ public class MembersTreeFactoryTest {
     private DataObject dataObject;
     
     @InjectMocks
-    private MembersTreeFactory classUnderTest;
+    private MembersFactory classUnderTest;
     
     @BeforeEach
     public void setup() {

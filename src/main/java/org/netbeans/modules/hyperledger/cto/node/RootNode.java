@@ -27,16 +27,19 @@ import org.openide.nodes.Children;
  *
  * @author mario.schroeder
  */
-public class CtoRootNode extends DataNode {
+public class RootNode extends DataNode {
+    
+    private final MembersFactory factory;
 
-    public CtoRootNode(DataObject obj, Children ch) {
+    public RootNode(DataObject obj, Children ch) {
         super(obj, ch);
+        factory = new MembersFactory(this);
+        
         setIconBaseWithExtension(FileType.ICON);
-        init();
+        createChildren();
     }
 
-    private void init() {
-        MembersTreeFactory factory = new MembersTreeFactory(this);
+    private void createChildren() {
         setChildren(Children.create(factory, true));
     }
 }

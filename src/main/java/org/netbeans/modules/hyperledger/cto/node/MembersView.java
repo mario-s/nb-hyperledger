@@ -51,5 +51,4 @@ final class MembersView extends JPanel implements ExplorerManager.Provider {
     public boolean requestFocusInWindow() {
         return view.requestFocusInWindow();
     }
-
 }

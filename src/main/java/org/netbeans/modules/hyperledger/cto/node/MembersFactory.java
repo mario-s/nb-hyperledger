@@ -21,6 +21,7 @@ package org.netbeans.modules.hyperledger.cto.node;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
+import java.util.Optional;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
@@ -41,7 +42,7 @@ import org.openide.util.Pair;
  *
  * @author mario.schroeder
  */
-final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
+final class MembersFactory extends ChildFactory<Pair<String,String>> {
     private static final String MEMBER = "%s : %s";
     
     @StaticResource
@@ -49,11 +50,8 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
     
     private final DataNode root;
     
-    private ParserListener listener;
-    
-    public MembersTreeFactory(DataNode root) {
+    public MembersFactory(DataNode root) {
         this.root = root;
-        listener = new ParserListener();
     }
 
     @Override
@@ -66,7 +64,8 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
 
     @Override
     protected boolean createKeys(List<Pair<String,String>> toPopulate) {
-
+        
+        ParserListener listener = new ParserListener();
         FileObject fileObject = root.getDataObject().getPrimaryFile();
 
         try {
@@ -80,15 +79,15 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
             Exceptions.printStackTrace(ex);
         }
         
-        updateRootName();
+        updateRootName(listener.getNamespace());
         listener.getMembers().forEach((k,v) -> toPopulate.add(Pair.of(k, v)));
 
         return true;
     }
 
-    private void updateRootName() {
+    private void updateRootName(Optional<String> namespace) {
         String oldName = root.getDisplayName();
-        String rootName = listener.getNamespace().orElse(oldName);
+        String rootName = namespace.orElse(oldName);
         if(!rootName.equals(oldName)) {
             root.setDisplayName(rootName);
         }
