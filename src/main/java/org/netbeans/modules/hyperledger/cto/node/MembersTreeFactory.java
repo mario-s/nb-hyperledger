@@ -18,8 +18,6 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
@@ -32,7 +30,6 @@ import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataNode;
-import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
@@ -52,13 +49,10 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
     
     private final DataNode root;
     
-    private final PropertyChangeSupport changeSupport;
-
     private ParserListener listener;
     
     public MembersTreeFactory(DataNode root) {
         this.root = root;
-        changeSupport = new PropertyChangeSupport(this);
         listener = new ParserListener();
     }
 
@@ -95,10 +89,8 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
     private void updateRootName() {
         String oldName = root.getDisplayName();
         String rootName = listener.getNamespace().orElse(oldName);
-        changeSupport.firePropertyChange(PropertyChange.namespace.name(), oldName, rootName);
-    }
-
-    void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
+        if(!rootName.equals(oldName)) {
+            root.setDisplayName(rootName);
+        }
     }
 }
