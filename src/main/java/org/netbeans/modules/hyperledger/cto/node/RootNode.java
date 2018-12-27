@@ -27,11 +27,11 @@ import org.openide.nodes.Children;
  *
  * @author mario.schroeder
  */
-public class RootNode extends DataNode {
+final class RootNode extends DataNode {
     
     private final MembersFactory factory;
 
-    public RootNode(DataObject obj, Children ch) {
+    RootNode(DataObject obj, Children ch) {
         super(obj, ch);
         factory = new MembersFactory(this);
         

@@ -18,6 +18,8 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
@@ -42,7 +44,7 @@ import org.openide.util.Pair;
  *
  * @author mario.schroeder
  */
-final class MembersFactory extends ChildFactory<Pair<String,String>> {
+final class MembersFactory extends ChildFactory<Pair<String,String>> implements PropertyChangeListener{
     private static final String MEMBER = "%s : %s";
     
     @StaticResource
@@ -52,8 +54,9 @@ final class MembersFactory extends ChildFactory<Pair<String,String>> {
     
     public MembersFactory(DataNode root) {
         this.root = root;
+        root.getDataObject().addPropertyChangeListener(this);
     }
-
+    
     @Override
     protected Node createNodeForKey(Pair<String,String> pair) {
         AbstractNode node = new AbstractNode(Children.LEAF);
@@ -91,5 +94,10 @@ final class MembersFactory extends ChildFactory<Pair<String,String>> {
         if(!rootName.equals(oldName)) {
             root.setDisplayName(rootName);
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        refresh(true);
     }
 }
