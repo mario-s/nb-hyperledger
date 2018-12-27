@@ -19,7 +19,12 @@
 package org.netbeans.modules.hyperledger.cto.node;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
+import java.util.stream.Collectors;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
@@ -32,22 +37,55 @@ import org.netbeans.modules.hyperledger.cto.lexer.CtoVocabulary;
  */
 final class ParserListener extends CtoParserBaseListener{
     
-    private final CtoVocabulary vocabulary = new CtoVocabulary();
+    private final CtoVocabulary vocabulary;
     
-    private final Map<String, String> dictionary = new HashMap<>();
+    private final Map<String, String> members;
+    
+    private boolean withinName;
+    
+    private Optional<String> namespace;
+    
+    ParserListener() {
+        vocabulary = new CtoVocabulary();
+        members = new HashMap<>();
+        namespace = empty();
+    }
     
     private String getName(int id) {
         return (vocabulary.getDisplayName(id));
     }
     
     private void addNode(TerminalNode node, int id) {
-        dictionary.put(node.getText(), getName(id));
+        members.put(node.getText(), getName(id));
     }
 
-    Map<String, String> getDictionary() {
-        return dictionary;
+    Map<String, String> getMembers() {
+        return members;
     }
 
+    Optional<String> getNamespace() {
+        return namespace;
+    }
+    
+    @Override
+    public void enterNamespaceDeclaration(CtoParser.NamespaceDeclarationContext ctx) {
+        withinName = true;
+    }
+
+    @Override
+    public void exitNamespaceDeclaration(CtoParser.NamespaceDeclarationContext ctx) {
+        withinName = false;
+    }
+
+    @Override
+    public void exitQualifiedName(CtoParser.QualifiedNameContext ctx) {
+        if(withinName) {
+            List<TerminalNode> identifiers = ctx.IDENTIFIER();
+            String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
+            namespace = ofNullable(name);
+        }
+    }
+  
     @Override
     public void exitAssetDeclaration(CtoParser.AssetDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(), CtoLexer.ASSET);

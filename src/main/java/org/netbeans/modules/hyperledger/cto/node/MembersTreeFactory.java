@@ -18,6 +18,8 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
@@ -29,6 +31,7 @@ import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.openide.filesystems.FileObject;
+import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.ChildFactory;
@@ -46,11 +49,17 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
     
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
+    
+    private final DataNode root;
+    
+    private final PropertyChangeSupport changeSupport;
 
-    private final DataObject obj;
-
-    public MembersTreeFactory(DataObject obj) {
-        this.obj = obj;
+    private ParserListener listener;
+    
+    public MembersTreeFactory(DataNode root) {
+        this.root = root;
+        changeSupport = new PropertyChangeSupport(this);
+        listener = new ParserListener();
     }
 
     @Override
@@ -64,10 +73,8 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
     @Override
     protected boolean createKeys(List<Pair<String,String>> toPopulate) {
 
-        FileObject fileObject = obj.getPrimaryFile();
+        FileObject fileObject = root.getDataObject().getPrimaryFile();
 
-        ParserListener listener = new ParserListener();
-        
         try {
             CharStream input = new FileCharStream(fileObject.getPath());
             Lexer lexer = new CtoLexer(input);
@@ -75,14 +82,23 @@ final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
             CtoParser parser = new CtoParser(tokenStream);
             parser.addParseListener(listener);
             parser.modelUnit();
-            
-            listener.getDictionary().forEach((k,v) -> toPopulate.add(Pair.of(k, v)));
-
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
+        
+        updateRootName();
+        listener.getMembers().forEach((k,v) -> toPopulate.add(Pair.of(k, v)));
 
         return true;
     }
 
+    private void updateRootName() {
+        String oldName = root.getDisplayName();
+        String rootName = listener.getNamespace().orElse(oldName);
+        changeSupport.firePropertyChange(PropertyChange.namespace.name(), oldName, rootName);
+    }
+
+    void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
 }

@@ -18,6 +18,8 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
@@ -27,21 +29,26 @@ import org.openide.nodes.Children;
  *
  * @author mario.schroeder
  */
-public class CtoRootNode extends DataNode {
-
-    private final MembersTreeFactory treeFactory;
+public class CtoRootNode extends DataNode implements PropertyChangeListener{
 
     public CtoRootNode(DataObject obj, Children ch) {
         super(obj, ch);
         setIconBaseWithExtension(FileType.ICON);
-
-        treeFactory = new MembersTreeFactory(obj);
-
         init();
     }
 
     private void init() {
-        setChildren(Children.create(treeFactory, true));
+        MembersTreeFactory factory = new MembersTreeFactory(this);
+        factory.addPropertyChangeListener(this);
+        setChildren(Children.create(factory, true));
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if(evt.getPropertyName().equals(PropertyChange.namespace.name())){
+            final Object namespace = evt.getNewValue();
+            setDisplayName(namespace.toString());
+        }
     }
 
 }
