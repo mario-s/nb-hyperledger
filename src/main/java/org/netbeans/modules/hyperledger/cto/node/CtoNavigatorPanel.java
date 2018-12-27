@@ -18,17 +18,13 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import java.awt.BorderLayout;
 import java.util.Collection;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
-import org.openide.explorer.view.ListView;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
