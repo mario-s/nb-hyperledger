@@ -20,6 +20,7 @@ package org.netbeans.modules.hyperledger.cto.node;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParserBaseListener;
@@ -36,42 +37,49 @@ final class ParserListener extends CtoParserBaseListener{
     private final Map<String, String> dictionary = new HashMap<>();
     
     private String getName(int id) {
-        return vocabulary.getDisplayName(id);
+        return (vocabulary.getDisplayName(id));
+    }
+    
+    private void addNode(TerminalNode node, int id) {
+        dictionary.put(node.getText(), getName(id));
     }
 
     Map<String, String> getDictionary() {
         return dictionary;
     }
+
+    @Override
+    public void exitAssetDeclaration(CtoParser.AssetDeclarationContext ctx) {
+        addNode(ctx.IDENTIFIER(), CtoLexer.ASSET);
+    }
+
+    @Override
+    public void exitParticipantDeclaration(CtoParser.ParticipantDeclarationContext ctx) {
+        addNode(ctx.IDENTIFIER(), CtoLexer.PARTICIPANT);
+    }
+
+    @Override
+    public void exitTransactionDeclaration(CtoParser.TransactionDeclarationContext ctx) {
+        addNode(ctx.IDENTIFIER(), CtoLexer.TRANSACTION);
+    }
+
+    @Override
+    public void exitEventDeclaration(CtoParser.EventDeclarationContext ctx) {
+        addNode(ctx.IDENTIFIER(), CtoLexer.EVENT);
+    }
+
+    @Override
+    public void exitEnumDeclaration(CtoParser.EnumDeclarationContext ctx) {
+        addNode(ctx.IDENTIFIER(), CtoLexer.ENUM);
+    }
+
+    @Override
+    public void exitConceptDeclaration(CtoParser.ConceptDeclarationContext ctx) {
+        addNode(ctx.IDENTIFIER(0), CtoLexer.CONCEPT);
+    }
     
-    @Override
-    public void enterAssetDeclaration(CtoParser.AssetDeclarationContext ctx) {
-        dictionary.put(ctx.getText(), getName(CtoLexer.ASSET));
-    }
-
-    @Override
-    public void enterTransactionDeclaration(CtoParser.TransactionDeclarationContext ctx) {
-        dictionary.put(ctx.getText(), getName(CtoLexer.TRANSACTION));
-    }
-
-    @Override
-    public void enterParticipantDeclaration(CtoParser.ParticipantDeclarationContext ctx) {
-        dictionary.put(ctx.getText(), getName(CtoLexer.PARTICIPANT));
-    }
-
-    @Override
-    public void enterEventDeclaration(CtoParser.EventDeclarationContext ctx) {
-        dictionary.put(ctx.getText(), getName(CtoLexer.EVENT));
-    }
-
-    @Override
-    public void enterEnumDeclaration(CtoParser.EnumDeclarationContext ctx) {
-        dictionary.put(ctx.getText(), getName(CtoLexer.ENUM));
-    }
-
-    @Override
-    public void enterConceptDeclaration(CtoParser.ConceptDeclarationContext ctx) {
-        dictionary.put(ctx.getText(), getName(CtoLexer.CONCEPT));
-    }
+    
+    
     
     
 }

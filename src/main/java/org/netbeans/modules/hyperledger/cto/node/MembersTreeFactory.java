@@ -18,23 +18,36 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import java.io.IOException;
+import static java.lang.String.format;
 import java.util.List;
-import org.netbeans.api.lexer.TokenId;
-import org.netbeans.modules.hyperledger.cto.lexer.Category;
-import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
-import org.openide.loaders.DataNode;
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.TokenStream;
+import org.netbeans.api.annotations.common.StaticResource;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
+import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.Exceptions;
+import org.openide.util.Pair;
 
 /**
  *
  * @author mario.schroeder
  */
-final class MembersTreeFactory extends ChildFactory<TokenId> {
+final class MembersTreeFactory extends ChildFactory<Pair<String,String>> {
+    private static final String MEMBER = "%s : %s";
     
+    @StaticResource
+    private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
+
     private final DataObject obj;
 
     public MembersTreeFactory(DataObject obj) {
@@ -42,17 +55,35 @@ final class MembersTreeFactory extends ChildFactory<TokenId> {
     }
 
     @Override
-    protected Node createNodeForKey(TokenId key) {
+    protected Node createNodeForKey(Pair<String,String> pair) {
         AbstractNode node = new AbstractNode(Children.LEAF);
-        node.setDisplayName(key.name());
+        node.setDisplayName(format(MEMBER, pair.first(), pair.second()));
+        node.setIconBaseWithExtension(ICON);
         return node;
     }
-    
+
     @Override
-    protected boolean createKeys(List<TokenId> toPopulate) {
-        TokenId token = new CtoTokenId("Asset", Category.keyword.name(), 0);
-        toPopulate.add(token);
+    protected boolean createKeys(List<Pair<String,String>> toPopulate) {
+
+        FileObject fileObject = obj.getPrimaryFile();
+
+        ParserListener listener = new ParserListener();
+        
+        try {
+            CharStream input = new ANTLRFileStream(fileObject.getPath());
+            Lexer lexer = new CtoLexer(input);
+            TokenStream tokenStream = new CommonTokenStream(lexer);
+            CtoParser parser = new CtoParser(tokenStream);
+            parser.addParseListener(listener);
+            parser.modelUnit();
+            
+            listener.getDictionary().forEach((k,v) -> toPopulate.add(Pair.of(k, v)));
+
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
         return true;
     }
-    
+
 }
