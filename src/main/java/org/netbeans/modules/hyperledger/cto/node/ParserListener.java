@@ -25,6 +25,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
@@ -56,7 +57,10 @@ final class ParserListener extends CtoParserBaseListener{
     }
     
     private void addNode(TerminalNode node, int id) {
-        members.put(node.getText(), getName(id));
+        if(!(node instanceof ErrorNode)) {
+            String text = node.getText();
+            members.put(text, getName(id));
+        }
     }
 
     Map<String, String> getMembers() {
@@ -85,7 +89,7 @@ final class ParserListener extends CtoParserBaseListener{
             namespace = ofNullable(name);
         }
     }
-  
+    
     @Override
     public void exitAssetDeclaration(CtoParser.AssetDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(), CtoLexer.ASSET);
