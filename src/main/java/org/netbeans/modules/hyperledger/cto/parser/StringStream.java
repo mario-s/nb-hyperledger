@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.node;
+package org.netbeans.modules.hyperledger.cto.parser;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.IntStream;
@@ -26,7 +26,7 @@ import org.antlr.v4.runtime.misc.Interval;
  *
  * @author mario.schroeder
  */
-final class StringStream implements CharStream {
+public final class StringStream implements CharStream {
     
     /**
      * The data being scanned
@@ -43,7 +43,7 @@ final class StringStream implements CharStream {
      */
     protected int current = 0;
 
-    StringStream(String content) {
+    public StringStream(String content) {
         this.data = content.toCharArray();
         this.countChars = data.length;
     }
