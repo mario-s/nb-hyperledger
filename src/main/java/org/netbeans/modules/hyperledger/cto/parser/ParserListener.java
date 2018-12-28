@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.node;
+package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.List;
 import java.util.Map;
@@ -27,9 +27,7 @@ import static java.util.Optional.ofNullable;
 
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
@@ -40,7 +38,7 @@ import org.netbeans.modules.hyperledger.cto.lexer.CtoVocabulary;
  *
  * @author mario.schroeder
  */
-final class ParserListener extends CtoParserBaseListener{
+public final class ParserListener extends CtoParserBaseListener{
     
     private final CtoVocabulary vocabulary;
     
@@ -48,7 +46,7 @@ final class ParserListener extends CtoParserBaseListener{
     
     private Optional<String> namespace;
     
-    ParserListener() {
+    public ParserListener() {
         vocabulary = new CtoVocabulary();
         members = new TreeMap<>();
         namespace = empty();
@@ -65,11 +63,11 @@ final class ParserListener extends CtoParserBaseListener{
         }
     }
 
-    Map<String, String> getMembers() {
+    public Map<String, String> getMembers() {
         return members;
     }
 
-    Optional<String> getNamespace() {
+    public Optional<String> getNamespace() {
         return namespace;
     }
 

@@ -37,6 +37,7 @@ import javax.swing.text.Document;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.parser.CtoParserProvider;
+import org.netbeans.modules.hyperledger.cto.parser.ParserListener;
 import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileChangeAdapter;
 import org.openide.filesystems.FileEvent;
