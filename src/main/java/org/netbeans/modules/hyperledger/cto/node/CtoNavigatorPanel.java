@@ -20,10 +20,9 @@ package org.netbeans.modules.hyperledger.cto.node;
 
 import java.util.Collection;
 import java.util.Optional;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
+
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.explorer.ExplorerManager;
@@ -36,14 +35,19 @@ import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static org.netbeans.modules.hyperledger.cto.node.Bundle.*;
+
 /**
  *
  * @author mario.schroeder
  */
 @NbBundle.Messages({
-    "LBL_CtoLang=Composer Model"
+    "CTO_NAV_NAME=Composer Model",
+    "CTO_NAV_HINT=Overview of the resource definitions of the file."
 })
-@NavigatorPanel.Registration(mimeType = FileType.MIME, position = 500, displayName = "#LBL_CtoLang")
+@NavigatorPanel.Registration(mimeType = FileType.MIME, position = 500, displayName = "#CTO_NAV_NAME")
 public class CtoNavigatorPanel implements NavigatorPanel {
 
     private static final RequestProcessor RP = new RequestProcessor(CtoNavigatorPanel.class.getName(), 1);
@@ -58,6 +62,11 @@ public class CtoNavigatorPanel implements NavigatorPanel {
 
     private final LookupListener selectionListener = ev -> {
         RP.post(() -> {
+            rootNode.ifPresent(n -> {
+                n.getFactory().cleanup();
+                rootNode = empty();
+            });
+                        
             if (selection != null) {
                 display(selection.allInstances());
             }
@@ -66,12 +75,12 @@ public class CtoNavigatorPanel implements NavigatorPanel {
 
     @Override
     public String getDisplayName() {
-        return NbBundle.getMessage(CtoNavigatorPanel.class, "LBL_CtoLang");
+        return CTO_NAV_NAME();
     }
 
     @Override
     public String getDisplayHint() {
-        return "TODO";
+        return CTO_NAV_HINT();
     }
 
     @Override
@@ -88,6 +97,7 @@ public class CtoNavigatorPanel implements NavigatorPanel {
 
     @Override
     public void panelDeactivated() {
+        selectionListener.resultChanged(null);
         selection.removeLookupListener(selectionListener);
         selection = null;
     }
@@ -105,7 +115,6 @@ public class CtoNavigatorPanel implements NavigatorPanel {
             rootNode = of(node);
             manager.setRootContext(node);
         } else {
-            rootNode.ifPresent(n -> n.getFactory().cleanup());
             manager.setRootContext(Node.EMPTY);
         }
     }
