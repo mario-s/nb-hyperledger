@@ -21,13 +21,17 @@ package org.netbeans.modules.hyperledger.cto.node;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import static org.mockito.BDDMockito.given;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openide.filesystems.FileObject;
@@ -35,6 +39,9 @@ import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
 import org.openide.util.Pair;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 
 /**
  *
@@ -63,10 +70,18 @@ public class MembersFactoryTest {
     }
     
     @Test
-    @DisplayName("The factory should create keys.")
-    public void createKeys_NotEmpty() {
+    @DisplayName("The factory should create 7 keys.")
+    public void createKeys() {
         List<Pair<String,String>> toPopulate = new ArrayList<>();
         classUnderTest.createKeys(toPopulate);
-        assertThat(toPopulate.isEmpty(), is(false));
+        assertThat(toPopulate.size(), is(7));
+    }
+    
+    @Test
+    @DisplayName("The factory should update the display name of the root node.")
+    public void updateDisplayname() {
+        List<Pair<String,String>> toPopulate = new ArrayList<>();
+        classUnderTest.createKeys(toPopulate);
+        verify(node).setDisplayName(anyString());
     }
 }
