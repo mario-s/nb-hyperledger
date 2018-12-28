@@ -130,8 +130,7 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     }
 
     private String getTextFromFile() throws IOException {
-        FileObject fileObject = getPrimaryFile();
-        return fileObject.asText();
+        return getPrimaryFile().asText();
     }
 
     private void updateRootName(Optional<String> namespace) {
@@ -142,20 +141,20 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
         }
     }
 
-    private Optional<Document> getDocument() {
+    private Optional<Document> findDocument() {
         DataObject dataObject = getDataObject();
         EditorCookie ec = dataObject.getLookup().lookup(EditorCookie.class);
         if (ec != null) {
             JEditorPane[] panes = ec.getOpenedPanes();
             if (hasPanes(panes)) {
-                return of(panes[0].getDocument());
+                return getDocument(panes);
             } else {
                 ec.open();
                 try {
                     ec.openDocument();
                     panes = ec.getOpenedPanes();
                     if (hasPanes(panes)) {
-                        return of(panes[0].getDocument());
+                        return getDocument(panes);
                     }
                 } catch (IOException ex) {
                     Exceptions.printStackTrace(ex);
@@ -168,10 +167,14 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     private boolean hasPanes(JEditorPane[] panes) {
         return panes != null && panes.length > 0;
     }
+    
+    private Optional<Document> getDocument(JEditorPane[] panes) {
+        return of(panes[0].getDocument());
+    }
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        SwingUtilities.invokeLater(() -> getDocument().ifPresent(doc -> {
+        SwingUtilities.invokeLater(() -> findDocument().ifPresent(doc -> {
             refresh(doc); //force a refresh of the tree
             doc.addDocumentListener(this);
         }));
@@ -179,7 +182,7 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
 
     void cleanup() {
         getPrimaryFile().removeFileChangeListener(adapter);
-        SwingUtilities.invokeLater(() -> getDocument().ifPresent(doc -> doc.removeDocumentListener(this)));
+        SwingUtilities.invokeLater(() -> findDocument().ifPresent(doc -> doc.removeDocumentListener(this)));
     }
 
     @Override
