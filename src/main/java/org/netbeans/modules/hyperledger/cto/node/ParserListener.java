@@ -42,8 +42,6 @@ final class ParserListener extends CtoParserBaseListener{
     
     private final Map<String, String> members;
     
-    private boolean withinName;
-    
     private Optional<String> namespace;
     
     ParserListener() {
@@ -57,7 +55,7 @@ final class ParserListener extends CtoParserBaseListener{
     }
     
     private void addNode(TerminalNode node, int id) {
-        if(!(node instanceof ErrorNode)) {
+        if(node != null && !(node instanceof ErrorNode)) {
             String text = node.getText();
             members.put(text, getName(id));
         }
@@ -70,24 +68,13 @@ final class ParserListener extends CtoParserBaseListener{
     Optional<String> getNamespace() {
         return namespace;
     }
-    
-    @Override
-    public void enterNamespaceDeclaration(CtoParser.NamespaceDeclarationContext ctx) {
-        withinName = true;
-    }
 
     @Override
     public void exitNamespaceDeclaration(CtoParser.NamespaceDeclarationContext ctx) {
-        withinName = false;
-    }
-
-    @Override
-    public void exitQualifiedName(CtoParser.QualifiedNameContext ctx) {
-        if(withinName) {
-            List<TerminalNode> identifiers = ctx.IDENTIFIER();
-            String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
-            namespace = ofNullable(name);
-        }
+        CtoParser.QualifiedNameContext qualCtx = ctx.qualifiedName();
+        List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
+        String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
+        namespace = ofNullable(name);
     }
     
     @Override
@@ -104,7 +91,7 @@ final class ParserListener extends CtoParserBaseListener{
     public void exitTransactionDeclaration(CtoParser.TransactionDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(), CtoLexer.TRANSACTION);
     }
-
+    
     @Override
     public void exitEventDeclaration(CtoParser.EventDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(), CtoLexer.EVENT);
