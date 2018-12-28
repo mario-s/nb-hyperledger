@@ -43,8 +43,9 @@ final class RootNode extends DataNode {
     private void createChildren() {
         setChildren(Children.create(factory, true));
     }
-    
-    void refresh(DocumentEvent e) {
-        factory.refresh(e);
+
+    MembersFactory getFactory() {
+        return factory;
     }
+    
 }

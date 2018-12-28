@@ -29,6 +29,7 @@ import javax.swing.ActionMap;
 import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.modules.hyperledger.cto.FileType;
@@ -125,8 +126,13 @@ public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener
         return ofNullable(EditorRegistry.lastFocusedComponent());
     }
 
-    private void refresh(DocumentEvent e) {
-        rootNode.ifPresent(node -> node.refresh(e));
+    private void refresh(DocumentEvent evt) {
+        rootNode.ifPresent(node -> {
+            String propName = DocumentEvent.EventType.CHANGE.toString();
+            Document doc = evt.getDocument();
+            PropertyChangeEvent event = new PropertyChangeEvent(this, propName, null, doc);
+            node.getFactory().propertyChange(event);
+        });
     }
 
     @Override

@@ -126,11 +126,9 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        refresh(false);
-    }
-    
-    void refresh(DocumentEvent e) {
-        document = e.getDocument();
+        if(DocumentEvent.EventType.CHANGE.toString().equals(evt.getPropertyName())) {
+            document = (Document) evt.getNewValue();
+        }
         refresh(false);
     }
 }
