@@ -40,11 +40,11 @@ modelUnit
     ;
 
 namespaceDeclaration
-    : NAMESPACE qualifiedName
+    : NAMESPACE qualifiedName EOL
     ;
 
 importDeclaration
-    : IMPORT qualifiedName ('.' '*')?
+    : IMPORT qualifiedName ('.' '*')? EOL
     ;
 
 typeDeclaration

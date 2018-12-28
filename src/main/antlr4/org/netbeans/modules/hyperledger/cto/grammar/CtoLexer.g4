@@ -77,8 +77,8 @@ MUL:                '*';
 // Additional symbols
 AT:                 '@';
 ELLIPSIS:           '...';
-REF:                '-->';
-VAR:                'o';
+REF:                '--> ';
+VAR:                'o ';
 
 // Literals
 DECIMAL_LITERAL:    ('0' | [1-9] (Digits? | '_'+ Digits)) [lL]?;
