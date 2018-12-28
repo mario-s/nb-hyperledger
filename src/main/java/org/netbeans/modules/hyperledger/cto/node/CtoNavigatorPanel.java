@@ -112,12 +112,12 @@ public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener
     private void display(Collection<? extends DataObject> selectedFiles) {
         if (selectedFiles.size() == 1) {
             DataObject dataObject = selectedFiles.iterator().next();
-            if (dataObject.isValid()) {
-                RootNode node = new RootNode(dataObject, Children.LEAF);
-                rootNode = of(node);
-                manager.setRootContext(node);
-            }
+            RootNode node = new RootNode(dataObject, Children.LEAF);
+            node.getFactory().register();
+            rootNode = of(node);
+            manager.setRootContext(node);
         } else {
+            rootNode.ifPresent(n -> n.getFactory().cleanup());
             manager.setRootContext(Node.EMPTY);
         }
     }
@@ -131,7 +131,7 @@ public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener
             String propName = DocumentEvent.EventType.CHANGE.toString();
             Document doc = evt.getDocument();
             PropertyChangeEvent event = new PropertyChangeEvent(this, propName, null, doc);
-            node.getFactory().propertyChange(event);
+            //node.getFactory().propertyChange(event);
         });
     }
 

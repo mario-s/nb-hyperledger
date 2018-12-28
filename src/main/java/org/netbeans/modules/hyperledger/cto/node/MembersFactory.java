@@ -18,27 +18,31 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.util.List;
 import java.util.Optional;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import javax.swing.JEditorPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.annotations.common.StaticResource;
-import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
+import org.openide.cookies.EditorCookie;
+import org.openide.filesystems.FileChangeAdapter;
+import org.openide.filesystems.FileEvent;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataNode;
+import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
@@ -50,20 +54,34 @@ import org.openide.util.Pair;
  *
  * @author mario.schroeder
  */
-final class MembersFactory extends ChildFactory<Pair<String, String>> implements PropertyChangeListener {
+final class MembersFactory extends ChildFactory<Pair<String, String>> implements DocumentListener {
 
     private static final String MEMBER = "%s : %s";
 
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
-    
+
     private final DataNode root;
 
     private Document document;
 
+    private final FileChangeAdapter adapter = new FileChangeAdapter() {
+        @Override
+        public void fileChanged(FileEvent fe) {
+            refresh(false);
+        }
+    };
+
     MembersFactory(DataNode root) {
         this.root = root;
-        root.getDataObject().addPropertyChangeListener(this);
+    }
+
+    private FileObject getPrimaryFile() {
+        return getDataObject().getPrimaryFile();
+    }
+
+    private DataObject getDataObject() {
+        return root.getDataObject();
     }
 
     @Override
@@ -112,7 +130,7 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     }
 
     private String getTextFromFile() throws IOException {
-        FileObject fileObject = root.getDataObject().getPrimaryFile();
+        FileObject fileObject = getPrimaryFile();
         return fileObject.asText();
     }
 
@@ -124,11 +142,56 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
         }
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if(DocumentEvent.EventType.CHANGE.toString().equals(evt.getPropertyName())) {
-            document = (Document) evt.getNewValue();
+    private Optional<Document> getDocument() {
+        DataObject dataObject = getDataObject();
+        EditorCookie ec = dataObject.getLookup().lookup(EditorCookie.class);
+        if (ec != null) {
+            JEditorPane[] panes = ec.getOpenedPanes();
+            if (panes != null && panes.length > 0) {
+                return of(panes[0].getDocument());
+            } else {
+                ec.open();
+                try {
+                    ec.openDocument();
+                    panes = ec.getOpenedPanes();
+                    if (panes != null && panes.length > 0) {
+                        return of(panes[0].getDocument());
+                    }
+                } catch (IOException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
         }
+        return empty();
+    }
+
+    void register() {
+        getPrimaryFile().addFileChangeListener(adapter);
+        SwingUtilities.invokeLater(() -> getDocument().ifPresent(doc -> doc.addDocumentListener(this)));
+    }
+
+    void cleanup() {
+        getPrimaryFile().removeFileChangeListener(adapter);
+        SwingUtilities.invokeLater(() -> getDocument().ifPresent(doc -> doc.removeDocumentListener(this)));
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        refresh(e);
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        refresh(e);
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        refresh(e);
+    }
+    
+    private void refresh(DocumentEvent e) {
+        this.document = e.getDocument();
         refresh(false);
     }
 }
