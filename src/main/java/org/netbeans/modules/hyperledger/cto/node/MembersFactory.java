@@ -147,14 +147,14 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
         EditorCookie ec = dataObject.getLookup().lookup(EditorCookie.class);
         if (ec != null) {
             JEditorPane[] panes = ec.getOpenedPanes();
-            if (panes != null && panes.length > 0) {
+            if (hasPanes(panes)) {
                 return of(panes[0].getDocument());
             } else {
                 ec.open();
                 try {
                     ec.openDocument();
                     panes = ec.getOpenedPanes();
-                    if (panes != null && panes.length > 0) {
+                    if (hasPanes(panes)) {
                         return of(panes[0].getDocument());
                     }
                 } catch (IOException ex) {
@@ -165,10 +165,14 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
         return empty();
     }
 
+    private boolean hasPanes(JEditorPane[] panes) {
+        return panes != null && panes.length > 0;
+    }
+
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
         SwingUtilities.invokeLater(() -> getDocument().ifPresent(doc -> {
-            refresh(doc);
+            refresh(doc); //force a refresh of the tree
             doc.addDocumentListener(this);
         }));
     }
@@ -192,11 +196,11 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     public void changedUpdate(DocumentEvent e) {
         refresh(e);
     }
-    
+
     private void refresh(DocumentEvent e) {
         refresh(e.getDocument());
     }
-    
+
     private void refresh(Document doc) {
         this.document = doc;
         refresh(false);

@@ -18,20 +18,12 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Optional;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static java.util.Optional.ofNullable;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
-import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.explorer.ExplorerManager;
@@ -52,7 +44,7 @@ import org.openide.util.RequestProcessor;
     "LBL_CtoLang=Composer Model"
 })
 @NavigatorPanel.Registration(mimeType = FileType.MIME, position = 500, displayName = "#LBL_CtoLang")
-public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener, DocumentListener {
+public class CtoNavigatorPanel implements NavigatorPanel {
 
     private static final RequestProcessor RP = new RequestProcessor(CtoNavigatorPanel.class.getName(), 1);
 
@@ -92,16 +84,12 @@ public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener
         selection = lkp.lookupResult(DataObject.class);
         selection.addLookupListener(selectionListener);
         selectionListener.resultChanged(null);
-
-        EditorRegistry.addPropertyChangeListener(this);
     }
 
     @Override
     public void panelDeactivated() {
         selection.removeLookupListener(selectionListener);
         selection = null;
-
-        EditorRegistry.removePropertyChangeListener(this);
     }
 
     @Override
@@ -121,42 +109,4 @@ public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener
             manager.setRootContext(Node.EMPTY);
         }
     }
-
-    private Optional<JTextComponent> focusedComponent() {
-        return ofNullable(EditorRegistry.lastFocusedComponent());
-    }
-
-    private void refresh(DocumentEvent evt) {
-        rootNode.ifPresent(node -> {
-            String propName = DocumentEvent.EventType.CHANGE.toString();
-            Document doc = evt.getDocument();
-            PropertyChangeEvent event = new PropertyChangeEvent(this, propName, null, doc);
-            //node.getFactory().propertyChange(event);
-        });
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (EditorRegistry.FOCUS_GAINED_PROPERTY.equals(evt.getPropertyName())) {
-            focusedComponent().ifPresent(c -> c.getDocument().addDocumentListener(this));
-        } else if (EditorRegistry.FOCUS_LOST_PROPERTY.equals(evt.getPropertyName())) {
-            focusedComponent().ifPresent(c -> c.getDocument().removeDocumentListener(this));
-        }
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
 }
