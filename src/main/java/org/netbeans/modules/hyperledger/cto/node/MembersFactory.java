@@ -36,7 +36,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
-import org.netbeans.modules.hyperledger.cto.parser.CtoParserProvider;
+import org.netbeans.modules.hyperledger.cto.parser.CtoParserFactory;
 import org.netbeans.modules.hyperledger.cto.parser.ParserListener;
 import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileChangeAdapter;
@@ -100,7 +100,7 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
 
         try {
             String text = getText();
-            CtoParser parser = new CtoParserProvider().apply(text);
+            CtoParser parser = CtoParserFactory.getParserProvider().apply(text);
             parser.addParseListener(listener);
             parser.modelUnit();
         } catch (IOException ex) {

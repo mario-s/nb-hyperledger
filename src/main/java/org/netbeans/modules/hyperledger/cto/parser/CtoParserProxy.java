@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
+import java.util.function.Function;
 import javax.swing.event.ChangeListener;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.parsing.api.Snapshot;
@@ -34,13 +35,18 @@ public class CtoParserProxy extends Parser {
 
     private Snapshot snapshot;
     private CtoParser ctoParser;
+    private Function<String, CtoParser> parserProvider;
+
+    public CtoParserProxy(Function<String, CtoParser> parserProvider) {
+        this.parserProvider = parserProvider;
+    }
 
     @Override
     public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
         this.snapshot = snapshot;
-        
+
         String text = snapshot.getText().toString();
-        ctoParser = new CtoParserProvider().apply(text);
+        ctoParser = parserProvider.apply(text);
         ctoParser.modelUnit();
     }
 
@@ -57,4 +63,20 @@ public class CtoParserProxy extends Parser {
     public void removeChangeListener(ChangeListener cl) {
     }
 
+    public static class CtoParserResult extends Parser.Result {
+
+        private boolean valid = true;
+        private CtoParser ctoParser;
+
+        public CtoParserResult(Snapshot snapshot, CtoParser ctoParser) {
+            super(snapshot);
+            this.ctoParser = ctoParser;
+        }
+
+        @Override
+        protected void invalidate() {
+            valid = false;
+        }
+
+    }
 }

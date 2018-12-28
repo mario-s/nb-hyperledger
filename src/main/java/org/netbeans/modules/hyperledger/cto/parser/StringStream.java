@@ -26,7 +26,7 @@ import org.antlr.v4.runtime.misc.Interval;
  *
  * @author mario.schroeder
  */
-public final class StringStream implements CharStream {
+final class StringStream implements CharStream {
     
     /**
      * The data being scanned
@@ -43,7 +43,7 @@ public final class StringStream implements CharStream {
      */
     protected int current = 0;
 
-    public StringStream(String content) {
+    StringStream(String content) {
         this.data = content.toCharArray();
         this.countChars = data.length;
     }

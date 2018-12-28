@@ -19,8 +19,15 @@
 package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.Collection;
+import java.util.function.Function;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.hyperledger.cto.FileType;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserFactory;
@@ -30,11 +37,19 @@ import org.netbeans.modules.parsing.spi.ParserFactory;
  * @author mario.schroeder
  */
 @MimeRegistration(mimeType = FileType.MIME, service = ParserFactory.class)
-public class CtoParserFactory extends ParserFactory{
+public class CtoParserFactory extends ParserFactory {
 
     @Override
     public Parser createParser(Collection<Snapshot> clctn) {
-        return new CtoParserProxy();
+        return new CtoParserProxy(getParserProvider());
     }
-    
+
+    public static Function<String, CtoParser> getParserProvider() {
+        return text -> {
+            CharStream input = new StringStream(text);
+            Lexer lexer = new CtoLexer(input);
+            TokenStream tokenStream = new CommonTokenStream(lexer);
+            return new CtoParser(tokenStream);
+        };
+    }
 }
