@@ -44,7 +44,7 @@ namespaceDeclaration
     ;
 
 importDeclaration
-    : IMPORT qualifiedName ('.' '*')? EOL
+    : IMPORT qualifiedName ('.' '*')?
     ;
 
 typeDeclaration

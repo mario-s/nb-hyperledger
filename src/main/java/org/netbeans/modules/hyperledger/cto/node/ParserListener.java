@@ -21,11 +21,15 @@ package org.netbeans.modules.hyperledger.cto.node;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
+
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
@@ -106,5 +110,6 @@ final class ParserListener extends CtoParserBaseListener{
     public void exitConceptDeclaration(CtoParser.ConceptDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(0), CtoLexer.CONCEPT);
     }
+    
     
 }

@@ -18,11 +18,9 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import java.io.IOException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.IntStream;
 import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.misc.Utils;
 
 /**
  *
