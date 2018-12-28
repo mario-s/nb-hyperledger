@@ -122,7 +122,7 @@ public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener
         }
     }
 
-    private Optional<JTextComponent> lastFocusedComponent() {
+    private Optional<JTextComponent> focusedComponent() {
         return ofNullable(EditorRegistry.lastFocusedComponent());
     }
 
@@ -138,9 +138,9 @@ public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (EditorRegistry.FOCUS_GAINED_PROPERTY.equals(evt.getPropertyName())) {
-            lastFocusedComponent().ifPresent(c -> c.getDocument().addDocumentListener(this));
+            focusedComponent().ifPresent(c -> c.getDocument().addDocumentListener(this));
         } else if (EditorRegistry.FOCUS_LOST_PROPERTY.equals(evt.getPropertyName())) {
-            lastFocusedComponent().ifPresent(c -> c.getDocument().removeDocumentListener(this));
+            focusedComponent().ifPresent(c -> c.getDocument().removeDocumentListener(this));
         }
     }
 
