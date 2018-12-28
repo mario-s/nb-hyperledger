@@ -167,7 +167,10 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        SwingUtilities.invokeLater(() -> getDocument().ifPresent(doc -> doc.addDocumentListener(this)));
+        SwingUtilities.invokeLater(() -> getDocument().ifPresent(doc -> {
+            refresh(doc);
+            doc.addDocumentListener(this);
+        }));
     }
 
     void cleanup() {
@@ -191,7 +194,11 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     }
     
     private void refresh(DocumentEvent e) {
-        this.document = e.getDocument();
+        refresh(e.getDocument());
+    }
+    
+    private void refresh(Document doc) {
+        this.document = doc;
         refresh(false);
     }
 }
