@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import javax.swing.event.DocumentEvent;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
@@ -41,5 +42,9 @@ final class RootNode extends DataNode {
 
     private void createChildren() {
         setChildren(Children.create(factory, true));
+    }
+    
+    void refresh(DocumentEvent e) {
+        factory.refresh(e);
     }
 }

@@ -50,7 +50,7 @@ import org.openide.util.Pair;
  *
  * @author mario.schroeder
  */
-final class MembersFactory extends ChildFactory<Pair<String, String>> implements PropertyChangeListener, DocumentListener {
+final class MembersFactory extends ChildFactory<Pair<String, String>> implements PropertyChangeListener {
 
     private static final String MEMBER = "%s : %s";
 
@@ -60,8 +60,6 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     private final DataNode root;
 
     private Document document;
-
-    private boolean registered;
 
     MembersFactory(DataNode root) {
         this.root = root;
@@ -128,29 +126,10 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        JTextComponent jtc = EditorRegistry.lastFocusedComponent();
-        if (jtc != null && !registered) {
-            jtc.getDocument().addDocumentListener(this);
-        }
         refresh(false);
     }
-
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
-        refresh(e);
-    }
     
-    private void refresh(DocumentEvent e) {
+    void refresh(DocumentEvent e) {
         document = e.getDocument();
         refresh(false);
     }

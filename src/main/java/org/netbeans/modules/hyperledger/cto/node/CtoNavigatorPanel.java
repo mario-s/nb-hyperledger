@@ -18,9 +18,19 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.Optional;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
+import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.explorer.ExplorerManager;
@@ -41,12 +51,13 @@ import org.openide.util.RequestProcessor;
     "LBL_CtoLang=Composer Model"
 })
 @NavigatorPanel.Registration(mimeType = FileType.MIME, position = 500, displayName = "#LBL_CtoLang")
-public class CtoNavigatorPanel implements NavigatorPanel {
+public class CtoNavigatorPanel implements NavigatorPanel, PropertyChangeListener, DocumentListener {
 
     private static final RequestProcessor RP = new RequestProcessor(CtoNavigatorPanel.class.getName(), 1);
 
-    
     private Lookup.Result<DataObject> selection;
+
+    private Optional<RootNode> rootNode = empty();
 
     private final ExplorerManager manager = new ExplorerManager();
     private final Lookup lookup = ExplorerUtils.createLookup(manager, new ActionMap());
@@ -80,12 +91,16 @@ public class CtoNavigatorPanel implements NavigatorPanel {
         selection = lkp.lookupResult(DataObject.class);
         selection.addLookupListener(selectionListener);
         selectionListener.resultChanged(null);
+
+        EditorRegistry.addPropertyChangeListener(this);
     }
 
     @Override
     public void panelDeactivated() {
         selection.removeLookupListener(selectionListener);
         selection = null;
+
+        EditorRegistry.removePropertyChangeListener(this);
     }
 
     @Override
@@ -97,12 +112,45 @@ public class CtoNavigatorPanel implements NavigatorPanel {
         if (selectedFiles.size() == 1) {
             DataObject dataObject = selectedFiles.iterator().next();
             if (dataObject.isValid()) {
-                Node delegate = new RootNode(dataObject, Children.LEAF);
-                manager.setRootContext(delegate);
+                RootNode node = new RootNode(dataObject, Children.LEAF);
+                rootNode = of(node);
+                manager.setRootContext(node);
             }
         } else {
             manager.setRootContext(Node.EMPTY);
         }
+    }
+
+    private Optional<JTextComponent> lastFocusedComponent() {
+        return ofNullable(EditorRegistry.lastFocusedComponent());
+    }
+
+    private void refresh(DocumentEvent e) {
+        rootNode.ifPresent(node -> node.refresh(e));
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (EditorRegistry.FOCUS_GAINED_PROPERTY.equals(evt.getPropertyName())) {
+            lastFocusedComponent().ifPresent(c -> c.getDocument().addDocumentListener(this));
+        } else if (EditorRegistry.FOCUS_LOST_PROPERTY.equals(evt.getPropertyName())) {
+            lastFocusedComponent().ifPresent(c -> c.getDocument().removeDocumentListener(this));
+        }
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        refresh(e);
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        refresh(e);
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        refresh(e);
     }
 
 }
