@@ -122,7 +122,7 @@ fragment Digit: [0-9];
 CHAR_LITERAL:       '\'' (~["\\\r\n] | EscapeSequence)* '\'';
 STRING_LITERAL:     '"' (~["\\\r\n] | EscapeSequence)* '"';
 
-IDENTIFIER:         LetterOrDigit*;
+IDENTIFIER:         LetterOrDigit+;
 
 // Fragment rules
 fragment ExponentPart
