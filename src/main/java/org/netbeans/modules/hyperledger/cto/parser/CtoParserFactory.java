@@ -21,6 +21,7 @@ package org.netbeans.modules.hyperledger.cto.parser;
 import java.util.Collection;
 import java.util.function.Function;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
@@ -46,7 +47,7 @@ public class CtoParserFactory extends ParserFactory {
 
     public static Function<String, CtoParser> getParserProvider() {
         return text -> {
-            CharStream input = new StringStream(text);
+            CharStream input = CharStreams.fromString(text);
             Lexer lexer = new CtoLexer(input);
             TokenStream tokenStream = new CommonTokenStream(lexer);
             return new CtoParser(tokenStream);

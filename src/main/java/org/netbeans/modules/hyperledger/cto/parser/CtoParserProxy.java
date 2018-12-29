@@ -32,10 +32,10 @@ import org.netbeans.modules.parsing.spi.SourceModificationEvent;
  * @author mario.schroeder
  */
 public class CtoParserProxy extends Parser {
-
+    
+    private final Function<String, CtoParser> parserProvider;
     private Snapshot snapshot;
     private CtoParser ctoParser;
-    private Function<String, CtoParser> parserProvider;
 
     public CtoParserProxy(Function<String, CtoParser> parserProvider) {
         this.parserProvider = parserProvider;
@@ -65,8 +65,8 @@ public class CtoParserProxy extends Parser {
 
     public static class CtoParserResult extends Parser.Result {
 
+        private final CtoParser ctoParser;
         private boolean valid = true;
-        private CtoParser ctoParser;
 
         public CtoParserResult(Snapshot snapshot, CtoParser ctoParser) {
             super(snapshot);
