@@ -70,11 +70,11 @@ public class MembersFactoryTest {
     }
     
     @Test
-    @DisplayName("The factory should create 7 keys.")
+    @DisplayName("The factory should create keys.")
     public void createKeys() {
         List<Pair<String,String>> toPopulate = new ArrayList<>();
         classUnderTest.createKeys(toPopulate);
-        assertThat(toPopulate.size(), is(7));
+        assertThat(toPopulate.size(), is(6));
     }
     
     @Test

@@ -48,12 +48,12 @@ importDeclaration
     ;
 
 typeDeclaration
-    : (assetDeclaration
+    : assetDeclaration
     | conceptDeclaration  
     | enumDeclaration
     | participantDeclaration
     | transactionDeclaration
-    | eventDeclaration)
+    | eventDeclaration
     ;
 
 classModifier
