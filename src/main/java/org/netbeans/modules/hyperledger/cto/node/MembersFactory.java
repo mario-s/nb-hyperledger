@@ -36,7 +36,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
-import org.netbeans.modules.hyperledger.cto.parser.CtoParserFactory;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
 import org.openide.cookies.EditorCookie;
