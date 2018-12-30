@@ -19,24 +19,29 @@
 package org.netbeans.modules.hyperledger.cto.node;
 
 import java.awt.BorderLayout;
+import javax.swing.ActionMap;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import org.openide.explorer.ExplorerManager;
+import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
+import org.openide.util.Lookup;
 
 /**
  *
  * @author mario.schroeder
  */
-final class MembersView extends JPanel implements ExplorerManager.Provider {
+final class MembersView extends JPanel implements ExplorerManager.Provider, Lookup.Provider {
 
-    private final BeanTreeView view;
     private final ExplorerManager manager;
+    private final Lookup lookup;
+    private final BeanTreeView view;
 
-    public MembersView(ExplorerManager manager) {
-        this.manager = manager;
-        
+    public MembersView() {
+        this.manager = new ExplorerManager();
+        this.lookup = ExplorerUtils.createLookup(manager, new ActionMap());
         view = new BeanTreeView();
+
         view.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setLayout(new BorderLayout());
         add(view, BorderLayout.CENTER);
@@ -45,6 +50,11 @@ final class MembersView extends JPanel implements ExplorerManager.Provider {
     @Override
     public ExplorerManager getExplorerManager() {
         return manager;
+    }
+
+    @Override
+    public Lookup getLookup() {
+        return lookup;
     }
 
     @Override

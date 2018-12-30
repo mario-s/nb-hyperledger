@@ -20,13 +20,10 @@ package org.netbeans.modules.hyperledger.cto.node;
 
 import java.util.Collection;
 import java.util.Optional;
-import javax.swing.ActionMap;
 import javax.swing.JComponent;
 
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.navigator.NavigatorPanel;
-import org.openide.explorer.ExplorerManager;
-import org.openide.explorer.ExplorerUtils;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
@@ -53,9 +50,7 @@ public class CtoNavigatorPanel implements NavigatorPanel {
     private static final RequestProcessor RP = new RequestProcessor(CtoNavigatorPanel.class.getName(), 1);
     private Lookup.Result<DataObject> selection;
     private Optional<RootNode> rootNode = empty();
-    private final ExplorerManager manager = new ExplorerManager();
-    private final Lookup lookup = ExplorerUtils.createLookup(manager, new ActionMap());
-    private final JComponent view = new MembersView(manager);
+    private final MembersView view = new MembersView();
 
     private final LookupListener selectionListener = ev -> {
         RP.post(() -> {
@@ -101,7 +96,7 @@ public class CtoNavigatorPanel implements NavigatorPanel {
 
     @Override
     public Lookup getLookup() {
-        return lookup;
+        return view.getLookup();
     }
 
     private void display(Collection<? extends DataObject> selectedFiles) {
@@ -110,9 +105,9 @@ public class CtoNavigatorPanel implements NavigatorPanel {
             RootNode node = new RootNode(dataObject, Children.LEAF);
             node.getFactory().register();
             rootNode = of(node);
-            manager.setRootContext(node);
+            view.getExplorerManager().setRootContext(node);
         } else {
-            manager.setRootContext(Node.EMPTY);
+            view.getExplorerManager().setRootContext(Node.EMPTY);
         }
     }
 }
