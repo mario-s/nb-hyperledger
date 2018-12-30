@@ -16,14 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.lexer;
+package org.netbeans.modules.hyperledger.cto.grammar;
 
 import java.util.List;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.netbeans.modules.hyperledger.cto.lexer.Category;
+import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
 
 /**
  * 
@@ -31,19 +34,11 @@ import org.junit.jupiter.api.Test;
  */
 public class TokenTaxonomyTest {
 
-    private TokenTaxonomy classUnderTest;
-
-    @BeforeEach
-    public void setUp() {
-        classUnderTest = TokenTaxonomy.getDefault();
-    }
-
     @Test
     @DisplayName("It should return a list of keyword tokens.")
     public void tokens_Keywords() {
-        List<CtoTokenId> result = classUnderTest.tokens(Category.keyword);
+        List<CtoTokenId> result = TokenTaxonomy.INSTANCE.tokens(Category.keyword);
         assertThat(result.isEmpty(), is(false));
     }
-
 
 }

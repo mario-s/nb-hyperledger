@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.lexer;
 
+import org.netbeans.modules.hyperledger.cto.grammar.TokenTaxonomy;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,8 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
     private final Map<Integer, CtoTokenId> idToToken;
 
     public CtoLanguageHierarchy() {
-        tokens = TokenTaxonomy.getDefault().allTokens();
-        idToToken = TokenTaxonomy.getDefault().getIdTokenMap();
+        tokens = TokenTaxonomy.INSTANCE.allTokens();
+        idToToken = TokenTaxonomy.INSTANCE.getIdTokenMap();
     }
 
     @Override

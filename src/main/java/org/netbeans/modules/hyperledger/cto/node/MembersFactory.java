@@ -37,8 +37,8 @@ import javax.swing.text.Document;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.parser.CtoParserFactory;
-import org.netbeans.modules.hyperledger.cto.parser.ParserListener;
-import org.netbeans.modules.hyperledger.cto.parser.ParserProvider;
+import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
+import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
 import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileChangeAdapter;
 import org.openide.filesystems.FileEvent;
@@ -101,7 +101,7 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
 
         try {
             String text = getText();
-            CtoParser parser = ParserProvider.Instance.apply(text);
+            CtoParser parser = ParserProvider.INSTANCE.apply(text);
             parser.addParseListener(listener);
             parser.modelUnit();
         } catch (IOException ex) {

@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
+import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
 import java.util.Collection;
 import java.util.function.Function;
 import org.antlr.v4.runtime.CharStream;
@@ -42,6 +43,6 @@ public class CtoParserFactory extends ParserFactory {
 
     @Override
     public Parser createParser(Collection<Snapshot> clctn) {
-        return new CtoParserProxy(ParserProvider.Instance);
+        return new CtoParserProxy(ParserProvider.INSTANCE);
     }
 }

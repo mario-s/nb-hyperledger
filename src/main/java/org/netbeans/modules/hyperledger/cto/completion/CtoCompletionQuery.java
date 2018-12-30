@@ -23,13 +23,14 @@ import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.text.Document;
 import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
-import org.netbeans.modules.hyperledger.cto.lexer.TokenTaxonomy;
+import org.netbeans.modules.hyperledger.cto.grammar.TokenTaxonomy;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.Optional.*;
+
 import java.util.stream.Stream;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.lexer.Category;
@@ -54,7 +55,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     
     CtoCompletionQuery(CompletionFilter completionFilter) {
         this.completionFilter = completionFilter;
-        this.tokenProvider = category -> TokenTaxonomy.getDefault().tokens(category).stream();
+        this.tokenProvider = category -> TokenTaxonomy.INSTANCE.tokens(category).stream();
     }
 
     @Override

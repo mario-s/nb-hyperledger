@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.parser;
+package org.netbeans.modules.hyperledger.cto.grammar;
 
 import java.util.function.Function;
 import org.antlr.v4.runtime.CharStream;
@@ -24,8 +24,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 
 /**
  *
@@ -33,7 +31,7 @@ import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
  */
 public enum ParserProvider implements Function<String, CtoParser> {
     
-    Instance;
+    INSTANCE;
 
     @Override
     public CtoParser apply(String text) {
