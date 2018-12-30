@@ -18,7 +18,6 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import javax.swing.event.DocumentEvent;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
@@ -46,6 +45,5 @@ final class RootNode extends DataNode {
 
     MembersFactory getFactory() {
         return factory;
-    }
-    
+    } 
 }
