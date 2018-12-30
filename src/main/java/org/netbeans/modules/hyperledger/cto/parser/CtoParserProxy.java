@@ -72,6 +72,14 @@ public class CtoParserProxy extends Parser {
             super(snapshot);
             this.ctoParser = ctoParser;
         }
+        
+        public CtoParser getCtoParser()
+                throws ParseException {
+            if (!valid) {
+                throw new ParseException();
+            }
+            return ctoParser;
+        }
 
         @Override
         protected void invalidate() {
