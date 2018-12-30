@@ -28,7 +28,7 @@
 
 /*
  A grammar for Hyperledger Composer Modeling Language
- https://hyperledger.github.io/composer/latest/reference/cto_language.html
+ https://hyperledger.github.io/composer/v0.19/reference/cto_language.html
  */
 
 parser grammar CtoParser;
@@ -40,11 +40,11 @@ modelUnit
     ;
 
 namespaceDeclaration
-    : NAMESPACE qualifiedName EOL
+    : NAMESPACE qualifiedName NL+
     ;
 
 importDeclaration
-    : IMPORT qualifiedName ('.' '*')?
+    : IMPORT qualifiedName ('.' '*')? NL+
     ;
 
 typeDeclaration
@@ -54,7 +54,11 @@ typeDeclaration
     | participantDeclaration
     | transactionDeclaration
     | eventDeclaration
+    | illegal
     ;
+
+illegal
+    : IDENTIFIER* classBody;
 
 classModifier
     : decorator
@@ -76,10 +80,10 @@ conceptDeclaration
     ;
 
 enumDeclaration
-    : ENUM IDENTIFIER '{' enumConstant* '}';
+    : ENUM IDENTIFIER '{' NL* enumConstant* '}' NL*;
 
 enumConstant
-    : VAR IDENTIFIER;
+    : VAR IDENTIFIER NL+;
 
 eventDeclaration
     : EVENT IDENTIFIER
@@ -104,11 +108,11 @@ extendsOrIdentified: ((EXTENDS IDENTIFIER) | identified);
 identified: (IDENTIFIED IDENTIFIER);
 
 classBody
-    : '{' classBodyDeclaration* '}';
+    : '{' NL* classBodyDeclaration* '}' NL*;
 
 classBodyDeclaration
-    : ';'
-    | fieldDeclaration
+    : ';' NL+
+    | fieldDeclaration NL+
     ;
 
 fieldDeclaration
@@ -195,7 +199,7 @@ floatLiteral
     : FLOAT_LITERAL;
 
 decorator
-    : AT qualifiedName ('(' elementValuePair ')')?;
+    : AT qualifiedName ('(' elementValuePair ')')? NL;
 
 elementValuePair
     : literal (',' literal)*;
