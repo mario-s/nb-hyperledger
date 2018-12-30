@@ -37,7 +37,7 @@ final class MembersView extends JPanel implements ExplorerManager.Provider, Look
     private final Lookup lookup;
     private final BeanTreeView view;
 
-    public MembersView() {
+    MembersView() {
         this.manager = new ExplorerManager();
         this.lookup = ExplorerUtils.createLookup(manager, new ActionMap());
         view = new BeanTreeView();
