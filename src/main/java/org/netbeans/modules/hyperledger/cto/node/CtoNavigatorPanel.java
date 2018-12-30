@@ -51,11 +51,8 @@ import static org.netbeans.modules.hyperledger.cto.node.Bundle.*;
 public class CtoNavigatorPanel implements NavigatorPanel {
 
     private static final RequestProcessor RP = new RequestProcessor(CtoNavigatorPanel.class.getName(), 1);
-
     private Lookup.Result<DataObject> selection;
-
     private Optional<RootNode> rootNode = empty();
-
     private final ExplorerManager manager = new ExplorerManager();
     private final Lookup lookup = ExplorerUtils.createLookup(manager, new ActionMap());
     private final JComponent view = new MembersView(manager);
