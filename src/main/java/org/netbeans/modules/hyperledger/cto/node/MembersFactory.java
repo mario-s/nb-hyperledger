@@ -38,6 +38,7 @@ import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
+import org.netbeans.modules.hyperledger.cto.grammar.ParserResult;
 import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileChangeAdapter;
 import org.openide.filesystems.FileEvent;
@@ -106,9 +107,10 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
-
-        updateRootName(listener.getNamespace());
-        listener.getMembers().forEach((k, v) -> toPopulate.add(Pair.of(k, v)));
+        
+        ParserResult result = listener.getResult();
+        updateRootName(result.getNamespace());
+        result.getMembers().forEach((k, v) -> toPopulate.add(Pair.of(k, v)));
 
         return true;
     }
