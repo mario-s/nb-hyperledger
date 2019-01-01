@@ -23,6 +23,9 @@ import java.io.IOException;
 import static java.lang.String.format;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -35,10 +38,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import org.netbeans.api.annotations.common.StaticResource;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
-import org.netbeans.modules.hyperledger.cto.grammar.ParserResult;
 import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileChangeAdapter;
 import org.openide.filesystems.FileEvent;
@@ -50,18 +54,19 @@ import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
-import org.openide.util.Pair;
 
 /**
  *
  * @author mario.schroeder
  */
-final class MembersFactory extends ChildFactory<Pair<String, String>> implements DocumentListener {
+final class MembersFactory extends ChildFactory<Entry<String, Integer>> implements DocumentListener {
 
     private static final String MEMBER = "%s : %s";
 
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
+    
+    private static final CtoVocabulary VOCABULARY = new CtoVocabulary();
 
     private final DataNode root;
 
@@ -87,15 +92,16 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     }
 
     @Override
-    protected Node createNodeForKey(Pair<String, String> pair) {
+    protected Node createNodeForKey(Entry<String, Integer> entry) {
         AbstractNode node = new AbstractNode(Children.LEAF);
-        node.setDisplayName(format(MEMBER, pair.first(), pair.second()));
+        String type = VOCABULARY.getDisplayName(entry.getValue());
+        node.setDisplayName(format(MEMBER, entry.getKey(), type));
         node.setIconBaseWithExtension(ICON);
         return node;
     }
 
     @Override
-    protected boolean createKeys(List<Pair<String, String>> toPopulate) {
+    protected boolean createKeys(List<Entry<String, Integer>> toPopulate) {
 
         ParserListener listener = new ParserListener();
 
@@ -107,10 +113,11 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
-        
-        ParserResult result = listener.getResult();
-        updateRootName(result.getNamespace());
-        result.getMembers().forEach((k, v) -> toPopulate.add(Pair.of(k, v)));
+
+        Map<String, Integer> result = listener.getParserResult();
+        Optional<String> namespace = extractNamespace(result);
+        updateRootName(namespace);
+        result.entrySet().forEach(toPopulate::add);
 
         return true;
     }
@@ -131,6 +138,15 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
 
     private String getTextFromFile() throws IOException {
         return getPrimaryFile().asText();
+    }
+
+    private Optional<String> extractNamespace(Map<String, Integer> members) {
+        Optional<String> namespace = members.entrySet().stream()
+                .filter(Objects::nonNull)
+                .filter(e -> e.getValue() == CtoLexer.NAMESPACE)
+                .findFirst().map(e -> e.getKey());
+        namespace.ifPresent(members::remove);
+        return namespace;
     }
 
     private void updateRootName(Optional<String> namespace) {
@@ -167,7 +183,7 @@ final class MembersFactory extends ChildFactory<Pair<String, String>> implements
     private boolean hasPanes(JEditorPane[] panes) {
         return panes != null && panes.length > 0;
     }
-    
+
     private Optional<Document> getDocument(JEditorPane[] panes) {
         return of(panes[0].getDocument());
     }

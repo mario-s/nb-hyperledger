@@ -21,6 +21,7 @@ package org.netbeans.modules.hyperledger.cto.node;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -72,7 +73,7 @@ public class MembersFactoryTest {
     @Test
     @DisplayName("The factory should create keys.")
     public void createKeys() {
-        List<Pair<String,String>> toPopulate = new ArrayList<>();
+        List<Entry<String,Integer>> toPopulate = new ArrayList<>();
         classUnderTest.createKeys(toPopulate);
         assertThat(toPopulate.size(), is(6));
     }
@@ -80,7 +81,7 @@ public class MembersFactoryTest {
     @Test
     @DisplayName("The factory should update the display name of the root node.")
     public void updateDisplayname() {
-        List<Pair<String,String>> toPopulate = new ArrayList<>();
+        List<Entry<String,Integer>> toPopulate = new ArrayList<>();
         classUnderTest.createKeys(toPopulate);
         verify(node).setDisplayName(anyString());
     }

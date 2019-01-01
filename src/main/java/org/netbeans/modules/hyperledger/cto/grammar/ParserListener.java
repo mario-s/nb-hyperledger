@@ -19,6 +19,8 @@
 package org.netbeans.modules.hyperledger.cto.grammar;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -30,27 +32,26 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 public final class ParserListener extends CtoParserBaseListener{
     
     private final CtoVocabulary vocabulary;
-    private final ParserResult result;
-
+    private final Map<String, Integer> members;
     
     public ParserListener() {
         vocabulary = new CtoVocabulary();
-        result = new ParserResult();
+        members = new TreeMap<>();
     }
 
-    public ParserResult getResult() {
-        return result;
-    }
-    
-    private String getName(int id) {
-        return (vocabulary.getDisplayName(id));
+    public Map<String, Integer> getParserResult() {
+        return members;
     }
     
     private void addNode(TerminalNode node, int id) {
         if(node != null && !(node instanceof ErrorNode)) {
             String text = node.getText();
-            result.addMember(text, getName(id));
+            addNode(text, id);
         }
+    }
+
+    private void addNode(String text, int id) {
+        members.put(text, id);
     }
 
     @Override
@@ -58,7 +59,7 @@ public final class ParserListener extends CtoParserBaseListener{
         CtoParser.QualifiedNameContext qualCtx = ctx.qualifiedName();
         List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
         String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
-        result.setNamespace(name);
+        addNode(name, CtoLexer.NAMESPACE);
     }
     
     @Override
