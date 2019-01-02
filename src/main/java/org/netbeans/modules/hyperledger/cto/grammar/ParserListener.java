@@ -29,29 +29,18 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  *
  * @author mario.schroeder
  */
-public final class ParserListener extends CtoParserBaseListener{
-    
-    private final CtoVocabulary vocabulary;
-    private final Map<String, Integer> members;
-    
-    public ParserListener() {
-        vocabulary = new CtoVocabulary();
-        members = new TreeMap<>();
+public final class ParserListener extends CtoParserBaseListener {
+
+    private final Result result = new Result();
+
+    public Result getResult() {
+        return result;
     }
 
-    public Map<String, Integer> getParserResult() {
-        return members;
-    }
-    
     private void addNode(TerminalNode node, int id) {
-        if(node != null && !(node instanceof ErrorNode)) {
-            String text = node.getText();
-            addNode(text, id);
+        if (node != null && !(node instanceof ErrorNode)) {
+            result.addNode(node.getText(), id);
         }
-    }
-
-    private void addNode(String text, int id) {
-        members.put(text, id);
     }
 
     @Override
@@ -59,9 +48,9 @@ public final class ParserListener extends CtoParserBaseListener{
         CtoParser.QualifiedNameContext qualCtx = ctx.qualifiedName();
         List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
         String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
-        addNode(name, CtoLexer.NAMESPACE);
+        result.addNode(name, CtoLexer.NAMESPACE);
     }
-    
+
     @Override
     public void exitAssetDeclaration(CtoParser.AssetDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(), CtoLexer.ASSET);
@@ -76,7 +65,7 @@ public final class ParserListener extends CtoParserBaseListener{
     public void exitTransactionDeclaration(CtoParser.TransactionDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(), CtoLexer.TRANSACTION);
     }
-    
+
     @Override
     public void exitEventDeclaration(CtoParser.EventDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(), CtoLexer.EVENT);
@@ -91,6 +80,18 @@ public final class ParserListener extends CtoParserBaseListener{
     public void exitConceptDeclaration(CtoParser.ConceptDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(0), CtoLexer.CONCEPT);
     }
-    
-    
+
+    public static class Result {
+
+        private final Map<String, Integer> members = new TreeMap<>();
+
+        private void addNode(String text, int id) {
+            members.put(text, id);
+        }
+
+        public Map<String, Integer> getMembers() {
+            return members;
+        }
+    }
+
 }

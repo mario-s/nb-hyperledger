@@ -22,7 +22,7 @@ import org.openide.util.lookup.InstanceContent;
  * @author mario.schroeder
  */
 public enum LookupContext implements Lookup.Provider{
-    Instance;
+    INSTANCE;
     
     private final InstanceContent content;
     private final Lookup lookup;

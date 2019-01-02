@@ -20,7 +20,9 @@ package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.function.Function;
 import javax.swing.event.ChangeListener;
+import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
+import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
@@ -45,9 +47,14 @@ public class CtoParserProxy extends Parser {
     public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
         this.snapshot = snapshot;
 
+        
         String text = snapshot.getText().toString();
         ctoParser = parserProvider.apply(text);
+        ParserListener listener = new ParserListener();
+        ctoParser.addParseListener(listener);
         ctoParser.modelUnit();
+        
+        LookupContext.INSTANCE.add(listener.getResult());
     }
 
     @Override

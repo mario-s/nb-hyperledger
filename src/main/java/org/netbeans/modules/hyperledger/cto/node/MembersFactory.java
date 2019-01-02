@@ -19,6 +19,8 @@
 package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
 
 import static java.lang.String.format;
 
@@ -28,22 +30,13 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-
-import javax.swing.JEditorPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import org.netbeans.api.annotations.common.StaticResource;
+import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
-import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileChangeAdapter;
 import org.openide.filesystems.FileEvent;
 import org.openide.filesystems.FileObject;
@@ -54,23 +47,30 @@ import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 
 /**
  *
  * @author mario.schroeder
  */
-final class MembersFactory extends ChildFactory<Entry<String, Integer>> implements DocumentListener {
+final class MembersFactory extends ChildFactory<Entry<String, Integer>> implements LookupListener {
 
     private static final String MEMBER = "%s : %s";
 
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
-    
+
     private static final CtoVocabulary VOCABULARY = new CtoVocabulary();
 
     private final DataNode root;
 
-    private Document document;
+    private final LookupContext lookupContext = LookupContext.INSTANCE;
+
+    private Lookup.Result<ParserListener.Result> selection;
+
+    private Map<String, Integer> members = new HashMap();
 
     private final FileChangeAdapter adapter = new FileChangeAdapter() {
         @Override
@@ -103,41 +103,27 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
     @Override
     protected boolean createKeys(List<Entry<String, Integer>> toPopulate) {
 
-        ParserListener listener = new ParserListener();
+        if (members.isEmpty()) {
 
-        try {
-            String text = getText();
-            CtoParser parser = ParserProvider.INSTANCE.apply(text);
-            parser.addParseListener(listener);
-            parser.modelUnit();
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            ParserListener listener = new ParserListener();
+
+            try {
+                String text = getPrimaryFile().asText();
+                CtoParser parser = ParserProvider.INSTANCE.apply(text);
+                parser.addParseListener(listener);
+                parser.modelUnit();
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+
+            members = listener.getResult().getMembers();
         }
 
-        Map<String, Integer> result = listener.getParserResult();
-        Optional<String> namespace = extractNamespace(result);
+        Optional<String> namespace = extractNamespace(members);
         updateRootName(namespace);
-        result.entrySet().forEach(toPopulate::add);
+        members.entrySet().forEach(toPopulate::add);
 
         return true;
-    }
-
-    private String getText() throws IOException {
-        if (document != null) {
-            try {
-                int len = document.getLength();
-                return document.getText(0, len);
-            } catch (BadLocationException ex) {
-                return getTextFromFile();
-            } finally {
-                document = null;
-            }
-        }
-        return getTextFromFile();
-    }
-
-    private String getTextFromFile() throws IOException {
-        return getPrimaryFile().asText();
     }
 
     private Optional<String> extractNamespace(Map<String, Integer> members) {
@@ -157,71 +143,28 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
         }
     }
 
-    private Optional<Document> findDocument() {
-        DataObject dataObject = getDataObject();
-        EditorCookie ec = dataObject.getLookup().lookup(EditorCookie.class);
-        if (ec != null) {
-            JEditorPane[] panes = ec.getOpenedPanes();
-            if (hasPanes(panes)) {
-                return getDocument(panes);
-            } else {
-                ec.open();
-                try {
-                    ec.openDocument();
-                    panes = ec.getOpenedPanes();
-                    if (hasPanes(panes)) {
-                        return getDocument(panes);
-                    }
-                } catch (IOException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
-            }
-        }
-        return empty();
-    }
-
-    private boolean hasPanes(JEditorPane[] panes) {
-        return panes != null && panes.length > 0;
-    }
-
-    private Optional<Document> getDocument(JEditorPane[] panes) {
-        return of(panes[0].getDocument());
-    }
-
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        SwingUtilities.invokeLater(() -> findDocument().ifPresent(doc -> {
-            refresh(doc); //force a refresh of the tree
-            doc.addDocumentListener(this);
-        }));
+        selection = lookupContext.getLookup().lookupResult(ParserListener.Result.class);
+        selection.addLookupListener(this);
     }
 
     void cleanup() {
         getPrimaryFile().removeFileChangeListener(adapter);
-        SwingUtilities.invokeLater(() -> findDocument().ifPresent(doc -> doc.removeDocumentListener(this)));
+        selection.removeLookupListener(this);
     }
 
     @Override
-    public void insertUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
-        refresh(e);
-    }
-
-    private void refresh(DocumentEvent e) {
-        refresh(e.getDocument());
-    }
-
-    private void refresh(Document doc) {
-        this.document = doc;
-        refresh(false);
+    public void resultChanged(LookupEvent ev) {
+        if (selection != null) {
+            //consume and remove
+            Collection<? extends ParserListener.Result> results = selection.allInstances();
+            if(!results.isEmpty()) {
+                ParserListener.Result result = results.iterator().next();
+                members = result.getMembers();
+                lookupContext.remove(result);
+                refresh(false);
+            }
+        }
     }
 }
