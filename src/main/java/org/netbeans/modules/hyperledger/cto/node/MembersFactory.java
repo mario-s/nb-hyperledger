@@ -102,11 +102,10 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     @Override
     protected boolean createKeys(List<Entry<String, Integer>> toPopulate) {
-
+        //load text from file, since the members are empty initialy
         if (members.isEmpty()) {
-
             ParserListener listener = new ParserListener();
-
+            
             try {
                 String text = getPrimaryFile().asText();
                 CtoParser parser = ParserProvider.INSTANCE.apply(text);
@@ -115,7 +114,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
             } catch (IOException ex) {
                 Exceptions.printStackTrace(ex);
             }
-
+            
             members = listener.getResult().getMembers();
         }
 
