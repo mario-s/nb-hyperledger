@@ -37,6 +37,7 @@ import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
+import org.netbeans.modules.hyperledger.cto.grammar.ResourcesResult;
 import org.openide.filesystems.FileChangeAdapter;
 import org.openide.filesystems.FileEvent;
 import org.openide.filesystems.FileObject;
@@ -68,7 +69,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     private final LookupContext lookupContext = LookupContext.INSTANCE;
 
-    private Lookup.Result<ParserListener.Result> selection;
+    private Lookup.Result<ResourcesResult> selection;
 
     private Map<String, Integer> members = new HashMap();
 
@@ -144,7 +145,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        selection = lookupContext.getLookup().lookupResult(ParserListener.Result.class);
+        selection = lookupContext.getLookup().lookupResult(ResourcesResult.class);
         selection.addLookupListener(this);
     }
 
@@ -157,9 +158,9 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
     public void resultChanged(LookupEvent ev) {
         if (selection != null) {
             //consume and remove
-            Collection<? extends ParserListener.Result> results = selection.allInstances();
+            Collection<? extends ResourcesResult> results = selection.allInstances();
             if(!results.isEmpty()) {
-                ParserListener.Result result = results.iterator().next();
+                ResourcesResult result = results.iterator().next();
                 members = result.getMembers();
                 lookupContext.remove(result);
                 refresh(false);

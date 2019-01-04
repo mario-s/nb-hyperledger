@@ -31,9 +31,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public final class ParserListener extends CtoParserBaseListener {
 
-    private final Result result = new Result();
+    private final ResourcesResult result = new ResourcesResult();
 
-    public Result getResult() {
+    public ResourcesResult getResult() {
         return result;
     }
 
@@ -80,18 +80,4 @@ public final class ParserListener extends CtoParserBaseListener {
     public void exitConceptDeclaration(CtoParser.ConceptDeclarationContext ctx) {
         addNode(ctx.IDENTIFIER(0), CtoLexer.CONCEPT);
     }
-
-    public static class Result {
-
-        private final Map<String, Integer> members = new TreeMap<>();
-
-        private void addNode(String text, int id) {
-            members.put(text, id);
-        }
-
-        public Map<String, Integer> getMembers() {
-            return members;
-        }
-    }
-
 }
