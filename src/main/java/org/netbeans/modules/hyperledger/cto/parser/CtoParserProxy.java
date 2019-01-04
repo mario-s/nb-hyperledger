@@ -36,8 +36,8 @@ import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 public class CtoParserProxy extends Parser {
     
     private final Function<String, CtoParser> parserProvider;
-    private Snapshot snapshot;
-    private CtoParser ctoParser;
+    
+    private CtoParserResult parserResult;
 
     public CtoParserProxy(Function<String, CtoParser> parserProvider) {
         this.parserProvider = parserProvider;
@@ -45,21 +45,21 @@ public class CtoParserProxy extends Parser {
 
     @Override
     public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
-        this.snapshot = snapshot;
-
         
         String text = snapshot.getText().toString();
-        ctoParser = parserProvider.apply(text);
+        CtoParser ctoParser = parserProvider.apply(text);
         ParserListener listener = new ParserListener();
         ctoParser.addParseListener(listener);
         ctoParser.modelUnit();
         
         LookupContext.INSTANCE.add(listener.getResult());
+        
+        parserResult = new CtoParserResult(snapshot, ctoParser);
     }
 
     @Override
     public Result getResult(Task task) throws ParseException {
-        return new CtoParserResult(snapshot, ctoParser);
+        return parserResult;
     }
 
     @Override
