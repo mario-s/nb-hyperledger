@@ -26,18 +26,28 @@ import org.antlr.v4.runtime.RecognitionException;
  */
 public class SyntaxError {
 
-    private RecognitionException exception;
-    private String message;
+    private final RecognitionException exception;
+    
+    private String message = "";
     private int line;
     private int charPositionInLine;
 
-    public SyntaxError(RecognitionException exception, String message, int line, int charPositionInLine) {
+    public SyntaxError(RecognitionException exception) {
         this.exception = exception;
-        this.message = message;
-        this.line = line;
-        this.charPositionInLine = charPositionInLine;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
+
+    public void setCharPositionInLine(int charPositionInLine) {
+        this.charPositionInLine = charPositionInLine;
+    }
+    
     public RecognitionException getException() {
         return exception;
     }
