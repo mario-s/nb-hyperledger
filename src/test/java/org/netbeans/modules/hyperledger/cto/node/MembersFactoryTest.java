@@ -38,7 +38,6 @@ import static org.mockito.BDDMockito.given;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataNode;
