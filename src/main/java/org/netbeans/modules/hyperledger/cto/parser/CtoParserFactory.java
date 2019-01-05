@@ -35,6 +35,6 @@ public class CtoParserFactory extends ParserFactory {
 
     @Override
     public Parser createParser(Collection<Snapshot> clctn) {
-        return new CtoParserProxy(ParserProvider.INSTANCE);
+        return new CtoProxyParser(ParserProvider.INSTANCE);
     }
 }

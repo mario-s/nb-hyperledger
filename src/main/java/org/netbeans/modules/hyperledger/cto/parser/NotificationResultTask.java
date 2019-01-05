@@ -42,7 +42,7 @@ public class NotificationResultTask extends ParserResultTask {
     
     @Override
     public void run(Parser.Result result, SchedulerEvent se) {
-        CtoParserProxy.CtoParserResult ctoResult = (CtoParserProxy.CtoParserResult) result;
+        CtoProxyParser.CtoParserResult ctoResult = (CtoProxyParser.CtoParserResult) result;
         
         Map<String, Integer> resources = ctoResult.getResources();
         if (!resources.isEmpty()) {
