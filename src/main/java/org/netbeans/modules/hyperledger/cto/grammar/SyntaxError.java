@@ -24,28 +24,16 @@ import org.antlr.v4.runtime.RecognitionException;
  *
  * @author mario.schroeder
  */
-public class SyntaxError {
+public final class SyntaxError {
 
     private final RecognitionException exception;
-    
-    private String message = "";
-    private int line;
-    private int charPositionInLine;
+    private final String message;
+    private final int line;
 
-    public SyntaxError(RecognitionException exception) {
+    public SyntaxError(RecognitionException exception, String message, int line) {
         this.exception = exception;
-    }
-
-    public void setMessage(String message) {
         this.message = message;
-    }
-
-    public void setLine(int line) {
         this.line = line;
-    }
-
-    public void setCharPositionInLine(int charPositionInLine) {
-        this.charPositionInLine = charPositionInLine;
     }
     
     public RecognitionException getException() {
@@ -59,9 +47,4 @@ public class SyntaxError {
     public int getLine() {
         return line;
     }
-
-    public int getCharPositionInLine() {
-        return charPositionInLine;
-    }
-    
 }
