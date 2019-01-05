@@ -31,17 +31,10 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public final class ParserListener extends CtoParserBaseListener {
 
-    private final ResourcesResult result = new ResourcesResult();
-
     private final Map<String, Integer> members = new TreeMap<>();
 
     public Map<String, Integer> getMembers() {
         return members;
-    }
-
-    @Deprecated
-    public ResourcesResult getResult() {
-        return result;
     }
 
     private void addNode(String text, int id) {

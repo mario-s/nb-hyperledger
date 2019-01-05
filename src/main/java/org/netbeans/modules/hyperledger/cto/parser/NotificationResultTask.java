@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
+import java.util.Map;
 import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
@@ -34,7 +35,10 @@ public class NotificationResultTask extends ParserResultTask {
     public void run(Parser.Result result, SchedulerEvent se) {
         CtoParserProxy.CtoParserResult ctoResult = (CtoParserProxy.CtoParserResult) result;
 
-        ctoResult.getResourcesResult().ifPresent(r -> LookupContext.INSTANCE.add(r));
+        Map<String, Integer> resources = ctoResult.getResources();
+        if(!resources.isEmpty()) {
+            LookupContext.INSTANCE.add(resources);
+        }
     }
 
     @Override

@@ -23,11 +23,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.event.ChangeListener;
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.grammar.ErrorParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
-import org.netbeans.modules.hyperledger.cto.grammar.ResourcesResult;
 import org.netbeans.modules.hyperledger.cto.grammar.SyntaxError;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
@@ -36,6 +34,7 @@ import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
@@ -66,10 +65,10 @@ public class CtoParserProxy extends Parser {
         //do the parsing
         ctoParser.modelUnit();
         
-        Map<String, Integer> result = listener.getMembers();
+        Map<String, Integer> resources = listener.getMembers();
         List<SyntaxError> errors = errorListener.getSyntaxErrors();
         
-        parserResult = new CtoParserResult(snapshot, result, errors);
+        parserResult = new CtoParserResult(snapshot, resources, errors);
     }
 
     @Override
@@ -88,20 +87,20 @@ public class CtoParserProxy extends Parser {
     public static class CtoParserResult extends Parser.Result {
 
         private boolean valid = true;
-        private final Map<String, Integer> resourcesResult;
+        private final Map<String, Integer> resources;
         private final List<SyntaxError> errors;
 
-        public CtoParserResult(Snapshot snapshot, Map<String, Integer> resourcesResult, List<SyntaxError> errors) {
+        public CtoParserResult(Snapshot snapshot, Map<String, Integer> resources, List<SyntaxError> errors) {
             super(snapshot);
-            this.resourcesResult = resourcesResult;
+            this.resources = resources;
             this.errors = errors;
         }
         
-        public Optional<Map<String, Integer>> getResourcesResult() {
+        public Map<String, Integer> getResources() {
             if (!valid) {
-                return empty();
+                return emptyMap();
             }
-            return of(resourcesResult);
+            return resources;
         }
 
         public List<SyntaxError> getErrors() {
