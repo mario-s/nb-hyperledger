@@ -18,18 +18,23 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.event.ChangeListener;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
+import org.netbeans.modules.hyperledger.cto.grammar.ErrorParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ResourcesResult;
+import org.netbeans.modules.hyperledger.cto.grammar.SyntaxError;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 
+import static java.util.Collections.emptyList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
@@ -52,13 +57,18 @@ public class CtoParserProxy extends Parser {
         
         String text = snapshot.getText().toString();
         CtoParser ctoParser = parserProvider.apply(text);
+        
         ParserListener listener = new ParserListener();
+        ErrorParserListener errorListener = new ErrorParserListener();
         ctoParser.addParseListener(listener);
+        ctoParser.addErrorListener(errorListener);
+        //do the parsing
         ctoParser.modelUnit();
         
         ResourcesResult result = listener.getResult();
+        List<SyntaxError> errors = errorListener.getSyntaxErrors();
         
-        parserResult = new CtoParserResult(snapshot, result);
+        parserResult = new CtoParserResult(snapshot, result, errors);
     }
 
     @Override
@@ -78,10 +88,12 @@ public class CtoParserProxy extends Parser {
 
         private boolean valid = true;
         private final ResourcesResult resourcesResult;
+        private final List<SyntaxError> errors;
 
-        public CtoParserResult(Snapshot snapshot, ResourcesResult resourcesResult) {
+        public CtoParserResult(Snapshot snapshot, ResourcesResult resourcesResult, List<SyntaxError> errors) {
             super(snapshot);
             this.resourcesResult = resourcesResult;
+            this.errors = errors;
         }
         
         public Optional<ResourcesResult> getResourcesResult() {
@@ -91,6 +103,13 @@ public class CtoParserProxy extends Parser {
             return of(resourcesResult);
         }
 
+        public List<SyntaxError> getErrors() {
+            if(!valid) {
+                return emptyList();
+            }
+            return errors;
+        }
+        
         @Override
         protected void invalidate() {
             valid = false;
