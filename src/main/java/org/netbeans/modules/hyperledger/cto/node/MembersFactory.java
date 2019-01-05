@@ -32,6 +32,7 @@ import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoResources;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
@@ -67,7 +68,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     private final LookupContext lookupContext = LookupContext.INSTANCE;
 
-    private Lookup.Result<Map> selection;
+    private Lookup.Result<CtoResources> selection;
 
     private Map<String, Integer> members = new HashMap();
 
@@ -136,7 +137,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        selection = lookupContext.getLookup().lookupResult(Map.class);
+        selection = lookupContext.getLookup().lookupResult(CtoResources.class);
         selection.addLookupListener(this);
     }
 

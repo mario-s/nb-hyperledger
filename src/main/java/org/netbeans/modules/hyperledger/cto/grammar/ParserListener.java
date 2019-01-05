@@ -20,9 +20,7 @@ package org.netbeans.modules.hyperledger.cto.grammar;
 
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
-import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
@@ -31,20 +29,14 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public final class ParserListener extends CtoParserBaseListener {
 
-    private final Map<String, Integer> members = new TreeMap<>();
+    private final CtoResources members = new CtoResources();
 
     public Map<String, Integer> getMembers() {
         return members;
     }
 
-    private void addNode(String text, int id) {
-        members.put(text, id);
-    }
-
     private void addNode(TerminalNode node, int id) {
-        if (node != null && !(node instanceof ErrorNode)) {
-            addNode(node.getText(), id);
-        }
+        members.put(node, id);
     }
 
     @Override
@@ -53,7 +45,7 @@ public final class ParserListener extends CtoParserBaseListener {
         if (qualCtx != null) {
             List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
             String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
-            addNode(name, CtoLexer.NAMESPACE);
+            members.put(name, CtoLexer.NAMESPACE);
         }
     }
 
