@@ -33,13 +33,24 @@ public final class ParserListener extends CtoParserBaseListener {
 
     private final ResourcesResult result = new ResourcesResult();
 
+    private final Map<String, Integer> members = new TreeMap<>();
+
+    public Map<String, Integer> getMembers() {
+        return members;
+    }
+
+    @Deprecated
     public ResourcesResult getResult() {
         return result;
     }
 
+    private void addNode(String text, int id) {
+        members.put(text, id);
+    }
+
     private void addNode(TerminalNode node, int id) {
         if (node != null && !(node instanceof ErrorNode)) {
-            result.addNode(node.getText(), id);
+            addNode(node.getText(), id);
         }
     }
 
@@ -49,7 +60,7 @@ public final class ParserListener extends CtoParserBaseListener {
         if (qualCtx != null) {
             List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
             String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
-            result.addNode(name, CtoLexer.NAMESPACE);
+            addNode(name, CtoLexer.NAMESPACE);
         }
     }
 

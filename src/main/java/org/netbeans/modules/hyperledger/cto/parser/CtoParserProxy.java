@@ -19,6 +19,7 @@
 package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.event.ChangeListener;
@@ -65,7 +66,7 @@ public class CtoParserProxy extends Parser {
         //do the parsing
         ctoParser.modelUnit();
         
-        ResourcesResult result = listener.getResult();
+        Map<String, Integer> result = listener.getMembers();
         List<SyntaxError> errors = errorListener.getSyntaxErrors();
         
         parserResult = new CtoParserResult(snapshot, result, errors);
@@ -87,16 +88,16 @@ public class CtoParserProxy extends Parser {
     public static class CtoParserResult extends Parser.Result {
 
         private boolean valid = true;
-        private final ResourcesResult resourcesResult;
+        private final Map<String, Integer> resourcesResult;
         private final List<SyntaxError> errors;
 
-        public CtoParserResult(Snapshot snapshot, ResourcesResult resourcesResult, List<SyntaxError> errors) {
+        public CtoParserResult(Snapshot snapshot, Map<String, Integer> resourcesResult, List<SyntaxError> errors) {
             super(snapshot);
             this.resourcesResult = resourcesResult;
             this.errors = errors;
         }
         
-        public Optional<ResourcesResult> getResourcesResult() {
+        public Optional<Map<String, Integer>> getResourcesResult() {
             if (!valid) {
                 return empty();
             }

@@ -26,6 +26,7 @@ import java.util.TreeMap;
  * 
  * @author mario.schroeder
  */
+@Deprecated
 public class ResourcesResult {
     
     private final Map<String, Integer> members = new TreeMap<>();

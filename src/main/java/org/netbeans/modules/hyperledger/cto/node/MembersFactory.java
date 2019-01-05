@@ -68,7 +68,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     private final LookupContext lookupContext = LookupContext.INSTANCE;
 
-    private Lookup.Result<ResourcesResult> selection;
+    private Lookup.Result<Map> selection;
 
     private Map<String, Integer> members = new HashMap();
 
@@ -120,7 +120,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
                 Exceptions.printStackTrace(ex);
             }
 
-            members = listener.getResult().getMembers();
+            members = listener.getMembers();
         }
 
         members.entrySet().forEach(toPopulate::add);
@@ -137,7 +137,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        selection = lookupContext.getLookup().lookupResult(ResourcesResult.class);
+        selection = lookupContext.getLookup().lookupResult(Map.class);
         selection.addLookupListener(this);
     }
 
@@ -150,10 +150,10 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
     public void resultChanged(LookupEvent ev) {
         if (selection != null) {
             //consume and remove
-            Collection<? extends ResourcesResult> results = selection.allInstances();
+            Collection<? extends Map> results = selection.allInstances();
             if (!results.isEmpty()) {
-                ResourcesResult result = results.iterator().next();
-                members = result.getMembers();
+                Map<String, Integer> result = results.iterator().next();
+                members = result;
                 lookupContext.remove(result);
                 refresh(false);
             }
