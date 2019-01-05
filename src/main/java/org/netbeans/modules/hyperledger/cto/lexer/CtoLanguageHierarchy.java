@@ -18,7 +18,6 @@
  */
 package org.netbeans.modules.hyperledger.cto.lexer;
 
-import org.netbeans.modules.hyperledger.cto.grammar.TokenTaxonomy;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

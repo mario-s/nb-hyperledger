@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.grammar;
+package org.netbeans.modules.hyperledger.cto.lexer;
 
 
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import org.antlr.v4.runtime.Vocabulary;
-import org.netbeans.modules.hyperledger.cto.lexer.Category;
-import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 
 import static java.util.stream.Collectors.*;
 

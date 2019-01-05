@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.text.Document;
 import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
-import org.netbeans.modules.hyperledger.cto.grammar.TokenTaxonomy;
+import org.netbeans.modules.hyperledger.cto.lexer.TokenTaxonomy;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 

@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.grammar;
 
+import org.netbeans.modules.hyperledger.cto.lexer.TokenTaxonomy;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
