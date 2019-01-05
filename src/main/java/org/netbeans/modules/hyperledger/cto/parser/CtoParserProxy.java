@@ -20,7 +20,6 @@ package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.event.ChangeListener;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
@@ -35,8 +34,6 @@ import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 /**
  *
