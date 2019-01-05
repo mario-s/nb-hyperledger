@@ -30,4 +30,28 @@ public class SyntaxError {
     private String message;
     private int line;
     private int charPositionInLine;
+
+    public SyntaxError(RecognitionException exception, String message, int line, int charPositionInLine) {
+        this.exception = exception;
+        this.message = message;
+        this.line = line;
+        this.charPositionInLine = charPositionInLine;
+    }
+
+    public RecognitionException getException() {
+        return exception;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getCharPositionInLine() {
+        return charPositionInLine;
+    }
+    
 }
