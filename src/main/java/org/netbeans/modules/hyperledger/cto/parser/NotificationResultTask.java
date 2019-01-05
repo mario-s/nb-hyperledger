@@ -18,6 +18,7 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
+import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
@@ -27,11 +28,13 @@ import org.netbeans.modules.parsing.spi.SchedulerEvent;
  *
  * @author mario.schroeder
  */
-public class SyntaxErrorsHighlightingTask extends ParserResultTask {
+public class NotificationResultTask extends ParserResultTask {
 
     @Override
     public void run(Parser.Result result, SchedulerEvent se) {
-         CtoParserProxy.CtoParserResult ctoResult = (CtoParserProxy.CtoParserResult) result;  
+        CtoParserProxy.CtoParserResult ctoResult = (CtoParserProxy.CtoParserResult) result;
+
+        ctoResult.getResourcesResult().ifPresent(r -> LookupContext.INSTANCE.add(r));
     }
 
     @Override
@@ -47,5 +50,5 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask {
     @Override
     public void cancel() {
     }
-    
+
 }

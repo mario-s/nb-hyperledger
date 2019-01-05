@@ -18,16 +18,20 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
+import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.event.ChangeListener;
-import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
+import org.netbeans.modules.hyperledger.cto.grammar.ResourcesResult;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
+
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 /**
  *
@@ -52,9 +56,9 @@ public class CtoParserProxy extends Parser {
         ctoParser.addParseListener(listener);
         ctoParser.modelUnit();
         
-        LookupContext.INSTANCE.add(listener.getResult());
+        ResourcesResult result = listener.getResult();
         
-        parserResult = new CtoParserResult(snapshot, ctoParser);
+        parserResult = new CtoParserResult(snapshot, result);
     }
 
     @Override
@@ -72,20 +76,19 @@ public class CtoParserProxy extends Parser {
 
     public static class CtoParserResult extends Parser.Result {
 
-        private final CtoParser ctoParser;
         private boolean valid = true;
+        private final ResourcesResult resourcesResult;
 
-        public CtoParserResult(Snapshot snapshot, CtoParser ctoParser) {
+        public CtoParserResult(Snapshot snapshot, ResourcesResult resourcesResult) {
             super(snapshot);
-            this.ctoParser = ctoParser;
+            this.resourcesResult = resourcesResult;
         }
         
-        public CtoParser getCtoParser()
-                throws ParseException {
+        public Optional<ResourcesResult> getResourcesResult() {
             if (!valid) {
-                throw new ParseException();
+                return empty();
             }
-            return ctoParser;
+            return of(resourcesResult);
         }
 
         @Override

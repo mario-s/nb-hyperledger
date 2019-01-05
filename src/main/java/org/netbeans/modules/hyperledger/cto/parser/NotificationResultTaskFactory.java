@@ -18,23 +18,25 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
-import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
 import java.util.Collection;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.Parser;
-import org.netbeans.modules.parsing.spi.ParserFactory;
+import org.netbeans.modules.parsing.spi.SchedulerTask;
+import org.netbeans.modules.parsing.spi.TaskFactory;
+
+import static java.util.Collections.singletonList;
 
 /**
  *
  * @author mario.schroeder
  */
-@MimeRegistration(mimeType = FileType.MIME, service = ParserFactory.class)
-public class CtoParserFactory extends ParserFactory {
+@MimeRegistration(mimeType = FileType.MIME, service = TaskFactory.class)
+public class NotificationResultTaskFactory extends TaskFactory{
 
     @Override
-    public Parser createParser(Collection<Snapshot> clctn) {
-        return new CtoParserProxy(ParserProvider.INSTANCE);
+    public Collection<? extends SchedulerTask> create(Snapshot snpsht) {
+        return singletonList(new NotificationResultTask());
     }
+    
 }
