@@ -46,9 +46,11 @@ public final class ParserListener extends CtoParserBaseListener {
     @Override
     public void exitNamespaceDeclaration(CtoParser.NamespaceDeclarationContext ctx) {
         CtoParser.QualifiedNameContext qualCtx = ctx.qualifiedName();
-        List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
-        String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
-        result.addNode(name, CtoLexer.NAMESPACE);
+        if (qualCtx != null) {
+            List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
+            String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
+            result.addNode(name, CtoLexer.NAMESPACE);
+        }
     }
 
     @Override

@@ -27,8 +27,6 @@ import static java.lang.String.format;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Optional;
 
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.LookupContext;
@@ -51,6 +49,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
+
 
 /**
  *
@@ -94,11 +93,16 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     @Override
     protected Node createNodeForKey(Entry<String, Integer> entry) {
-        AbstractNode node = new AbstractNode(Children.LEAF);
-        String type = VOCABULARY.getDisplayName(entry.getValue());
-        node.setDisplayName(format(MEMBER, entry.getKey(), type));
-        node.setIconBaseWithExtension(ICON);
-        return node;
+        if (CtoLexer.NAMESPACE == entry.getValue()) {
+            updateRootName(entry.getKey());
+            return null;
+        } else {
+            AbstractNode node = new AbstractNode(Children.LEAF);
+            String type = VOCABULARY.getDisplayName(entry.getValue());
+            node.setDisplayName(format(MEMBER, entry.getKey(), type));
+            node.setIconBaseWithExtension(ICON);
+            return node;
+        }
     }
 
     @Override
@@ -106,7 +110,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
         //load text from file, since the members are empty initialy
         if (members.isEmpty()) {
             ParserListener listener = new ParserListener();
-            
+
             try {
                 String text = getPrimaryFile().asText();
                 CtoParser parser = ParserProvider.INSTANCE.apply(text);
@@ -115,29 +119,17 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
             } catch (IOException ex) {
                 Exceptions.printStackTrace(ex);
             }
-            
+
             members = listener.getResult().getMembers();
         }
 
-        Optional<String> namespace = extractNamespace(members);
-        updateRootName(namespace);
         members.entrySet().forEach(toPopulate::add);
 
         return true;
     }
 
-    private Optional<String> extractNamespace(Map<String, Integer> members) {
-        Optional<String> namespace = members.entrySet().stream()
-                .filter(Objects::nonNull)
-                .filter(e -> e.getValue() == CtoLexer.NAMESPACE)
-                .findFirst().map(e -> e.getKey());
-        namespace.ifPresent(members::remove);
-        return namespace;
-    }
-
-    private void updateRootName(Optional<String> namespace) {
+    private void updateRootName(String rootName) {
         String oldName = root.getDisplayName();
-        String rootName = namespace.orElse(oldName);
         if (!rootName.equals(oldName)) {
             root.setDisplayName(rootName);
         }
@@ -159,7 +151,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
         if (selection != null) {
             //consume and remove
             Collection<? extends ResourcesResult> results = selection.allInstances();
-            if(!results.isEmpty()) {
+            if (!results.isEmpty()) {
                 ResourcesResult result = results.iterator().next();
                 members = result.getMembers();
                 lookupContext.remove(result);

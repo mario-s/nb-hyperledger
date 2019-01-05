@@ -19,6 +19,7 @@
 package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.File;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -30,18 +31,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 
 import static org.mockito.BDDMockito.given;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
-import org.openide.util.Pair;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -57,32 +61,33 @@ public class MembersFactoryTest {
     @Mock
     private DataObject dataObject;
     
+    @InjectMocks
     private MembersFactory classUnderTest;
     
     @BeforeEach
     public void setup() {
+        reset(node, dataObject);
+    }
+    
+    @Test
+    @DisplayName("The factory should create keys.")
+    public void createKeys() {
         String path = getClass().getResource("sample.cto").getFile();
         FileObject fileObject = FileUtil.toFileObject(new File(path));
         
         given(node.getDataObject()).willReturn(dataObject);
         given(dataObject.getPrimaryFile()).willReturn(fileObject);
         
-        classUnderTest = new MembersFactory(node);
-    }
-    
-    @Test
-    @DisplayName("The factory should create keys.")
-    public void createKeys() {
         List<Entry<String,Integer>> toPopulate = new ArrayList<>();
         classUnderTest.createKeys(toPopulate);
-        assertThat(toPopulate.size(), is(6));
+        assertThat(toPopulate.size(), is(7));
     }
     
     @Test
     @DisplayName("The factory should update the display name of the root node.")
     public void updateDisplayname() {
-        List<Entry<String,Integer>> toPopulate = new ArrayList<>();
-        classUnderTest.createKeys(toPopulate);
+        Entry<String,Integer> entry = new SimpleEntry<>("foo", CtoLexer.NAMESPACE);
+        classUnderTest.createNodeForKey(entry);
         verify(node).setDisplayName(anyString());
     }
 }
