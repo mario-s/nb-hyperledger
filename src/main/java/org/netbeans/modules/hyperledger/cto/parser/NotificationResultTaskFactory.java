@@ -16,18 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
+package org.netbeans.modules.hyperledger.cto.parser;
 
-import org.netbeans.api.annotations.common.StaticResource;
+import java.util.Collection;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
+import org.netbeans.modules.hyperledger.cto.FileType;
+import org.netbeans.modules.parsing.api.Snapshot;
+import org.netbeans.modules.parsing.spi.SchedulerTask;
+import org.netbeans.modules.parsing.spi.TaskFactory;
+
+import static java.util.Collections.singletonList;
 
 /**
- * Constants for the cto file type.
- * 
+ *
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
+@MimeRegistration(mimeType = FileType.MIME, service = TaskFactory.class)
+public class NotificationResultTaskFactory extends TaskFactory{
+
+    @Override
+    public Collection<? extends SchedulerTask> create(Snapshot snpsht) {
+        return singletonList(new NotificationResultTask());
+    }
     
-    String MIME = "text/cto";
 }

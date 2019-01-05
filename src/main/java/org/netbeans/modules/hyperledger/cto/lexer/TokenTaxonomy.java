@@ -18,12 +18,14 @@
  */
 package org.netbeans.modules.hyperledger.cto.lexer;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 
 import static java.util.stream.Collectors.*;
 
@@ -32,15 +34,11 @@ import static java.util.stream.Collectors.*;
  * 
  * @author mario.schroeder
  */
-public final class TokenTaxonomy {
+public enum TokenTaxonomy {
 
-    public enum Category {
-        keyword, type, field, separator, value, comment, text
-    }
+    INSTANCE;
 
     private final List<CtoTokenId> tokens;
-
-    private static final TokenTaxonomy INSTANCE = new TokenTaxonomy();
 
     private TokenTaxonomy() {
         tokens = new ArrayList<>();
@@ -72,10 +70,6 @@ public final class TokenTaxonomy {
         };
 
         return mapping.apply(token).name();
-    }
-
-    public static TokenTaxonomy getDefault() {
-        return INSTANCE;
     }
 
     public List<CtoTokenId> allTokens() {

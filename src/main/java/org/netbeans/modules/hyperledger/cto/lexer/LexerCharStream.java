@@ -30,14 +30,14 @@ import org.netbeans.spi.lexer.LexerInput;
  * 
  * @author mario.schroeder
  */
-final class CtoCharStream implements CharStream {
+final class LexerCharStream implements CharStream {
 
     private final static String NAME = "CtoChar";
 
     private final LexerInput input;
     private final Deque<Integer> markers = new ArrayDeque<>();
 
-    public CtoCharStream(LexerInput input) {
+    public LexerCharStream(LexerInput input) {
         this.input = input;
     }
 

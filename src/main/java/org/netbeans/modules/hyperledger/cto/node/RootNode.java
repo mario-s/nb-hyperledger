@@ -16,18 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
+package org.netbeans.modules.hyperledger.cto.node;
 
-import org.netbeans.api.annotations.common.StaticResource;
+import org.netbeans.modules.hyperledger.cto.FileType;
+import org.openide.loaders.DataNode;
+import org.openide.loaders.DataObject;
+import org.openide.nodes.Children;
 
 /**
- * Constants for the cto file type.
- * 
+ *
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
+final class RootNode extends DataNode {
     
-    String MIME = "text/cto";
+    private final MembersFactory factory;
+
+    RootNode(DataObject obj, Children ch) {
+        super(obj, ch);
+        factory = new MembersFactory(this);
+        
+        setIconBaseWithExtension(FileType.ICON);
+        createChildren();
+    }
+
+    private void createChildren() {
+        setChildren(Children.create(factory, true));
+    }
+
+    MembersFactory getFactory() {
+        return factory;
+    } 
 }

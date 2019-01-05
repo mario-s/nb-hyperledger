@@ -16,18 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
+package org.netbeans.modules.hyperledger.cto.parser;
 
-import org.netbeans.api.annotations.common.StaticResource;
+import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
+import java.util.Collection;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
+import org.netbeans.modules.hyperledger.cto.FileType;
+import org.netbeans.modules.parsing.api.Snapshot;
+import org.netbeans.modules.parsing.spi.Parser;
+import org.netbeans.modules.parsing.spi.ParserFactory;
 
 /**
- * Constants for the cto file type.
- * 
+ *
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
-    
-    String MIME = "text/cto";
+@MimeRegistration(mimeType = FileType.MIME, service = ParserFactory.class)
+public class CtoParserFactory extends ParserFactory {
+
+    @Override
+    public Parser createParser(Collection<Snapshot> clctn) {
+        return new CtoProxyParser(ParserProvider.INSTANCE);
+    }
 }

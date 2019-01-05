@@ -16,18 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
+package org.netbeans.modules.hyperledger.cto.grammar;
 
-import org.netbeans.api.annotations.common.StaticResource;
+import java.util.TreeMap;
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * Constants for the cto file type.
- * 
+ *
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
+public class CtoResources extends TreeMap<String, Integer>{
     
-    String MIME = "text/cto";
+    void put(TerminalNode node, int id) {
+        if (node != null && !(node instanceof ErrorNode)) {
+            put(node.getText(), id);
+        }
+    }
 }

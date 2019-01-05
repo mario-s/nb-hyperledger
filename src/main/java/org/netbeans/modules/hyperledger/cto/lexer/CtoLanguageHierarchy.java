@@ -37,8 +37,8 @@ public class CtoLanguageHierarchy extends LanguageHierarchy<CtoTokenId> {
     private final Map<Integer, CtoTokenId> idToToken;
 
     public CtoLanguageHierarchy() {
-        tokens = TokenTaxonomy.getDefault().allTokens();
-        idToToken = TokenTaxonomy.getDefault().getIdTokenMap();
+        tokens = TokenTaxonomy.INSTANCE.allTokens();
+        idToToken = TokenTaxonomy.INSTANCE.getIdTokenMap();
     }
 
     @Override

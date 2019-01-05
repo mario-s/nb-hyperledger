@@ -16,16 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.lexer;
+package org.netbeans.modules.hyperledger.cto.grammar;
 
 import org.antlr.v4.runtime.Vocabulary;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
  *
  * @author mario.schroeder
  */
-final class CtoVocabulary implements Vocabulary{
+public final class CtoVocabulary implements Vocabulary{
     
     private static final Vocabulary VOCABULARY = CtoLexer.VOCABULARY;
 

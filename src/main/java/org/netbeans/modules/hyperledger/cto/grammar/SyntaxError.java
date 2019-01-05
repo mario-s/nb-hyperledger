@@ -16,18 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
+package org.netbeans.modules.hyperledger.cto.grammar;
 
-import org.netbeans.api.annotations.common.StaticResource;
+import org.antlr.v4.runtime.RecognitionException;
 
 /**
- * Constants for the cto file type.
- * 
+ *
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
+public final class SyntaxError {
+
+    private final RecognitionException exception;
+    private final String message;
+    private final int line;
+
+    public SyntaxError(RecognitionException exception, String message, int line) {
+        this.exception = exception;
+        this.message = message;
+        this.line = line;
+    }
     
-    String MIME = "text/cto";
+    public RecognitionException getException() {
+        return exception;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getLine() {
+        return line;
+    }
 }

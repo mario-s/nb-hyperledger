@@ -28,7 +28,7 @@
 
 /*
  A grammar for Hyperledger Composer Modeling Language
- https://hyperledger.github.io/composer/latest/reference/cto_language.html
+ https://hyperledger.github.io/composer/v0.19/reference/cto_language.html
  */
 
 lexer grammar CtoLexer;
@@ -77,8 +77,8 @@ MUL:                '*';
 // Additional symbols
 AT:                 '@';
 ELLIPSIS:           '...';
-REF:                '-->';
-VAR:                'o';
+REF:                '--> ';
+VAR:                'o ';
 
 // Literals
 DECIMAL_LITERAL:    ('0' | [1-9] (Digits? | '_'+ Digits)) [lL]?;
@@ -91,10 +91,14 @@ BOOL_LITERAL:       'true'
             ;
 DATE_TIME_LITERAL: Bound FullDate 'T' FullTime Bound;
 
-// Whitespace and comments
-WS:                 [ \t\r\n\u000C]+ -> channel(HIDDEN);
-LINE_COMMENT:       '//' ~[\r\n]*    -> channel(HIDDEN);
-COMMENT:            '/*' .*? '*/'    -> channel(HIDDEN);
+// Whitespace
+WS:                 [ \t\u000C]+ -> skip;
+//comments
+LINE_COMMENT:       '//' ~[\r\n]*            -> channel(HIDDEN);
+COMMENT:            '/*' .*? '*/' [\r\n]*    -> channel(HIDDEN);
+
+/** A logical newline that ends a statement */
+NL:    '\r'? '\n';
 
 //REGEX Expr
 REGEX_EXPR:         '/'.*?'/';
@@ -122,7 +126,7 @@ fragment Digit: [0-9];
 CHAR_LITERAL:       '\'' (~["\\\r\n] | EscapeSequence)* '\'';
 STRING_LITERAL:     '"' (~["\\\r\n] | EscapeSequence)* '"';
 
-IDENTIFIER:         Letter LetterOrDigit*;
+IDENTIFIER:         LetterOrDigit+;
 
 // Fragment rules
 fragment ExponentPart

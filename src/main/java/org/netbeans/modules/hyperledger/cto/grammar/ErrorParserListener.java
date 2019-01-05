@@ -16,34 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.lexer;
+package org.netbeans.modules.hyperledger.cto.grammar;
 
+import java.util.ArrayList;
 import java.util.List;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 
 /**
- * 
+ *
  * @author mario.schroeder
  */
-public class TokenTaxonomyTest {
+public class ErrorParserListener extends BaseErrorListener{
+    
+    private final List<SyntaxError> syntaxErrors = new ArrayList<>();
 
-    private TokenTaxonomy classUnderTest;
-
-    @BeforeEach
-    public void setUp() {
-        classUnderTest = TokenTaxonomy.getDefault();
+    public List<SyntaxError> getSyntaxErrors() {
+        return syntaxErrors;
     }
 
-    @Test
-    @DisplayName("It should return a list of keyword tokens.")
-    public void tokens_Keywords() {
-        List<CtoTokenId> result = classUnderTest.tokens(TokenTaxonomy.Category.keyword);
-        assertThat(result.isEmpty(), is(false));
+    @Override
+    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+        syntaxErrors.add(new SyntaxError(e, msg, line));
     }
-
-
 }

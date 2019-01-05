@@ -16,18 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
-
-import org.netbeans.api.annotations.common.StaticResource;
+package org.netbeans.modules.hyperledger.cto.lexer;
 
 /**
- * Constants for the cto file type.
+ * Categories for the tokens.
  * 
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
-    
-    String MIME = "text/cto";
+public enum Category {
+    keyword, type, field, separator, value, comment, text
 }

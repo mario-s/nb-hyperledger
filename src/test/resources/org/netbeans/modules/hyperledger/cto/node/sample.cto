@@ -5,7 +5,7 @@ namespace org.basic.sample
 
 import foo.bar
 
-enum ProductType {
+enumi ProductType {
   o DAIRY
   o BEEF
 }

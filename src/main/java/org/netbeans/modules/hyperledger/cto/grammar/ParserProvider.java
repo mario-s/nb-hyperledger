@@ -16,18 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto;
+package org.netbeans.modules.hyperledger.cto.grammar;
 
-import org.netbeans.api.annotations.common.StaticResource;
+import java.util.function.Function;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.TokenStream;
 
 /**
- * Constants for the cto file type.
- * 
+ *
  * @author mario.schroeder
  */
-public interface FileType {
-    @StaticResource
-    String ICON = "org/netbeans/modules/hyperledger/cto/value_16x16.png";
+public enum ParserProvider implements Function<String, CtoParser> {
     
-    String MIME = "text/cto";
+    INSTANCE;
+
+    @Override
+    public CtoParser apply(String text) {
+        CharStream input = CharStreams.fromString(text);
+        Lexer lexer = new CtoLexer(input);
+        TokenStream tokenStream = new CommonTokenStream(lexer);
+        return new CtoParser(tokenStream);
+    }
 }
