@@ -54,11 +54,7 @@ typeDeclaration
     | participantDeclaration
     | transactionDeclaration
     | eventDeclaration
-    | illegal
     ;
-
-illegal
-    : IDENTIFIER* classBody;
 
 classModifier
     : decorator
