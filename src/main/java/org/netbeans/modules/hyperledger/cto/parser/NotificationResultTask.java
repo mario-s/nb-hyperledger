@@ -18,41 +18,60 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
+import java.util.List;
 import java.util.Map;
+import javax.swing.text.Document;
 import org.netbeans.modules.hyperledger.LookupContext;
+import org.netbeans.modules.hyperledger.cto.grammar.SyntaxError;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
+import org.netbeans.spi.editor.hints.ErrorDescription;
+import org.netbeans.spi.editor.hints.ErrorDescriptionFactory;
+import org.netbeans.spi.editor.hints.HintsController;
+import org.netbeans.spi.editor.hints.Severity;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author mario.schroeder
  */
 public class NotificationResultTask extends ParserResultTask {
-
+    
     @Override
     public void run(Parser.Result result, SchedulerEvent se) {
         CtoParserProxy.CtoParserResult ctoResult = (CtoParserProxy.CtoParserResult) result;
-
+        
         Map<String, Integer> resources = ctoResult.getResources();
-        if(!resources.isEmpty()) {
+        if (!resources.isEmpty()) {
             LookupContext.INSTANCE.add(resources);
         }
+        
+        Document document = result.getSnapshot().getSource().getDocument(false);
+        List<SyntaxError> syntaxErrors = ctoResult.getErrors();
+        List<ErrorDescription> errorDescriptions = syntaxErrors.stream().map(e
+                -> ErrorDescriptionFactory.createErrorDescription(
+                        Severity.ERROR,
+                        e.getMessage(),
+                        document,
+                        e.getLine())).collect(toList());
+        HintsController.setErrors(document, "cto", errorDescriptions);
     }
-
+    
     @Override
     public int getPriority() {
         return 100;
     }
-
+    
     @Override
     public Class<? extends Scheduler> getSchedulerClass() {
         return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
     }
-
+    
     @Override
     public void cancel() {
     }
-
+    
 }
