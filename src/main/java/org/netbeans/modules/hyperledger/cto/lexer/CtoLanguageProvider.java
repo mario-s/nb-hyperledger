@@ -26,13 +26,14 @@ import org.netbeans.api.lexer.Token;
 import org.netbeans.modules.hyperledger.cto.FileType;
 import org.netbeans.spi.lexer.LanguageEmbedding;
 import org.netbeans.spi.lexer.LanguageProvider;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Service to deliver the language.
  * 
  * @author mario.schroeder
  */
-@org.openide.util.lookup.ServiceProvider(service=org.netbeans.spi.lexer.LanguageProvider.class)
+@ServiceProvider(service=LanguageProvider.class)
 public class CtoLanguageProvider extends LanguageProvider{
     
     private final Supplier<Language<?>> supplier = () -> new CtoLanguageHierarchy().language();
