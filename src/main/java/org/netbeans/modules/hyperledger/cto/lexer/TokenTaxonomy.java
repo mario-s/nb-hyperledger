@@ -54,22 +54,22 @@ public enum TokenTaxonomy {
     private String getCategory(int token) {
         Function<Integer, Category> mapping = t -> {
             if (t < CtoLexer.BOOLEAN) {
-                return Category.keyword;
+                return Category.KEYWORD;
             } else if (t < CtoLexer.LPAREN) {
-                return Category.type;
+                return Category.TYPE;
             } else if (t < CtoLexer.REF) {
-                return Category.separator;
+                return Category.SEPARATOR;
             } else if (t < CtoLexer.DECIMAL_LITERAL) {
-                return Category.field;
+                return Category.FIELD;
             } else if (t < CtoLexer.WS || t == CtoLexer.CHAR_LITERAL || t == CtoLexer.STRING_LITERAL) {
-                return Category.value;
+                return Category.VALUE;
             } else if (t == CtoLexer.COMMENT || t == CtoLexer.LINE_COMMENT) {
-                return Category.comment;
+                return Category.COMMENT;
             }
-            return Category.text;
+            return Category.TEXT;
         };
 
-        return mapping.apply(token).name();
+        return mapping.apply(token).toString();
     }
 
     public List<CtoTokenId> allTokens() {
@@ -77,7 +77,7 @@ public enum TokenTaxonomy {
     }
 
     public List<CtoTokenId> tokens(Category category) {
-        return tokens.stream().filter(t -> category.name().equals(t.primaryCategory())).collect(toList());
+        return tokens.stream().filter(t -> category.toString().equals(t.primaryCategory())).collect(toList());
     }
 
     public Map<Integer, CtoTokenId> getIdTokenMap() {

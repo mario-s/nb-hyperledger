@@ -38,7 +38,7 @@ public class TokenTaxonomyTest {
     @Test
     @DisplayName("It should return a list of keyword tokens.")
     public void tokens_Keywords() {
-        List<CtoTokenId> result = TokenTaxonomy.INSTANCE.tokens(Category.keyword);
+        List<CtoTokenId> result = TokenTaxonomy.INSTANCE.tokens(Category.KEYWORD);
         assertThat(result.isEmpty(), is(false));
     }
 

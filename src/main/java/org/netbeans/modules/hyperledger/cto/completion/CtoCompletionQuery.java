@@ -73,7 +73,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
             Optional<String> iconPath = iconPath(token.ordinal());
             return new KeywordCompletionItem(iconPath, token.name(), filterResult.offset);
         };
-        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.keyword);
+        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.KEYWORD);
         return map(filterResult.filter, tokens, mapping);
     }
 
@@ -81,7 +81,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
         Function<CtoTokenId, PrimitiveTypeCompletionItem> mapping = token -> {
             return new PrimitiveTypeCompletionItem(token.name(), filterResult.offset);
         };
-        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.type);
+        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.TYPE);
         return map(filterResult.filter, tokens, mapping);
     }
     
