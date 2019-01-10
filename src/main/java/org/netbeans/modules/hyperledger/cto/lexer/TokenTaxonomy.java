@@ -69,7 +69,7 @@ public enum TokenTaxonomy {
             return Category.TEXT;
         };
 
-        return mapping.apply(token).toString();
+        return mapping.apply(token).name();
     }
 
     public List<CtoTokenId> allTokens() {
@@ -77,7 +77,7 @@ public enum TokenTaxonomy {
     }
 
     public List<CtoTokenId> tokens(Category category) {
-        return tokens.stream().filter(t -> category.toString().equals(t.primaryCategory())).collect(toList());
+        return tokens.stream().filter(t -> category.name().equals(t.primaryCategory())).collect(toList());
     }
 
     public Map<Integer, CtoTokenId> getIdTokenMap() {

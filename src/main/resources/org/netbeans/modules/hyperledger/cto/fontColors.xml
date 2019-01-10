@@ -2,11 +2,11 @@
 <!DOCTYPE fontscolors PUBLIC "-//NetBeans//DTD Editor Fonts and Colors settings 1.1//EN" "http://www.netbeans.org/dtds/EditorFontsColors-1_1.dtd">
 <fontscolors>
     
-    <fontcolor name="keyword" foreColor="blue" default="keyword"/>
-    <fontcolor name="type" foreColor="darkGray" default="type"/>    
-    <fontcolor name="field" foreColor="pink" default="field"/> 
-    <fontcolor name="value" foreColor="black" default="value"/> 
-    <fontcolor name="separator" foreColor="magenta" default="separator"/>
-    <fontcolor name="comment" foreColor="gray" default="comment"/>   
+    <fontcolor name="KEYWORD" foreColor="blue" default="keyword"/>
+    <fontcolor name="TYPE" foreColor="darkGray" default="type"/>    
+    <fontcolor name="FIELD" foreColor="pink" default="field"/> 
+    <fontcolor name="VALUE" foreColor="black" default="value"/> 
+    <fontcolor name="SEPARATOR" foreColor="magenta" default="separator"/>
+    <fontcolor name="COMMENT" foreColor="gray" default="comment"/>   
 
 </fontscolors>

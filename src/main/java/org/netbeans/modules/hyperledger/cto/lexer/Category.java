@@ -24,10 +24,5 @@ package org.netbeans.modules.hyperledger.cto.lexer;
  * @author mario.schroeder
  */
 public enum Category {
-    KEYWORD, TYPE, FIELD, SEPARATOR, VALUE, COMMENT, TEXT;
-    
-    @Override    
-    public String toString() {
-        return super.toString().toLowerCase();
-    }     
+    KEYWORD, TYPE, FIELD, SEPARATOR, VALUE, COMMENT, TEXT;    
 }
