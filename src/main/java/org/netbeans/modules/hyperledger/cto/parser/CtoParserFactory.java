@@ -34,7 +34,7 @@ import org.netbeans.modules.parsing.spi.ParserFactory;
 public class CtoParserFactory extends ParserFactory {
 
     @Override
-    public Parser createParser(Collection<Snapshot> clctn) {
+    public Parser createParser(Collection<Snapshot> coll) {
         return new CtoProxyParser(ParserProvider.INSTANCE);
     }
 }

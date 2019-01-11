@@ -18,26 +18,18 @@
  */
 package org.netbeans.modules.hyperledger.cto.grammar;
 
-import org.antlr.v4.runtime.RecognitionException;
-
 /**
  *
  * @author mario.schroeder
  */
 public final class SyntaxError {
 
-    private final RecognitionException exception;
     private final String message;
     private final int line;
 
-    public SyntaxError(RecognitionException exception, String message, int line) {
-        this.exception = exception;
+    public SyntaxError(String message, int line) {
         this.message = message;
         this.line = line;
-    }
-    
-    public RecognitionException getException() {
-        return exception;
     }
 
     public String getMessage() {
