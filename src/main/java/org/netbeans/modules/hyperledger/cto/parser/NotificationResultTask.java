@@ -62,7 +62,7 @@ public class NotificationResultTask extends ParserResultTask {
     
     @Override
     public int getPriority() {
-        return 100; //the lower, the high the priority
+        return 100; //the lower, the higher the priority
     }
     
     @Override
