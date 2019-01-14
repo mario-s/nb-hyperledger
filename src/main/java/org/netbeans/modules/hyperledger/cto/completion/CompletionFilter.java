@@ -53,9 +53,9 @@ interface CompletionFilter {
 
             try {
                 StyledDocument styledDocument = (StyledDocument) document;
-                int lineStartOffset = getRowFirstNonWhite(styledDocument, offset);
+                int lineStartOffset = firstRowNotWhitespace(styledDocument, offset);
                 char[] line = styledDocument.getText(lineStartOffset, offset - lineStartOffset).toCharArray();                
-                int whiteOffset = indexOfWhite(line);
+                int whiteOffset = indexOfWhitespace(line);
 
                 filter = new String(line, whiteOffset + 1, line.length - whiteOffset - 1);
                 startOffset = (whiteOffset > 0 ) ? lineStartOffset + whiteOffset + 1 : lineStartOffset;
@@ -69,7 +69,7 @@ interface CompletionFilter {
             return result;
         }
 
-        private int getRowFirstNonWhite(StyledDocument doc, int offset)
+        private int firstRowNotWhitespace(StyledDocument doc, int offset)
                 throws BadLocationException {
             Element paragraph = doc.getParagraphElement(offset);
             int start = paragraph.getStartOffset();
@@ -83,7 +83,7 @@ interface CompletionFilter {
             return start;
         }
 
-        private int indexOfWhite(char[] line) {
+        private int indexOfWhitespace(char[] line) {
             for(int i = line.length - 1; i > -1; i--) {
                 if (Character.isWhitespace(line[i])) {
                     return i;
