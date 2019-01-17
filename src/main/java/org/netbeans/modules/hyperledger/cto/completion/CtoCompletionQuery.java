@@ -90,7 +90,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
             tokens = tokens.filter(t -> t.name().startsWith(name));
         }
         
-        return tokens.map(t -> mapping.apply(t)).collect(toList());
+        return tokens.map(mapping::apply).collect(toList());
     }
 
     private Optional<String> iconPath(int type) {
