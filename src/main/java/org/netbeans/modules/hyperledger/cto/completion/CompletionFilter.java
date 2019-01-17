@@ -38,7 +38,7 @@ interface CompletionFilter {
     char SPC = ' ';
 
     /**
-     * The result contains an optional string that should be inserted at the location.
+     * The result contains an optional string that is used to filter the items and a location where the item shall be inserted..
      */
     static class FilterResult {
         Optional<String> filter = empty();
@@ -46,7 +46,7 @@ interface CompletionFilter {
     }
 
     /**
-     * It returns a reult which may contain a string with a location to replace the old string in the document.
+     * It returns a result which may contain a string for filtering and a location to replace the old string in the document.
      * @param document currently edited document
      * @param offset start offset
      * @return {@link FilterResult}
