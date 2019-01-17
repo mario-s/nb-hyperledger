@@ -47,15 +47,12 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     
     private final CompletionFilter completionFilter;
 
-    private final Function<Category, Stream<CtoTokenId>> tokenProvider;
-    
     CtoCompletionQuery() {
         this(new CompletionFilter.FilterImpl());
     }
     
     CtoCompletionQuery(CompletionFilter completionFilter) {
         this.completionFilter = completionFilter;
-        this.tokenProvider = category -> TokenTaxonomy.INSTANCE.tokens(category).stream();
     }
 
     @Override
@@ -73,25 +70,27 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
             Optional<String> iconPath = iconPath(token.ordinal());
             return new KeywordCompletionItem(iconPath, token.name(), filterResult.location);
         };
-        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.KEYWORD);
-        return map(filterResult.filter, tokens, mapping);
+        
+        return map(filterResult.filter, Category.KEYWORD, mapping);
     }
 
     private List<? extends AbstractCompletionItem> getPrimitiveTypeItems(CompletionFilter.FilterResult filterResult) {
         Function<CtoTokenId, PrimitiveTypeCompletionItem> mapping = token -> {
             return new PrimitiveTypeCompletionItem(token.name(), filterResult.location);
         };
-        Stream<CtoTokenId> tokens = tokenProvider.apply(Category.TYPE);
-        return map(filterResult.filter, tokens, mapping);
+        
+        return map(filterResult.filter, Category.TYPE, mapping);
     }
     
-    private List<? extends AbstractCompletionItem> map(Optional<String> filter, Stream<CtoTokenId> tokens, Function<CtoTokenId, ? extends AbstractCompletionItem> mapping) {
+    private List<? extends AbstractCompletionItem> map(Optional<String> filter, Category category, Function<CtoTokenId, ? extends AbstractCompletionItem> mapping) {
+        Stream<CtoTokenId> tokens = TokenTaxonomy.INSTANCE.tokens(category).stream();
+        
         String name = filter.orElse("");
         if(!name.isEmpty()){
             tokens = tokens.filter(t -> t.name().startsWith(name));
         }
-        Stream<? extends AbstractCompletionItem> itemStream = tokens.map(t -> mapping.apply(t));
-        return itemStream.collect(toList());
+        
+        return tokens.map(t -> mapping.apply(t)).collect(toList());
     }
 
     private Optional<String> iconPath(int type) {
