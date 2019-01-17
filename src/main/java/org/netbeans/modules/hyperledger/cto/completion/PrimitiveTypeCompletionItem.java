@@ -28,8 +28,8 @@ import org.openide.util.Pair;
  */
 public class PrimitiveTypeCompletionItem extends AbstractCompletionItem{
 
-    public PrimitiveTypeCompletionItem(String name, Pair<Integer, Integer> offsets) {
-        super(name, offsets);
+    public PrimitiveTypeCompletionItem(String name, Pair<Integer, Integer> location) {
+        super(name, location);
     }
 
     @Override

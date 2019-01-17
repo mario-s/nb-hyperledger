@@ -38,8 +38,8 @@ public class KeywordCompletionItem extends AbstractCompletionItem {
 
     private final ImageIcon icon;
 
-    public KeywordCompletionItem(Optional<String> iconPath, String name, Pair<Integer, Integer> offsets) {
-        super(name, offsets);
+    public KeywordCompletionItem(Optional<String> iconPath, String name, Pair<Integer, Integer> location) {
+        super(name, location);
         icon = iconPath.map(path -> new ImageIcon(ImageUtilities.loadImage(path))).orElse(null);
     }
 

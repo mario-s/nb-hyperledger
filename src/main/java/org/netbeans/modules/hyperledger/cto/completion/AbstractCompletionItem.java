@@ -62,10 +62,10 @@ public abstract class AbstractCompletionItem implements CompletionItem {
     private final int startOffset;
     private final int endOffset;
 
-    public AbstractCompletionItem(String name, Pair<Integer, Integer> offsets) {
+    public AbstractCompletionItem(String name, Pair<Integer, Integer> location) {
         this.name = name;
-        this.startOffset = offsets.first();
-        this.endOffset = offsets.second();
+        this.startOffset = location.first();
+        this.endOffset = location.second();
     }
 
     @Override

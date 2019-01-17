@@ -37,11 +37,20 @@ interface CompletionFilter {
 
     char SPC = ' ';
 
+    /**
+     * The result contains an optional string that should be inserted at the location.
+     */
     static class FilterResult {
         Optional<String> filter = empty();
-        Pair<Integer, Integer> offset;
+        Pair<Integer, Integer> location;
     }
 
+    /**
+     * It returns a reult which may contain a string with a location to replace the old string in the document.
+     * @param document currently edited document
+     * @param offset start offset
+     * @return {@link FilterResult}
+     */
     FilterResult filter(Document document, int offset);
 
     static class FilterImpl implements CompletionFilter {
@@ -65,7 +74,7 @@ interface CompletionFilter {
 
             FilterResult result = new FilterResult();
             result.filter = Optional.ofNullable(filter);
-            result.offset = Pair.of(startOffset, offset);
+            result.location = Pair.of(startOffset, offset);
             return result;
         }
 

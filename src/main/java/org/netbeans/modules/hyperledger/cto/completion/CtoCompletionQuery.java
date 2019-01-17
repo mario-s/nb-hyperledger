@@ -71,7 +71,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
     private List<? extends AbstractCompletionItem> getKeywordItems(CompletionFilter.FilterResult filterResult) {
         Function<CtoTokenId, KeywordCompletionItem> mapping = token -> {
             Optional<String> iconPath = iconPath(token.ordinal());
-            return new KeywordCompletionItem(iconPath, token.name(), filterResult.offset);
+            return new KeywordCompletionItem(iconPath, token.name(), filterResult.location);
         };
         Stream<CtoTokenId> tokens = tokenProvider.apply(Category.KEYWORD);
         return map(filterResult.filter, tokens, mapping);
@@ -79,7 +79,7 @@ final class CtoCompletionQuery extends AsyncCompletionQuery {
 
     private List<? extends AbstractCompletionItem> getPrimitiveTypeItems(CompletionFilter.FilterResult filterResult) {
         Function<CtoTokenId, PrimitiveTypeCompletionItem> mapping = token -> {
-            return new PrimitiveTypeCompletionItem(token.name(), filterResult.offset);
+            return new PrimitiveTypeCompletionItem(token.name(), filterResult.location);
         };
         Stream<CtoTokenId> tokens = tokenProvider.apply(Category.TYPE);
         return map(filterResult.filter, tokens, mapping);

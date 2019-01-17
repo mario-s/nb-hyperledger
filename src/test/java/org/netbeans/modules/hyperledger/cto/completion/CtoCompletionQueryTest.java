@@ -57,7 +57,7 @@ public class CtoCompletionQueryTest {
         reset(document, completionFilter);
         
         CompletionFilter.FilterResult result = new CompletionFilter.FilterResult();
-        result.offset = Pair.of(0, 0);
+        result.location = Pair.of(0, 0);
         when(completionFilter.filter(document, 0)).thenReturn(result);
     }
     
