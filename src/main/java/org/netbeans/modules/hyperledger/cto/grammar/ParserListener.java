@@ -44,7 +44,7 @@ public final class ParserListener extends CtoParserBaseListener {
         CtoParser.QualifiedNameContext qualCtx = ctx.qualifiedName();
         if (qualCtx != null) {
             List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
-            String name = identifiers.stream().map(n -> n.getText()).collect(Collectors.joining("."));
+            String name = identifiers.stream().map(TerminalNode::getText).collect(Collectors.joining("."));
             members.put(name, CtoLexer.NAMESPACE);
         }
     }
