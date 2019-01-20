@@ -54,7 +54,7 @@ import org.xml.sax.InputSource;
 @TemplateRegistration(folder = "Project/ClientSide", 
         displayName = "#Hyperledger_displayName", 
         description = "HyperledgerDescription.html", 
-        iconBase = "org/netbeans/modules/hyperledger/template/blockchain.png", 
+        iconBase = "org/netbeans/modules/hyperledger/template/hyperledger.png", 
         content = "HyperledgerProject.zip")
 @Messages("Hyperledger_displayName=Hyperledger")
 public class HyperledgerWizardIterator implements WizardDescriptor./*Progress*/InstantiatingIterator {
