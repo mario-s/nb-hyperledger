@@ -16,9 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.grammar;
+package org.netbeans.modules.hyperledger.cto.lexer;
 
-import org.netbeans.modules.hyperledger.cto.lexer.TokenTaxonomy;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -26,8 +25,6 @@ import static org.hamcrest.MatcherAssert.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.netbeans.modules.hyperledger.cto.lexer.Category;
-import org.netbeans.modules.hyperledger.cto.lexer.CtoTokenId;
 
 /**
  * 
