@@ -62,6 +62,8 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
 
+    private static final CtoVocabulary VOCABULARY = new CtoVocabulary();
+
     private final DataNode root;
 
     private final LookupContext lookupContext = LookupContext.INSTANCE;
@@ -96,7 +98,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
             return null;
         } else {
             AbstractNode node = new AbstractNode(Children.LEAF);
-            String type = CtoVocabulary.INSTANCE.getDisplayName(entry.getValue());
+            String type = VOCABULARY.getDisplayName(entry.getValue());
             node.setDisplayName(format(MEMBER, entry.getKey(), type));
             node.setIconBaseWithExtension(ICON);
             return node;
