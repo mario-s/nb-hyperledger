@@ -24,29 +24,35 @@ import org.antlr.v4.runtime.Vocabulary;
  *
  * @author mario.schroeder
  */
-public final class CtoVocabulary implements Vocabulary{
+public enum CtoVocabulary implements Vocabulary {
+
+    INSTANCE;
     
-    private static final Vocabulary VOCABULARY = CtoLexer.VOCABULARY;
+    private final Vocabulary vocabulary;
+
+    private CtoVocabulary() {
+        vocabulary = CtoLexer.VOCABULARY;
+    }
 
     @Override
     public int getMaxTokenType() {
-        return VOCABULARY.getMaxTokenType();
+        return vocabulary.getMaxTokenType();
     }
 
     @Override
     public String getLiteralName(int tokenType) {
-        return VOCABULARY.getLiteralName(tokenType);
+        return vocabulary.getLiteralName(tokenType);
     }
 
     @Override
     public String getSymbolicName(int tokenType) {
-        return VOCABULARY.getSymbolicName(tokenType);
+        return vocabulary.getSymbolicName(tokenType);
     }
 
     @Override
     public String getDisplayName(int tokenType) {
-        String name = VOCABULARY.getDisplayName(tokenType);
+        String name = vocabulary.getDisplayName(tokenType);
         return name.replaceAll("^\\'|\\'$", "");
     }
-    
+
 }

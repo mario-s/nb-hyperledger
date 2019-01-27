@@ -43,7 +43,7 @@ public enum TokenTaxonomy {
     private TokenTaxonomy() {
         tokens = new ArrayList<>();
 
-        Vocabulary vocabulary = new CtoVocabulary();
+        Vocabulary vocabulary = CtoVocabulary.INSTANCE;
         int max = vocabulary.getMaxTokenType() + 1;
         for (int i = 1; i < max; i++) {
             CtoTokenId token = new CtoTokenId(vocabulary.getDisplayName(i), getCategory(i), i);
