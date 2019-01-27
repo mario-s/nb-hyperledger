@@ -27,12 +27,12 @@ import static java.lang.String.format;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoResources;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
@@ -68,7 +68,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     private final LookupContext lookupContext = LookupContext.INSTANCE;
 
-    private Lookup.Result<CtoResources> selection;
+    private Lookup.Result<TreeMap> selection;
 
     private Map<String, Integer> members = new HashMap();
 
@@ -137,7 +137,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        selection = lookupContext.getLookup().lookupResult(CtoResources.class);
+        selection = lookupContext.getLookup().lookupResult(TreeMap.class);
         selection.addLookupListener(this);
     }
 
