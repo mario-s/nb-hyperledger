@@ -75,6 +75,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
     private final FileChangeAdapter adapter = new FileChangeAdapter() {
         @Override
         public void fileChanged(FileEvent fe) {
+            members.clear();
             refresh(false);
         }
     };
