@@ -153,9 +153,8 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
             //consume and remove
             Collection<? extends Map> results = selection.allInstances();
             if (!results.isEmpty()) {
-                Map<String, Integer> result = results.iterator().next();
-                members = result;
-                lookupContext.remove(result);
+                members = results.iterator().next();
+                lookupContext.remove(members);
                 refresh(false);
             }
         }
