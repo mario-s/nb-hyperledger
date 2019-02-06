@@ -18,9 +18,9 @@
  */
 package org.netbeans.modules.hyperledger.cto.grammar;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -38,14 +38,14 @@ public final class ParserListener extends CtoParserBaseListener {
     @Deprecated
     private final Map<String, Integer> members = new TreeMap<>();
     
-    private final Collection<CtoResource> resources = new TreeSet<>();
+    private final Set<CtoResource> resources = new TreeSet<>();
 
     @Deprecated
     public Map<String, Integer> getMembers() {
         return members;
     }
 
-    public Collection<CtoResource> getResources() {
+    public Set<CtoResource> getResources() {
         return resources;
     }
 
