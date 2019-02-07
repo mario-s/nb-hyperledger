@@ -20,20 +20,17 @@ package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
 
-import static java.lang.String.format;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.TreeSet;
 
-import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.LookupContext;
+import org.netbeans.modules.hyperledger.cto.CtoResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
 import org.openide.filesystems.FileChangeAdapter;
@@ -41,41 +38,31 @@ import org.openide.filesystems.FileEvent;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
-import org.openide.nodes.AbstractNode;
 import org.openide.nodes.ChildFactory;
-import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
-
 /**
  *
  * @author mario.schroeder
  */
-final class MembersFactory extends ChildFactory<Entry<String, Integer>> implements LookupListener {
-
-    private static final String MEMBER = "%s : %s";
-
-    @StaticResource
-    private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
-
-    private static final CtoVocabulary VOCABULARY = new CtoVocabulary();
+final class MembersFactory extends ChildFactory<CtoResource> implements LookupListener {
+    
+    private final LookupContext lookupContext = LookupContext.INSTANCE;
+    
+    private Set<CtoResource> resources = new HashSet<>();
 
     private final DataNode root;
 
-    private final LookupContext lookupContext = LookupContext.INSTANCE;
-
-    private Lookup.Result<TreeMap> selection;
-
-    private Map<String, Integer> members = new HashMap();
+    private Lookup.Result<TreeSet> selection;
 
     private final FileChangeAdapter adapter = new FileChangeAdapter() {
         @Override
         public void fileChanged(FileEvent fe) {
-            members.clear();
+            resources.clear();
             refresh(false);
         }
     };
@@ -93,23 +80,19 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
     }
 
     @Override
-    protected Node createNodeForKey(Entry<String, Integer> entry) {
-        if (CtoLexer.NAMESPACE == entry.getValue()) {
-            updateRootName(entry.getKey());
+    protected Node createNodeForKey(CtoResource resource) {
+        if (CtoLexer.NAMESPACE == resource.getType()) {
+            updateRootName(resource.getName());
             return null;
         } else {
-            AbstractNode node = new AbstractNode(Children.LEAF);
-            String type = VOCABULARY.getDisplayName(entry.getValue());
-            node.setDisplayName(format(MEMBER, entry.getKey(), type));
-            node.setIconBaseWithExtension(ICON);
-            return node;
+            return new ChildNode(getDataObject(), resource);
         }
     }
 
     @Override
-    protected boolean createKeys(List<Entry<String, Integer>> toPopulate) {
-        //load text from file, since the members are empty initialy
-        if (members.isEmpty()) {
+    protected boolean createKeys(List<CtoResource> toPopulate) {
+        //load text from file, since the resources are empty initialy
+        if (resources.isEmpty()) {
             ParserListener listener = new ParserListener();
 
             try {
@@ -121,10 +104,10 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
                 Exceptions.printStackTrace(ex);
             }
 
-            members = listener.getMembers();
+            resources = listener.getResources();
         }
 
-        members.entrySet().forEach(toPopulate::add);
+        resources.forEach(toPopulate::add);
 
         return true;
     }
@@ -138,7 +121,7 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        selection = lookupContext.getLookup().lookupResult(TreeMap.class);
+        selection = lookupContext.getLookup().lookupResult(TreeSet.class);
         selection.addLookupListener(this);
     }
 
@@ -151,10 +134,10 @@ final class MembersFactory extends ChildFactory<Entry<String, Integer>> implemen
     public void resultChanged(LookupEvent ev) {
         if (selection != null) {
             //consume and remove
-            Collection<? extends Map> results = selection.allInstances();
+            Collection<? extends Set> results = selection.allInstances();
             if (!results.isEmpty()) {
-                members = results.iterator().next();
-                lookupContext.remove(members);
+                resources = results.iterator().next();
+                lookupContext.remove(resources);
                 refresh(false);
             }
         }

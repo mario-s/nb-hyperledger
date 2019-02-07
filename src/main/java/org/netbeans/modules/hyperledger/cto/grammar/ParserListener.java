@@ -19,11 +19,13 @@
 package org.netbeans.modules.hyperledger.cto.grammar;
 
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.netbeans.modules.hyperledger.cto.CtoResource;
 
 /**
  *
@@ -31,16 +33,24 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public final class ParserListener extends CtoParserBaseListener {
 
-    private final Map<String, Integer> members = new TreeMap<>();
+    private final Set<CtoResource> resources = new TreeSet<>();
 
-    public Map<String, Integer> getMembers() {
-        return members;
+    public Set<CtoResource> getResources() {
+        return resources;
     }
 
-    private void addNode(TerminalNode node, int id) {
+    private void addNode(TerminalNode node, int type, int offset) {
         if (node != null && !(node instanceof ErrorNode)) {
-            members.put(node.getText(), id);
+            addNode(node.getText(), type, offset);
         }
+    }
+    
+    private void addNode(String text, int type, int offset) {
+        resources.add(new CtoResource(text, type, offset));
+    }
+    
+    private int getStart(ParserRuleContext ctx) {
+        return ctx.getStart().getStartIndex();
     }
 
     @Override
@@ -49,37 +59,37 @@ public final class ParserListener extends CtoParserBaseListener {
         if (qualCtx != null) {
             List<TerminalNode> identifiers = qualCtx.IDENTIFIER();
             String name = identifiers.stream().map(TerminalNode::getText).collect(Collectors.joining("."));
-            members.put(name, CtoLexer.NAMESPACE);
+            addNode(name, CtoLexer.NAMESPACE, getStart(ctx));
         }
     }
 
     @Override
     public void exitAssetDeclaration(CtoParser.AssetDeclarationContext ctx) {
-        addNode(ctx.IDENTIFIER(), CtoLexer.ASSET);
+        addNode(ctx.IDENTIFIER(), CtoLexer.ASSET, getStart(ctx));
     }
 
     @Override
     public void exitParticipantDeclaration(CtoParser.ParticipantDeclarationContext ctx) {
-        addNode(ctx.IDENTIFIER(), CtoLexer.PARTICIPANT);
+        addNode(ctx.IDENTIFIER(), CtoLexer.PARTICIPANT, getStart(ctx));
     }
 
     @Override
     public void exitTransactionDeclaration(CtoParser.TransactionDeclarationContext ctx) {
-        addNode(ctx.IDENTIFIER(), CtoLexer.TRANSACTION);
+        addNode(ctx.IDENTIFIER(), CtoLexer.TRANSACTION, getStart(ctx));
     }
 
     @Override
     public void exitEventDeclaration(CtoParser.EventDeclarationContext ctx) {
-        addNode(ctx.IDENTIFIER(), CtoLexer.EVENT);
+        addNode(ctx.IDENTIFIER(), CtoLexer.EVENT, getStart(ctx));
     }
 
     @Override
     public void exitEnumDeclaration(CtoParser.EnumDeclarationContext ctx) {
-        addNode(ctx.IDENTIFIER(), CtoLexer.ENUM);
+        addNode(ctx.IDENTIFIER(), CtoLexer.ENUM, getStart(ctx));
     }
 
     @Override
     public void exitConceptDeclaration(CtoParser.ConceptDeclarationContext ctx) {
-        addNode(ctx.IDENTIFIER(0), CtoLexer.CONCEPT);
+        addNode(ctx.IDENTIFIER(0), CtoLexer.CONCEPT, getStart(ctx));
     }
 }

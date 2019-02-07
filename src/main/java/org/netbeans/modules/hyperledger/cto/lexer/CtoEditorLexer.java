@@ -20,10 +20,12 @@ package org.netbeans.modules.hyperledger.cto.lexer;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import org.antlr.v4.runtime.CharStream;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.netbeans.spi.lexer.Lexer;
+import org.netbeans.spi.lexer.LexerInput;
 import org.netbeans.spi.lexer.LexerRestartInfo;
 
 /**
@@ -31,27 +33,30 @@ import org.netbeans.spi.lexer.LexerRestartInfo;
  * @author mario.schroeder
  */
 public final class CtoEditorLexer implements Lexer<CtoTokenId> {
-   
+
     private final LexerRestartInfo<CtoTokenId> info;
     private final Map<Integer, CtoTokenId> idToToken;
-    
+
     private final Function<CtoTokenId, Token<CtoTokenId>> tokenFactory;
-    private final CtoLexer ctoLexer;
+    private final Supplier<org.antlr.v4.runtime.Token> tokenSupplier;
 
     public CtoEditorLexer(LexerRestartInfo<CtoTokenId> info, Map<Integer, CtoTokenId> idToToken) {
+        this(info, idToToken, new TokenSupplier(info.input()));
+    }
+    
+    CtoEditorLexer(LexerRestartInfo<CtoTokenId> info, Map<Integer, CtoTokenId> idToToken, 
+            Supplier<org.antlr.v4.runtime.Token> tokenSupplier) {
         this.info = info;
         this.idToToken = idToToken;
+        this.tokenSupplier = tokenSupplier;
         this.tokenFactory = id -> info.tokenFactory().createToken(id);
-        
-        CharStream stream = new LexerCharStream(info.input());
-        ctoLexer = new CtoLexer(stream);
     }
 
     @Override
     public Token<CtoTokenId> nextToken() {
-        org.antlr.v4.runtime.Token token = ctoLexer.nextToken();
-
         Token<CtoTokenId> createdToken = null;
+
+        org.antlr.v4.runtime.Token token = tokenSupplier.get();
 
         int type = token.getType();
         if (type != -1) {
@@ -78,4 +83,19 @@ public final class CtoEditorLexer implements Lexer<CtoTokenId> {
         //nothing todo
     }
 
+    private static class TokenSupplier implements Supplier<org.antlr.v4.runtime.Token> {
+
+        private final CtoLexer lexer;
+
+        TokenSupplier(LexerInput input) {
+            CharStream stream = new LexerCharStream(input);
+            lexer = new CtoLexer(stream);
+        }
+
+        @Override
+        public org.antlr.v4.runtime.Token get() {
+            return lexer.nextToken();
+        }
+
+    }
 }

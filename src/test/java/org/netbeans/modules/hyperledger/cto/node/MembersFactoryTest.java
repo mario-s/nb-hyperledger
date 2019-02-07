@@ -19,10 +19,8 @@
 package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.File;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,6 +35,7 @@ import static org.mockito.BDDMockito.given;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.netbeans.modules.hyperledger.cto.CtoResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
@@ -77,7 +76,7 @@ public class MembersFactoryTest {
         given(node.getDataObject()).willReturn(dataObject);
         given(dataObject.getPrimaryFile()).willReturn(fileObject);
         
-        List<Entry<String,Integer>> toPopulate = new ArrayList<>();
+        List<CtoResource> toPopulate = new ArrayList<>();
         classUnderTest.createKeys(toPopulate);
         assertThat(toPopulate.size(), is(7));
     }
@@ -85,8 +84,8 @@ public class MembersFactoryTest {
     @Test
     @DisplayName("The factory should update the display name of the root node.")
     public void updateDisplayname() {
-        Entry<String,Integer> entry = new SimpleEntry<>("foo", CtoLexer.NAMESPACE);
-        classUnderTest.createNodeForKey(entry);
+        CtoResource res = new CtoResource("foo", CtoLexer.NAMESPACE, 0);
+        classUnderTest.createNodeForKey(res);
         verify(node).setDisplayName(anyString());
     }
 }
