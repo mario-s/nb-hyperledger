@@ -18,9 +18,21 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import org.netbeans.api.annotations.common.StaticResource;
+import org.netbeans.modules.hyperledger.cto.CtoResource;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
+import org.openide.filesystems.FileObject;
+import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.text.Line;
+import org.openide.text.NbDocument;
+import org.openide.util.RequestProcessor;
+
+import static java.lang.String.format;
 
 /**
  *
@@ -30,13 +42,35 @@ public final class ChildNode extends AbstractNode{
     
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
-
-    public ChildNode() {
+    private static final String MEMBER = "%s : %s";
+    private static final CtoVocabulary VOCABULARY = new CtoVocabulary();
+    private static final RequestProcessor RP = new RequestProcessor();
+    
+    private final DataObject dataObject;
+    private final CtoResource resource;
+    private final Action openAction = new AbstractAction() {
+        
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            RP.post(() -> {
+                NbDocument.openDocument(dataObject, resource.getLine(), 
+                        Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS);
+            });
+        }
+    };
+    
+    public ChildNode(DataObject dataObject, CtoResource resource) {
         super(Children.LEAF);
-        init();
-    }
-     
-    private void init() {
+        this.dataObject = dataObject;
+        this.resource = resource;
         setIconBaseWithExtension(ICON);
+        
+        String type = VOCABULARY.getDisplayName(resource.getType());
+        setDisplayName(format(MEMBER, resource.getName(), type));
+    }
+    
+    @Override
+    public Action getPreferredAction() {
+        return openAction;
     }
 }
