@@ -20,8 +20,10 @@ package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import javax.swing.event.ChangeListener;
+import org.netbeans.modules.hyperledger.cto.CtoResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
 import org.netbeans.modules.hyperledger.cto.grammar.ErrorParserListener;
 import org.netbeans.modules.hyperledger.cto.grammar.ParserListener;
@@ -33,7 +35,7 @@ import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
 
 /**
  * A parser that extends the NetBeans {@link Parser} but delegates 
@@ -64,7 +66,7 @@ public class CtoProxyParser extends Parser {
         //do the parsing
         ctoParser.modelUnit();
         
-        Map<String, Integer> resources = listener.getMembers();
+        Set<CtoResource> resources = listener.getResources();
         List<SyntaxError> errors = errorListener.getSyntaxErrors();
         
         parserResult = new CtoParserResult(snapshot, resources, errors);
@@ -86,18 +88,18 @@ public class CtoProxyParser extends Parser {
     public static class CtoParserResult extends Parser.Result {
 
         private boolean valid = true;
-        private final Map<String, Integer> resources;
+        private final Set<CtoResource> resources;
         private final List<SyntaxError> errors;
 
-        public CtoParserResult(Snapshot snapshot, Map<String, Integer> resources, List<SyntaxError> errors) {
+        public CtoParserResult(Snapshot snapshot, Set<CtoResource> resources, List<SyntaxError> errors) {
             super(snapshot);
             this.resources = resources;
             this.errors = errors;
         }
         
-        public Map<String, Integer> getResources() {
+        public Set<CtoResource> getResources() {
             if (!valid) {
-                return emptyMap();
+                return emptySet();
             }
             return resources;
         }
