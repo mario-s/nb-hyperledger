@@ -27,12 +27,12 @@ public class CtoResource implements Comparable<CtoResource> {
 
     private final String name;
     private final int type;
-    private final int line;
+    private final int offset;
 
-    public CtoResource(String name, int type, int line) {
+    public CtoResource(String name, int type, int offset) {
         this.name = name;
         this.type = type;
-        this.line = line;
+        this.offset = offset;
     }
 
     /**
@@ -54,12 +54,12 @@ public class CtoResource implements Comparable<CtoResource> {
     }
 
     /**
-     * Return the line in the editor
+     * Return the offset in the editor.
      *
      * @return int
      */
-    public int getLine() {
-        return line;
+    public int getOffset() {
+        return offset;
     }
 
     @Override

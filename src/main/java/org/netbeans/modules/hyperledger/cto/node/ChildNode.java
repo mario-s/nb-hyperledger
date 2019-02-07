@@ -24,7 +24,6 @@ import javax.swing.Action;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
-import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -35,7 +34,9 @@ import org.openide.util.RequestProcessor;
 import static java.lang.String.format;
 
 /**
- *
+ * This class is a child node in the navigator view. 
+ * A node represents a resource from the cto file.
+ * 
  * @author mario.schroeder
  */
 public final class ChildNode extends AbstractNode{
@@ -53,7 +54,7 @@ public final class ChildNode extends AbstractNode{
         @Override
         public void actionPerformed(ActionEvent arg0) {
             RP.post(() -> {
-                NbDocument.openDocument(dataObject, resource.getLine(), 
+                NbDocument.openDocument(dataObject, resource.getOffset(), 
                         Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS);
             });
         }
