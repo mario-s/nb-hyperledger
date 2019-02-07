@@ -20,19 +20,14 @@ package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import static java.lang.String.format;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
@@ -47,7 +42,6 @@ import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.ChildFactory;
-import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -62,9 +56,6 @@ import org.openide.util.LookupListener;
 final class MembersFactory extends ChildFactory<CtoResource> implements LookupListener {
 
     private static final String MEMBER = "%s : %s";
-
-    @StaticResource
-    private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
 
     private static final CtoVocabulary VOCABULARY = new CtoVocabulary();
 
@@ -102,10 +93,9 @@ final class MembersFactory extends ChildFactory<CtoResource> implements LookupLi
             updateRootName(resource.getName());
             return null;
         } else {
-            AbstractNode node = new AbstractNode(Children.LEAF);
+            AbstractNode node = new ChildNode();
             String type = VOCABULARY.getDisplayName(resource.getType());
             node.setDisplayName(format(MEMBER, resource.getName(), type));
-            node.setIconBaseWithExtension(ICON);
             return node;
         }
     }
