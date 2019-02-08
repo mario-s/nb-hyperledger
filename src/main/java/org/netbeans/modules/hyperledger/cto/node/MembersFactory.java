@@ -19,13 +19,9 @@
 package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-
-
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.netbeans.modules.hyperledger.LookupContext;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
@@ -53,11 +49,11 @@ final class MembersFactory extends ChildFactory<CtoResource> implements LookupLi
     
     private final LookupContext lookupContext = LookupContext.INSTANCE;
     
-    private Set<CtoResource> resources = new HashSet<>();
+    private Collection<CtoResource> resources = new ArrayList<>();
 
     private final DataNode root;
 
-    private Lookup.Result<TreeSet> selection;
+    private Lookup.Result<List> selection;
 
     private final FileChangeAdapter adapter = new FileChangeAdapter() {
         @Override
@@ -121,7 +117,7 @@ final class MembersFactory extends ChildFactory<CtoResource> implements LookupLi
 
     void register() {
         getPrimaryFile().addFileChangeListener(adapter);
-        selection = lookupContext.getLookup().lookupResult(TreeSet.class);
+        selection = lookupContext.getLookup().lookupResult(List.class);
         selection.addLookupListener(this);
     }
 
@@ -134,7 +130,7 @@ final class MembersFactory extends ChildFactory<CtoResource> implements LookupLi
     public void resultChanged(LookupEvent ev) {
         if (selection != null) {
             //consume and remove
-            Collection<? extends Set> results = selection.allInstances();
+            Collection<? extends List> results = selection.allInstances();
             if (!results.isEmpty()) {
                 resources = results.iterator().next();
                 lookupContext.remove(resources);

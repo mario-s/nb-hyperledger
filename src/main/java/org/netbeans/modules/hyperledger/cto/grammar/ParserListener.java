@@ -18,9 +18,8 @@
  */
 package org.netbeans.modules.hyperledger.cto.grammar;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -33,9 +32,9 @@ import org.netbeans.modules.hyperledger.cto.CtoResource;
  */
 public final class ParserListener extends CtoParserBaseListener {
 
-    private final Set<CtoResource> resources = new TreeSet<>();
+    private final List<CtoResource> resources = new ArrayList<>();
 
-    public Set<CtoResource> getResources() {
+    public List<CtoResource> getResources() {
         return resources;
     }
 
