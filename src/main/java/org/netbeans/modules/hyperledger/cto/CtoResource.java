@@ -23,7 +23,7 @@ package org.netbeans.modules.hyperledger.cto;
  *
  * @author mario.schroeder
  */
-public class CtoResource implements Comparable<CtoResource> {
+public class CtoResource {
 
     private final String name;
     private final int type;
@@ -60,10 +60,5 @@ public class CtoResource implements Comparable<CtoResource> {
      */
     public int getOffset() {
         return offset;
-    }
-
-    @Override
-    public int compareTo(CtoResource other) {
-        return getName().compareTo(other.getName());
     }
 }

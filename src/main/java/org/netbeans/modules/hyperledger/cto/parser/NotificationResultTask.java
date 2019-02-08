@@ -44,11 +44,8 @@ public class NotificationResultTask extends ParserResultTask {
     @Override
     public void run(Parser.Result result, SchedulerEvent se) {
         CtoProxyParser.CtoParserResult ctoResult = (CtoProxyParser.CtoParserResult) result;
-        
-        Set<CtoResource> resources = ctoResult.getResources();
-        if (!resources.isEmpty()) {
-            LookupContext.INSTANCE.add(resources);
-        }
+
+        LookupContext.INSTANCE.add(ctoResult.getResources());
         
         Document document = result.getSnapshot().getSource().getDocument(false);
         List<SyntaxError> syntaxErrors = ctoResult.getErrors();
