@@ -46,19 +46,21 @@ import org.openide.util.LookupListener;
  * @author mario.schroeder
  */
 final class MembersFactory extends ChildFactory<CtoResource> implements LookupListener {
-    
+
     private final LookupContext lookupContext = LookupContext.INSTANCE;
-    
+
     private Collection<CtoResource> resources = new ArrayList<>();
 
     private final DataNode root;
+    
+    private boolean fromFile = true;
 
     private Lookup.Result<List> selection;
-
+    
     private final FileChangeAdapter adapter = new FileChangeAdapter() {
         @Override
         public void fileChanged(FileEvent fe) {
-            resources.clear();
+            fromFile = true;
             refresh(false);
         }
     };
@@ -87,26 +89,27 @@ final class MembersFactory extends ChildFactory<CtoResource> implements LookupLi
 
     @Override
     protected boolean createKeys(List<CtoResource> toPopulate) {
-        //load text from file, since the resources are empty initialy
-        if (resources.isEmpty()) {
-            ParserListener listener = new ParserListener();
-
-            try {
-                String text = getPrimaryFile().asText();
-                CtoParser parser = ParserProvider.INSTANCE.apply(text);
-                parser.addParseListener(listener);
-                parser.modelUnit();
-            } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            resources = listener.getResources();
+        if(fromFile) {
+            resources = parseFile();
+            fromFile = false;
         }
-
+        
         resources.forEach(toPopulate::add);
-
         return true;
     }
+    
+    private List<CtoResource> parseFile() {
+        ParserListener listener = new ParserListener();
+        try {
+            String text = getPrimaryFile().asText();
+            CtoParser parser = ParserProvider.INSTANCE.apply(text);
+            parser.addParseListener(listener);
+            parser.modelUnit();
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return listener.getResources();
+    };
 
     private void updateRootName(String rootName) {
         String oldName = root.getDisplayName();
