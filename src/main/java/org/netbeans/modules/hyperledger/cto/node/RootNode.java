@@ -36,10 +36,6 @@ final class RootNode extends DataNode {
         factory = new MembersFactory(this);
         
         setIconBaseWithExtension(FileType.ICON);
-        createChildren();
-    }
-
-    private void createChildren() {
         setChildren(Children.create(factory, true));
     }
 
