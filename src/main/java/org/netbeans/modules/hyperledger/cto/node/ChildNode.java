@@ -21,6 +21,7 @@ package org.netbeans.modules.hyperledger.cto.node;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
@@ -44,7 +45,7 @@ public final class ChildNode extends AbstractNode{
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
     private static final String MEMBER = "%s : %s";
-    private static final CtoVocabulary VOCABULARY = new CtoVocabulary();
+    private static final Vocabulary VOCABULARY = new CtoVocabulary();
     private static final RequestProcessor RP = new RequestProcessor();
     
     private final DataObject dataObject;
