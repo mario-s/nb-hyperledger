@@ -58,7 +58,7 @@ public class NotificationResultTask extends ParserResultTask {
         setErrors(document, errorDescriptions);
     }
 
-   void setErrors(Document document, List<ErrorDescription> errorDescriptions) {
+    void setErrors(Document document, List<ErrorDescription> errorDescriptions) {
         HintsController.setErrors(document, LAYER, errorDescriptions);
     }
     
