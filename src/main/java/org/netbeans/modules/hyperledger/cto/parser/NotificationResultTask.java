@@ -19,10 +19,8 @@
 package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.List;
-import java.util.Set;
 import javax.swing.text.Document;
 import org.netbeans.modules.hyperledger.LookupContext;
-import org.netbeans.modules.hyperledger.cto.CtoResource;
 import org.netbeans.modules.hyperledger.cto.grammar.SyntaxError;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
@@ -41,6 +39,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class NotificationResultTask extends ParserResultTask {
     
+    private static final String LAYER = "cto";
+    
     @Override
     public void run(Parser.Result result, SchedulerEvent se) {
         CtoProxyParser.CtoParserResult ctoResult = (CtoProxyParser.CtoParserResult) result;
@@ -55,7 +55,11 @@ public class NotificationResultTask extends ParserResultTask {
                         e.getMessage(),
                         document,
                         e.getLine())).collect(toList());
-        HintsController.setErrors(document, "cto", errorDescriptions);
+        setErrors(document, errorDescriptions);
+    }
+
+   void setErrors(Document document, List<ErrorDescription> errorDescriptions) {
+        HintsController.setErrors(document, LAYER, errorDescriptions);
     }
     
     @Override
