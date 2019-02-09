@@ -53,7 +53,7 @@ public final class ChildNode extends AbstractNode{
     private final Action openAction = new AbstractAction() {
         
         @Override
-        public void actionPerformed(ActionEvent arg0) {
+        public void actionPerformed(ActionEvent event) {
             RP.post(() -> {
                 NbDocument.openDocument(dataObject, resource.getOffset(), 
                         Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS);
