@@ -102,7 +102,7 @@ public class CtoNavigatorPanel implements NavigatorPanel {
     private void display(Collection<? extends DataObject> selectedFiles) {
         if (selectedFiles.size() == 1) {
             DataObject dataObject = selectedFiles.iterator().next();
-            RootNode node = new RootNode(dataObject, Children.LEAF);
+            RootNode node = new RootNode(dataObject);
             node.getFactory().register();
             rootNode = of(node);
             view.getExplorerManager().setRootContext(node);

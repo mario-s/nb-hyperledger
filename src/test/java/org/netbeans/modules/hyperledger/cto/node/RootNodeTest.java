@@ -18,28 +18,38 @@
  */
 package org.netbeans.modules.hyperledger.cto.node;
 
-import org.netbeans.modules.hyperledger.cto.FileType;
-import org.openide.loaders.DataNode;
+import java.io.IOException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileSystem;
+import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
-import org.openide.nodes.Children;
+
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  *
  * @author mario.schroeder
  */
-final class RootNode extends DataNode {
+public class RootNodeTest {
     
-    private final MembersFactory factory;
+    private RootNode classUnderTest;
+    
+    @BeforeEach
+    void setup() throws IOException {
+        FileSystem fs = FileUtil.createMemoryFileSystem();
+        FileObject fileObject = fs.getRoot().createData("sample.cto");
+        DataObject dataObject = DataObject.find(fileObject);
 
-    RootNode(DataObject obj) {
-        super(obj, Children.LEAF);
-        factory = new MembersFactory(this);
-        
-        setIconBaseWithExtension(FileType.ICON);
-        setChildren(Children.create(factory, true));
+        classUnderTest = new RootNode(dataObject);
     }
-
-    MembersFactory getFactory() {
-        return factory;
-    } 
+    
+    @Test
+    public void getFactory() {
+        MembersFactory result = classUnderTest.getFactory();
+        assertThat(result, notNullValue());
+    }
+    
 }
