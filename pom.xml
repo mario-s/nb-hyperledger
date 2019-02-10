@@ -86,7 +86,29 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>enforce-no-package-cycles</id>
+                        <id>enforce-same-version</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <rules>
+                                <requireSameVersions>
+                                    <dependencies>
+                                        <dependency>org.netbeans.api</dependency>
+                                        <dependency>org.netbeans.modules</dependency>
+                                    </dependencies>
+                                </requireSameVersions>
+                                <requireSameVersions>
+                                    <dependencies>
+                                        <dependency>org.junit.jupiter</dependency>
+                                    </dependencies>
+                                </requireSameVersions>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>enforce-no-package-cycle</id>
                         <goals>
                             <goal>enforce</goal>
                         </goals>
@@ -101,6 +123,7 @@
             </plugin>
         </plugins>
     </build>
+
     <repositories>
         <repository>
             <id>netbeans</id>
@@ -111,6 +134,7 @@
             </snapshots>
         </repository>
     </repositories>
+
     <dependencies>
         <!-- test dependencies -->
         <dependency>
@@ -135,6 +159,19 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>2.24.0</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.netbeans.modules</groupId>
+            <artifactId>org-netbeans-modules-masterfs</artifactId>
+            <version>${netbeans.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.modules</groupId>
+            <artifactId>org-netbeans-modules-projectapi-nb</artifactId>
+            <version>${netbeans.version}</version>
             <scope>test</scope>
         </dependency>
         
@@ -238,18 +275,6 @@
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-explorer</artifactId>
             <version>${netbeans.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.modules</groupId>
-            <artifactId>org-netbeans-modules-masterfs</artifactId>
-            <version>${netbeans.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.modules</groupId>
-            <artifactId>org-netbeans-modules-projectapi-nb</artifactId>
-            <version>${netbeans.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
