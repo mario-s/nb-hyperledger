@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.function.Function;
 import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
+import org.netbeans.modules.hyperledger.cto.parser.CtoVocabulary;
 
 import static java.util.stream.Collectors.*;
 

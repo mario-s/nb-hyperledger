@@ -16,28 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.grammar;
+package org.netbeans.modules.hyperledger.cto.parser;
 
-import java.util.function.Function;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.Vocabulary;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
  *
  * @author mario.schroeder
  */
-public enum ParserProvider implements Function<String, CtoParser> {
-    
-    INSTANCE;
+public final class CtoVocabulary implements Vocabulary {
+
+    private final static Vocabulary VOCABULARY = CtoLexer.VOCABULARY;
 
     @Override
-    public CtoParser apply(String text) {
-        CharStream input = CharStreams.fromString(text);
-        Lexer lexer = new CtoLexer(input);
-        TokenStream tokenStream = new CommonTokenStream(lexer);
-        return new CtoParser(tokenStream);
+    public int getMaxTokenType() {
+        return VOCABULARY.getMaxTokenType();
     }
+
+    @Override
+    public String getLiteralName(int tokenType) {
+        return VOCABULARY.getLiteralName(tokenType);
+    }
+
+    @Override
+    public String getSymbolicName(int tokenType) {
+        return VOCABULARY.getSymbolicName(tokenType);
+    }
+
+    @Override
+    public String getDisplayName(int tokenType) {
+        String name = VOCABULARY.getDisplayName(tokenType);
+        return name.replaceAll("^\\'|\\'$", "");
+    }
+
 }

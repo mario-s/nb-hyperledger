@@ -18,7 +18,6 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
-import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
 import java.util.Collection;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.hyperledger.cto.FileType;

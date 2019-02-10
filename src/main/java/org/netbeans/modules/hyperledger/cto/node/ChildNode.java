@@ -24,7 +24,7 @@ import javax.swing.Action;
 import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
+import org.netbeans.modules.hyperledger.cto.parser.CtoVocabulary;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
