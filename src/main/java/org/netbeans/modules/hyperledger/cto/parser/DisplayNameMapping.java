@@ -18,36 +18,19 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
-import org.antlr.v4.runtime.Vocabulary;
+import java.util.function.Function;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
- *
+ * This function looks up for the name of the token in the {@link CtoLexer.VOCABULARY}
+ * and removes unwanted apostrophes. So 'foo' becomes foo.
  * @author mario.schroeder
  */
-public final class CtoVocabulary implements Vocabulary {
-
-    private final static Vocabulary VOCABULARY = CtoLexer.VOCABULARY;
-
+public interface DisplayNameMapping extends Function<Integer, String> {
+    
     @Override
-    public int getMaxTokenType() {
-        return VOCABULARY.getMaxTokenType();
-    }
-
-    @Override
-    public String getLiteralName(int tokenType) {
-        return VOCABULARY.getLiteralName(tokenType);
-    }
-
-    @Override
-    public String getSymbolicName(int tokenType) {
-        return VOCABULARY.getSymbolicName(tokenType);
-    }
-
-    @Override
-    public String getDisplayName(int tokenType) {
-        String name = VOCABULARY.getDisplayName(tokenType);
+    public default String apply(Integer type) {
+        String name = CtoLexer.VOCABULARY.getDisplayName(type);
         return name.replaceAll("^\\'|\\'$", "");
     }
-
 }
