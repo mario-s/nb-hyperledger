@@ -19,12 +19,11 @@
 package org.netbeans.modules.hyperledger.cto.parser;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.netbeans.modules.hyperledger.cto.grammar.ParserProvider;
 import org.netbeans.modules.hyperledger.cto.parser.CtoProxyParser.CtoParserResult;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
@@ -65,7 +64,7 @@ public class CtoProxyParserTest {
      * Test of parse method, of class CtoProxyParser.
      */
     @Test
-    @Tag("The arse method should produce a result")
+    @DisplayName("The arse method should produce a result")
     public void parse() throws Exception {
         classUnderTest.parse(snapshot, task, event);
         Parser.Result result = classUnderTest.getResult(task);

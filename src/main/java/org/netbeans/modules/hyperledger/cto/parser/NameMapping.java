@@ -16,37 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.grammar;
+package org.netbeans.modules.hyperledger.cto.parser;
 
-import org.antlr.v4.runtime.Vocabulary;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
- *
+ * This mapping looks for the name of the token in the {@link CtoLexer.VOCABULARY}.
+ * 
  * @author mario.schroeder
  */
-public final class CtoVocabulary implements Vocabulary {
-
-    private final static Vocabulary VOCABULARY = CtoLexer.VOCABULARY;
-
-    @Override
-    public int getMaxTokenType() {
-        return VOCABULARY.getMaxTokenType();
-    }
-
-    @Override
-    public String getLiteralName(int tokenType) {
-        return VOCABULARY.getLiteralName(tokenType);
-    }
-
-    @Override
-    public String getSymbolicName(int tokenType) {
-        return VOCABULARY.getSymbolicName(tokenType);
-    }
-
-    @Override
-    public String getDisplayName(int tokenType) {
-        String name = VOCABULARY.getDisplayName(tokenType);
+public interface NameMapping {
+    
+    /**
+     * Looks for the display name in the vocabulary and removes unwanted apostrophes. 
+     * So 'foo' becomes foo.
+     * @see CtoLexer.VOCABULARY.getDisplayName
+     * 
+     * @param type as int
+     * @return type as String.
+     */
+    public static String map(Integer type) {
+        String name = CtoLexer.VOCABULARY.getDisplayName(type);
         return name.replaceAll("^\\'|\\'$", "");
     }
-
 }

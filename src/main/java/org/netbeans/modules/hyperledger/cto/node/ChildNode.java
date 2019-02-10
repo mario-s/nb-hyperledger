@@ -21,10 +21,9 @@ package org.netbeans.modules.hyperledger.cto.node;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
-import org.netbeans.modules.hyperledger.cto.grammar.CtoVocabulary;
+import org.netbeans.modules.hyperledger.cto.parser.NameMapping;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -40,12 +39,11 @@ import static java.lang.String.format;
  * 
  * @author mario.schroeder
  */
-public final class ChildNode extends AbstractNode{
+public final class ChildNode extends AbstractNode {
     
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
     private static final String MEMBER = "%s : %s";
-    private static final Vocabulary VOCABULARY = new CtoVocabulary();
     private static final RequestProcessor RP = new RequestProcessor();
     
     private final DataObject dataObject;
@@ -67,7 +65,7 @@ public final class ChildNode extends AbstractNode{
         this.resource = resource;
         setIconBaseWithExtension(ICON);
         
-        String type = VOCABULARY.getDisplayName(resource.getType());
+        String type = NameMapping.map(resource.getType());
         setDisplayName(format(MEMBER, resource.getName(), type));
     }
     

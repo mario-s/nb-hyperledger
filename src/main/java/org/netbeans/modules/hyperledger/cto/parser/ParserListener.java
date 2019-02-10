@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.grammar;
+package org.netbeans.modules.hyperledger.cto.parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoParser;
+import org.netbeans.modules.hyperledger.cto.grammar.CtoParserBaseListener;
 
 /**
  *
