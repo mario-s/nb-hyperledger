@@ -20,6 +20,7 @@ package org.netbeans.modules.hyperledger.cto.node;
 
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileSystem;
@@ -47,6 +48,7 @@ public class RootNodeTest {
     }
     
     @Test
+    @DisplayName("The root should return an instance of the factory for children.")
     public void getFactory() {
         MembersFactory result = classUnderTest.getFactory();
         assertThat(result, notNullValue());
