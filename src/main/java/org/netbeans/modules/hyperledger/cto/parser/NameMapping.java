@@ -18,18 +18,24 @@
  */
 package org.netbeans.modules.hyperledger.cto.parser;
 
-import java.util.function.Function;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
 
 /**
- * This function looks up for the name of the token in the {@link CtoLexer.VOCABULARY}
- * and removes unwanted apostrophes. So 'foo' becomes foo.
+ * This mapping looks for the name of the token in the {@link CtoLexer.VOCABULARY}.
+ * 
  * @author mario.schroeder
  */
-public interface DisplayNameMapping extends Function<Integer, String> {
+public interface NameMapping {
     
-    @Override
-    public default String apply(Integer type) {
+    /**
+     * Looks for the display name in the vocabulary and removes unwanted apostrophes. 
+     * So 'foo' becomes foo.
+     * @see CtoLexer.VOCABULARY.getDisplayName
+     * 
+     * @param type as int
+     * @return type as String.
+     */
+    public static String map(Integer type) {
         String name = CtoLexer.VOCABULARY.getDisplayName(type);
         return name.replaceAll("^\\'|\\'$", "");
     }

@@ -23,7 +23,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
-import org.netbeans.modules.hyperledger.cto.parser.DisplayNameMapping;
+import org.netbeans.modules.hyperledger.cto.parser.NameMapping;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -39,7 +39,7 @@ import static java.lang.String.format;
  * 
  * @author mario.schroeder
  */
-public final class ChildNode extends AbstractNode implements DisplayNameMapping{
+public final class ChildNode extends AbstractNode {
     
     @StaticResource
     private static final String ICON = "org/netbeans/modules/hyperledger/cto/blue.png";
@@ -65,7 +65,7 @@ public final class ChildNode extends AbstractNode implements DisplayNameMapping{
         this.resource = resource;
         setIconBaseWithExtension(ICON);
         
-        String type = apply(resource.getType());
+        String type = NameMapping.map(resource.getType());
         setDisplayName(format(MEMBER, resource.getName(), type));
     }
     

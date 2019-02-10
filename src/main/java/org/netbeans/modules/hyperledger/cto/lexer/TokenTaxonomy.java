@@ -23,18 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import org.antlr.v4.runtime.Vocabulary;
 import org.netbeans.modules.hyperledger.cto.grammar.CtoLexer;
-import org.netbeans.modules.hyperledger.cto.parser.DisplayNameMapping;
 
 import static java.util.stream.Collectors.*;
+
+import org.netbeans.modules.hyperledger.cto.parser.NameMapping;
 
 /**
  * Class for organizing similar tokens into groups.
  * 
  * @author mario.schroeder
  */
-public enum TokenTaxonomy implements DisplayNameMapping {
+public enum TokenTaxonomy {
 
     INSTANCE;
 
@@ -43,10 +43,9 @@ public enum TokenTaxonomy implements DisplayNameMapping {
     private TokenTaxonomy() {
         tokens = new ArrayList<>();
 
-        Vocabulary vocabulary = CtoLexer.VOCABULARY;
-        int max = vocabulary.getMaxTokenType() + 1;
+        int max = CtoLexer.VOCABULARY.getMaxTokenType() + 1;
         for (int i = 1; i < max; i++) {
-            CtoTokenId token = new CtoTokenId(apply(i), getCategory(i), i);
+            CtoTokenId token = new CtoTokenId(NameMapping.map(i), getCategory(i), i);
             tokens.add(token);
         }
     }
