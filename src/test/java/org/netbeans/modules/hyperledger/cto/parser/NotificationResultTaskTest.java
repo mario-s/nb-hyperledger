@@ -62,10 +62,9 @@ public class NotificationResultTaskTest {
         given(snapshot.getSource()).willReturn(source);
         given(source.getDocument(false)).willReturn(document);
         
-        
-        List<CtoResource> resources = singletonList(new CtoResource("foo", 0, 0));
-        List<SyntaxError> errors = singletonList(new SyntaxError("bar", 0));
-        CtoParserResult ctoResult = new CtoParserResult(snapshot, resources, errors);
+        List<CtoResource> res = singletonList(new CtoResource("foo", 0, 0));
+        List<SyntaxError> errs = singletonList(new SyntaxError("bar", 0));
+        CtoParserResult ctoResult = new CtoParserResult(snapshot, res, errs);
         classUnderTest.run(ctoResult, null);
         
         verify(classUnderTest).setErrors(eq(document), any(List.class));

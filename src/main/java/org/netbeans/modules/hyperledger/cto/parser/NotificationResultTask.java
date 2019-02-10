@@ -48,17 +48,17 @@ public class NotificationResultTask extends ParserResultTask {
         
         Document document = result.getSnapshot().getSource().getDocument(false);
         List<SyntaxError> syntaxErrors = ctoResult.getErrors();
-        List<ErrorDescription> errorDescriptions = syntaxErrors.stream().map(e
+        List<ErrorDescription> descriptions = syntaxErrors.stream().map(e
                 -> ErrorDescriptionFactory.createErrorDescription(
                         Severity.ERROR,
                         e.getMessage(),
                         document,
                         e.getLine())).collect(toList());
-        setErrors(document, errorDescriptions);
+        setErrors(document, descriptions);
     }
 
-    void setErrors(Document document, List<ErrorDescription> errorDescriptions) {
-        HintsController.setErrors(document, LAYER, errorDescriptions);
+    void setErrors(Document document, List<ErrorDescription> descriptions) {
+        HintsController.setErrors(document, LAYER, descriptions);
     }
     
     @Override
