@@ -63,6 +63,7 @@
                     <excludes>
                         <exclude>**/Bundle.*</exclude>
                         <exclude>**/grammar/*.*</exclude>
+                        <exclude>**/template/*.*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
