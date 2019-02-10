@@ -64,7 +64,7 @@ public class CtoProxyParserTest {
      * Test of parse method, of class CtoProxyParser.
      */
     @Test
-    @DisplayName("The arse method should produce a result")
+    @DisplayName("The parse method should produce a result")
     public void parse() throws Exception {
         classUnderTest.parse(snapshot, task, event);
         Parser.Result result = classUnderTest.getResult(task);
