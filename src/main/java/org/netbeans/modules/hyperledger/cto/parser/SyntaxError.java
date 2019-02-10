@@ -16,28 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.netbeans.modules.hyperledger.cto.grammar;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+package org.netbeans.modules.hyperledger.cto.parser;
 
 /**
  *
  * @author mario.schroeder
  */
-public class ErrorParserListener extends BaseErrorListener{
-    
-    private final List<SyntaxError> syntaxErrors = new ArrayList<>();
+public final class SyntaxError {
 
-    public List<SyntaxError> getSyntaxErrors() {
-        return syntaxErrors;
+    private final String message;
+    private final int line;
+
+    public SyntaxError(String message, int line) {
+        this.message = message;
+        this.line = line;
     }
 
-    @Override
-    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        syntaxErrors.add(new SyntaxError(msg, line));
+    public String getMessage() {
+        return message;
+    }
+
+    public int getLine() {
+        return line;
     }
 }

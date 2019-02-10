@@ -27,7 +27,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.netbeans.modules.hyperledger.cto.CtoResource;
-import org.netbeans.modules.hyperledger.cto.grammar.SyntaxError;
 import org.netbeans.modules.hyperledger.cto.parser.CtoProxyParser.CtoParserResult;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Source;

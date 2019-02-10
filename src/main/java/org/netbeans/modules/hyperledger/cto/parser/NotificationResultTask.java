@@ -21,7 +21,6 @@ package org.netbeans.modules.hyperledger.cto.parser;
 import java.util.List;
 import javax.swing.text.Document;
 import org.netbeans.modules.hyperledger.LookupContext;
-import org.netbeans.modules.hyperledger.cto.grammar.SyntaxError;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
