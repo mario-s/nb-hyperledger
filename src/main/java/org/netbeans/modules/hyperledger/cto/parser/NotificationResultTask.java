@@ -47,8 +47,8 @@ public class NotificationResultTask extends ParserResultTask {
         LookupContext.INSTANCE.add(ctoResult.getResources());
         
         Document document = result.getSnapshot().getSource().getDocument(false);
-        List<SyntaxError> syntaxErrors = ctoResult.getErrors();
-        List<ErrorDescription> descriptions = syntaxErrors.stream().map(e
+        List<SyntaxError> errors = ctoResult.getErrors();
+        List<ErrorDescription> descriptions = errors.stream().map(e
                 -> ErrorDescriptionFactory.createErrorDescription(
                         Severity.ERROR,
                         e.getMessage(),
