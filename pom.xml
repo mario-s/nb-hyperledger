@@ -98,8 +98,6 @@
                                         <dependency>org.netbeans.api</dependency>
                                         <dependency>org.netbeans.modules</dependency>
                                     </dependencies>
-                                </requireSameVersions>
-                                <requireSameVersions>
                                     <dependencies>
                                         <dependency>org.junit.jupiter</dependency>
                                     </dependencies>
