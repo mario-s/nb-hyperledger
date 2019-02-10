@@ -35,7 +35,7 @@ public interface NameMapping {
      * @param type as int
      * @return type as String.
      */
-    public static String map(Integer type) {
+    public static String map(int type) {
         String name = CtoLexer.VOCABULARY.getDisplayName(type);
         return name.replaceAll("^\\'|\\'$", "");
     }
