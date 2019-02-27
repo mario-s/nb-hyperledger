@@ -37,40 +37,43 @@ import static java.util.stream.Collectors.toList;
  * @author mario.schroeder
  */
 public class NotificationResultTask extends ParserResultTask {
-    
+
     private static final String LAYER = "cto";
-    
+
     @Override
     public void run(Parser.Result result, SchedulerEvent se) {
         CtoProxyParser.CtoParserResult ctoResult = (CtoProxyParser.CtoParserResult) result;
 
-        LookupContext.INSTANCE.add(ctoResult.getResources());
-        
-        Document document = result.getSnapshot().getSource().getDocument(false);
-        List<SyntaxError> errors = ctoResult.getErrors();
-        List<ErrorDescription> descriptions = errors.stream().map(e
-                -> ErrorDescriptionFactory.createErrorDescription(
-                        Severity.ERROR,
-                        e.getMessage(),
-                        document,
-                        e.getLine())).collect(toList());
-        setErrors(document, descriptions);
+        if (ctoResult.isValid()) {
+
+            LookupContext.INSTANCE.add(ctoResult.getResources());
+
+            Document document = result.getSnapshot().getSource().getDocument(false);
+            List<SyntaxError> errors = ctoResult.getErrors();
+            List<ErrorDescription> descriptions = errors.stream().map(e
+                    -> ErrorDescriptionFactory.createErrorDescription(
+                            Severity.ERROR,
+                            e.getMessage(),
+                            document,
+                            e.getLine())).collect(toList());
+            setErrors(document, descriptions);
+        }
     }
 
     void setErrors(Document document, List<ErrorDescription> descriptions) {
         HintsController.setErrors(document, LAYER, descriptions);
     }
-    
+
     @Override
     public int getPriority() {
         return 100; //the lower, the higher the priority
     }
-    
+
     @Override
     public Class<? extends Scheduler> getSchedulerClass() {
         return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
     }
-    
+
     @Override
     public void cancel() {
     }

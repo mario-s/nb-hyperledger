@@ -110,5 +110,8 @@ public class CtoProxyParser extends Parser {
             valid = false;
         }
 
+        public boolean isValid() {
+            return valid;
+        }
     }
 }

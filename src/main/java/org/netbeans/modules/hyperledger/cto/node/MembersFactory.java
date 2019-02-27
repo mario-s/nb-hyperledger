@@ -135,8 +135,9 @@ final class MembersFactory extends ChildFactory<CtoResource> implements LookupLi
             //consume and remove
             Collection<? extends List> results = selection.allInstances();
             if (!results.isEmpty()) {
-                resources = results.iterator().next();
-                lookupContext.remove(resources);
+                Collection<CtoResource> instance = results.iterator().next();
+                resources = instance;
+                lookupContext.remove(instance);
                 refresh(false);
             }
         }
