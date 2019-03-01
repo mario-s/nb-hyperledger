@@ -79,7 +79,7 @@ public class NotificationResultTaskTest {
     }
     
     @Test
-    @DisplayName("It should not set errors in the HintsController, when result is not valid.")
+    @DisplayName("It should not set errors in the HintsController, when result is not finished.")
     public void run_noNotify() {
         ctoResult.invalidate();
         classUnderTest.run(ctoResult, null);
